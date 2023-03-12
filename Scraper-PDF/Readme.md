@@ -1,4 +1,4 @@
-# Instructions for intaling required dependencies and running from terminal
+# Instructions for installing required dependencies and running from terminal
 
 # Take a look at crawler.cfg to set parameters
 
