@@ -67,7 +67,7 @@ percentages = get_column_percentages()
 print(percentages)
 
 
-now = datetime.now().strftime("%S-%m-%d %H:%M:%S")
+now = datetime.now().strftime("%y-%m-%d %H:%M:%S")
 
 # Write the percentages to a CSV file
 filename = 'Updated__Factors_&_Percentage.csv'
@@ -120,7 +120,7 @@ connection.close()
 # Send the email with the CSV file as attachment
 msg = MIMEMultipart()
 msg['From'] = 'your_email@gmail.com'
-msg['To'] = 'recipient_email@gmail.com'
+msg['To'] = 'info@esgroadmap.com'
 msg['Subject'] = 'KPI Data Table'
 body = 'Please find attached the KPI data table for today.'
 msg.attach(MIMEText(body, 'plain'))
@@ -134,5 +134,5 @@ server = smtplib.SMTP('smtp.gmail.com', 587)
 server.starttls()
 server.login('your_email@gmail.com', 'your_email_password')
 text = msg.as_string()
-server.sendmail('your_email@gmail.com', 'recipient_email@gmail.com', text)
+server.sendmail('your_email@gmail.com', ' info@esgroadmap.com', text)
 server.quit()
