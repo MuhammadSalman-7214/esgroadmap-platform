@@ -1,1 +1,43 @@
+# esg-roadmap
+- You can use "script_settings.cfg" to edit the script parameters,
+- To run the full script: "python main.py"
+- The project is pushed to Github repo: https://github.com/zakaria47fs/esg-roadmap
+- To make parameters edits on "script_settings.cfg" script effective on server, you need to login to the server through RDP (make sure the server instance is running on AWS. Otherwise, you need to connect to AWS and start it), on the server go to the project folder "C:\Users\Administrator\Desktop\Projects\esg-roadmap", and edit the "script_settings.cfg" file
+
+
+Instructions for operating the AWS server using Amazon EventBridge:
+1.To make changes to the instance start and stop schedule, you need to edit the Amazon EventBridge rules associated with the Lambda functions.
+2.To do this, go to the AWS Management Console and navigate to the EventBridge service.
+3.Under the "Rules" tab, locate the rule associated with the Lambda function you want to modify. In this case, you should see two rules, one for Lambda-Ec2-Start and another for Lambda-Ec2-Stop.
+4.Click on the rule for the function you want to modify, and then click on the "Edit" button to modify the rule.
+5.Make the necessary changes to the schedule, such as the day of the week or the time of day, and then save the changes.
+6.To change the code on the server, you need to first make the changes in your GitHub repository.
+7.Once you have made the changes in GitHub, you can export the updated code to the Lambda function.
+8.To do this, go to the AWS Management Console and navigate to the Lambda service.
+9.Locate the Lambda function you want to update, either Lambda-Ec2-Start or Lambda-Ec2-Stop, and click on its name to open the function configuration.
+10.Under the "Code" tab, select the "Code source" option as "Upload from" and then select "GitHub" as the source.
+11.Choose the appropriate repository and branch that contains the updated code.
+12.Once you have selected the updated code, click "Deploy" to update the Lambda function.
+13.After the Lambda function is updated, the changes will take effect on the next scheduled event trigger.
+That's it! You have now learned how to operate the AWS server using Amazon EventBridge, modify the schedule for the Lambda functions.
+
+
+Here are the steps to edit the instance code by uploading it from GitHub:
+1.First, navigate to your GitHub repository where the code changes have been committed and pushed.
+2.Click on the "Code" button to see the available options for downloading the code.
+3.Select the "Download ZIP" option to download the code as a ZIP file.
+4.Extract the ZIP file to a local directory on your computer.
+5.Next, navigate to the AWS Management Console and go to the EC2 dashboard.
+6.Find the instance you want to update and connect to it using Remote Desktop Protocol (RDP).
+
+
+**How to update python documents on server
+**
+Remote Desktop connection
+password = mN7=K1q-@NVBhw=FiQc1bE$C&Ie?Oo7M
+
+
+
+
+
 
