@@ -23,27 +23,28 @@ import logging
 logging.info('Start Integrate and Upload')
 print('Start Integrate and Upload')
 
-
-df1 = pd.read_excel('integrate-input/ESGC Company data 2.4.xls')
+#De-activating merger, as will take place in MySQL (through view)
+#df = pd.read_excel('integrate-input/ESGC Company data 2.4.xls')
 
 # DF2 = Sentence data
-df2 = pd.read_csv(f'../NLP/nlp-output/targetsentences clean {date.today().strftime("%B")}.csv', engine = 'python')
+df3 = pd.read_csv(f'../NLP/nlp-output/targetsentences clean {date.today().strftime("%B")}.csv', engine = 'python')
 
+#De-activating merger, as will take place in MySQL (through view)
 # Merge operation. Left join operation provides all the rows from 1st dataframe and matching rows from the 2nd dataframe.
 # See for more info https://www.geeksforgeeks.org/how-to-do-a-vlookup-in-python-using-pandas/
 # See also https://datacarpentry.org/python-ecology-lesson/05-merging-data/
 # Ensure "company" (matching column) in same case in both - eg. currently in lower case
 
-Left_join = pd.merge(df1,
-                     df2,
-                     on ='company',
-                     how ='right')
-df3 = Left_join
+#Left_join = pd.merge(df1,
+#                     df2,
+#                     on ='company',
+#                     how ='right')
+#df3 = Left_join
 
-Left_join
+#Left_join
 
-logging.info(Left_join.head(n=3))
-print(Left_join.head(n=3))
+#logging.info(Left_join.head(n=3))
+#print(Left_join.head(n=3))
 
 #df3['Primarysource'] = df3.apply(lambda row: row.source in row.companylist, axis=1)
 
