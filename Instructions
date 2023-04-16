@@ -10,8 +10,8 @@ Instructions on how the KPI code functions for 1) % KPIs and 2) numeric/unique K
 Instructions on how the code works for checking for duplicate sentences
 [To be filled in]
 
-
-
+Instructions on how the Views work in MySQL Database
+[To be filled in]
 
 Instructions for operating the AWS server using Amazon EventBridge:
 1.To make changes to the instance start and stop schedule, you need to edit the Amazon EventBridge rules associated with the Lambda functions.
