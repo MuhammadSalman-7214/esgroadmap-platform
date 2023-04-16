@@ -1,4 +1,5 @@
-# esg-roadmap
+# 
+Integrated code instructions
 - You can use "script_settings.cfg" to edit the script parameters,
 - To run the full script: "python main.py"
 - The project is pushed to Github repo: https://github.com/zakaria47fs/esg-roadmap
@@ -12,6 +13,13 @@ Instructions on how the code works for checking for duplicate sentences
 
 Instructions on how the Views work in MySQL Database
 [To be filled in]
+
+Location:
+host='esgroadmap.cwco2pchjykw.us-east-2.rds.amazonaws.com',
+user='admin',
+password='hassanarshad1122',
+database='esgroadmap'
+
 
 Instructions for operating the AWS server using Amazon EventBridge:
 1.To make changes to the instance start and stop schedule, you need to edit the Amazon EventBridge rules associated with the Lambda functions.
@@ -44,9 +52,6 @@ Here are the steps to edit the instance code by uploading it from GitHub:
 11.The public IP address or DNS name of your instance can be found in the EC2 dashboard by selecting your instance and looking at its description.
 12.Once connected via RDP, you will be able to interact with your EC2 instance as if you were sitting in front of it.
 Note: since the instance is of Windows as OS of RDP so we can simply connect go to RDP login GitHub and then download zipfile. Afterwards unzip it to the required directory. Let me know if it explains everything.
-
-
-
 
 
 
