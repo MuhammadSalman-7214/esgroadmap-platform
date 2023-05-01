@@ -20,6 +20,12 @@ user='admin',
 password='hassanarshad1122',
 database='esgroadmap'
 
+Access AWS server
+log in the aws account. 
+Search EC2 and click on the instances.
+Check the instance you would like to start and then, on the top right there is a box “instance state”.
+Drop-down the options and select “Start instance”
+
 
 Instructions for operating the AWS server using Amazon EventBridge:
 1.To make changes to the instance start and stop schedule, you need to edit the Amazon EventBridge rules associated with the Lambda functions.
