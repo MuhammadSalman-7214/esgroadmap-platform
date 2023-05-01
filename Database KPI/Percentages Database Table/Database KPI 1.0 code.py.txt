@@ -15,13 +15,13 @@ connection = mysql.connector.connect(
     database='esgroadmap')
     
 cursor = connection.cursor()
-cursor.execute("DESCRIBE `sentence-all`")
+cursor.execute("DESCRIBE `sentenceallview`")
 columns = [row[0] for row in cursor.fetchall()]
 
 # Get a list of column names
 def get_column_percentages():
     cursor = connection.cursor()
-    cursor.execute("DESCRIBE `sentence-all`")
+    cursor.execute("DESCRIBE `sentenceallview`")
     columns = [row[0] for row in cursor.fetchall()]
 
     # Create a dictionary to store the percentages
@@ -30,30 +30,30 @@ def get_column_percentages():
     for column_name in columns:
         
         # Check data type of the column
-        cursor.execute(f"SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'sentence-all' AND COLUMN_NAME = '{column_name}'")
+        cursor.execute(f"SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'sentenceallview' AND COLUMN_NAME = '{column_name}'")
         data_type = cursor.fetchone()[0]
 
         if data_type == "tinyint":
             # Calculate the percentage of '1' values
-            query_percentage_1 = f"SELECT (COUNT(*) * 100) / (SELECT COUNT(*) FROM `sentence-all` WHERE `{column_name}` IS NOT NULL) AS percentage FROM `sentence-all` WHERE `{column_name}` = 1"
+            query_percentage_1 = f"SELECT (COUNT(*) * 100) / (SELECT COUNT(*) FROM `sentenceallview` WHERE `{column_name}` IS NOT NULL) AS percentage FROM `sentenceallview` WHERE `{column_name}` = 1"
             cursor.execute(query_percentage_1)
             percentage_1 = cursor.fetchone()[0]
             percentages[f"{column_name} (1 %)"] = f"{percentage_1:.2f}%"
         elif column_name in ['Member of the S&P500', 'Member of the Russell 1000 Index']:
             # Calculate the percentage of 'yes' or 'true' values
-            query_percentage_yes = f"SELECT (COUNT(CASE WHEN `{column_name}` = 'yes' THEN 1 END) * 100) / COUNT(CASE WHEN `{column_name}` IS NOT NULL THEN 1 END) AS percentage FROM `sentence-all`"
+            query_percentage_yes = f"SELECT (COUNT(CASE WHEN `{column_name}` = 'yes' THEN 1 END) * 100) / COUNT(CASE WHEN `{column_name}` IS NOT NULL THEN 1 END) AS percentage FROM `sentenceallview`"
             cursor.execute(query_percentage_yes)
             percentage_yes = cursor.fetchone()[0]
             percentages[f"{column_name} (YES %)"] = f"{percentage_yes:.2f}%"
         elif column_name in [ 'climateaction100']:
             # Calculate the percentage of 'yes' or 'true' values
-            query_percentage_yes = f"SELECT (COUNT(CASE WHEN `{column_name}` = 'TRUE' THEN 1 END) * 100) / COUNT(CASE WHEN `{column_name}` IS NOT NULL THEN 1 END) AS percentage FROM `sentence-all`"
+            query_percentage_yes = f"SELECT (COUNT(CASE WHEN `{column_name}` = 'TRUE' THEN 1 END) * 100) / COUNT(CASE WHEN `{column_name}` IS NOT NULL THEN 1 END) AS percentage FROM `sentenceallview`"
             cursor.execute(query_percentage_yes)
             percentage_yes = cursor.fetchone()[0]
             percentages[f"{column_name} (TRUE %)"] = f"{percentage_yes:.2f}%"
         else:
             # Calculate the percentage of non-null values
-            query_percentage_non_null = f"SELECT (COUNT(CASE WHEN `{column_name}` IS NOT NULL THEN 1 END) * 100) / COUNT(*) AS percentage FROM `sentence-all`"
+            query_percentage_non_null = f"SELECT (COUNT(CASE WHEN `{column_name}` IS NOT NULL THEN 1 END) * 100) / COUNT(*) AS percentage FROM `sentenceallview`"
             cursor.execute(query_percentage_non_null)
             percentage_non_null = cursor.fetchone()[0]
             percentages[f"{column_name} (NON-NULL %)"] = f"{percentage_non_null:.2f}%"
