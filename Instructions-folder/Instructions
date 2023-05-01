@@ -63,8 +63,118 @@ Note: since the instance is of Windows as OS of RDP so we can simply connect go 
 **
 Remote Desktop connection
 password = mN7=K1q-@NVBhw=FiQc1bE$C&Ie?Oo7M
+ 
 
 
+
+Duplicate Remover
+
+1.	This is a Python script that uses the `mysql.connector` library to connect to a MySQL database. The script connects to the database using the provided host, user, password, and database name. It then creates a cursor object to execute SQL queries.
+
+2.	The script first creates a temporary table called `temp_table` that holds the result of a subquery. The subquery selects the minimum id value from the sentence-all table for each combination of Company and Target sentence where there is more than one row with the same values for these two columns.
+
+3.	Next, the script deletes rows from the sentence-all table where the id value is not in the list of id values from the temporary table. This effectively removes duplicate rows from the sentence-all table based on the combination of Company and Target sentence.
+
+4.	Finally, the script drops the temporary table, commits the changes to the database, and closes the cursor and connection objects.
+
+
+
+Creation of sentenceallview:
+
+CREATE VIEW sentenceallview AS
+SELECT sa.*
+cd.Member of the S&P500 AS Member of the S&P500,
+cd.Member of the Russell 1000 Index AS Member of the Russell 1000 Index,
+cd.Ticker(s),
+cd.PR Agency,
+cd.Example 2020 company PR agency press release URL AS `Example 2020 company PR agency press release URL`,
+cd.Company Global / Main Website URL AS `Company Global / Main Website URL`,
+cd.Company global/main press - news release site URL AS `Company global/main press - news release site URL`,
+cd.Company annual reports page URL AS `Company annual reports page URL`,
+cd.`Company annual / financial report 2020 URL of pdf document` AS `Company annual / financial report 2020 URL of pdf document`,
+cd.Company sustainability / ESG reports page URL AS `Company sustainability / ESG reports page URL`,
+cd.`Company Sustainability / ESG report 2020 URL of pdf document` AS `Company Sustainability / ESG report 2020 URL of pdf document`,
+cd.Country,
+cd.`sector code #1 (NAICS)` AS `sector code #1 (NAICS)`,
+cd.`sector name #1 (NAICS)` AS `sector name #1 (NAICS)`,
+cd.`sector code #2 (NAICS)` AS `sector code #2 (NAICS)`,
+cd.`sector name #2 (NAICS)` AS `sector name #2 (NAICS)`,
+cd.`sector code #3 (NAICS)` AS `sector code #3 (NAICS)`,
+cd.`sector name #3 (NAICS)` AS `sector name #3 (NAICS)`,
+cd.`sector code #4 (NAICS)` AS `sector code #4 (NAICS)`,
+cd.`sector name #4 (NAICS)` AS `sector name #4 (NAICS)`,
+cd.`sector code #5 (NAICS)` AS `sector code #5 (NAICS)`,
+cd.`sector name #5 (NAICS)` AS `sector name #5 (NAICS)`,
+cd.`sector codes all (NAICS)` AS `sector codes all (NAICS)`,
+cd.`sector name all (NAICS)` AS `sector name all (NAICS)`
+FROM `sentence-all` sa
+JOIN companydata cd
+ON sa.company = cd.company;
+
+1.	The code provided creates a view named "sentencaeallview" that selects data from two tables "sentence-all" and "companydata".
+
+2.	The SELECT statement in the view selects all columns from the "sentence-all" table using the "sa.*" notation. It also selects specific columns from the "companydata" table using the "cd.column_name AS alias_name" notation. The alias names are used to rename the column names to more readable and user-friendly names.
+
+3.	The view then joins the two tables on the "company" column using the JOIN statement with the ON clause. The result is a single virtual table that combines the data from both tables.
+
+4.	In summary, the view is a predefined SQL query that selects and combines data from multiple tables into a single virtual table. This allows users to query the view as if it were a table, without having to know the underlying table structure or join conditions.
+
+
+Creation of sentence_carbon_view:
+
+CREATE VIEW sentence_carbon_view AS
+SELECT *
+FROM sentenceallview
+WHERE `sentence-carbon` = 1;
+
+1.   This code simply provides the the rows where value of `sentence-carbon` = 1.
+
+
+Unique and Total KPIs Data:
+
+1.	The code connects to a MySQL database using the `mysql.connector` module.
+2.	The function `get_column_totals()` is defined, which calculates various totals and unique values for each column in the `sentenceallview` table*.
+3.	The columns to be analyzed are defined in a list called `columns`.
+4.	A dictionary called `totals` is created to store the results of the calculations.
+5.	A loop is run over each column in the `columns` list.
+6.	The data type of the column is checked using a SQL query.
+7.	If the data type is `tinyint`, two SQL queries are executed to calculate the total number of `1` values and the number of unique `1` values, respectively. The results are added to the `totals` dictionary.
+8.	If the column is either `Member of the S&P500` or `Member of the Russell 1000 Index`, two SQL queries are executed to calculate the total number of `yes` values and the number of unique `yes` values, respectively. The results are added to the `totals` dictionary.
+9.	If the column is not of type `tinyint` and is not one of the two special columns mentioned above, two SQL queries are executed to calculate the total number of non-null values and the number of unique non-null values, respectively. The results are added to the `totals` dictionary.
+10.	The `get_column_totals()` function returns the `totals` dictionary.
+11.	The `column_names` list is defined to specify the order in which the columns should appear in the output CSV file.
+12.	The current date and time is stored in a string variable called `now`.
+13.	The name of the output CSV file is defined in a string variable called `filename`.
+14.	The `with` statement is used to open the output CSV file in "append" mode.
+15.	A `csv.writer` object is created to write the results to the output CSV file.
+16.	The `column_names` list is written to the output CSV file as the header row.
+17.	The values from the `totals` dictionary are written to the output CSV file, with the columns in the same order as in the `column_names` list.
+18.	The output CSV file is closed.
+19. Email containing the output csv is sent to the specific recipient.
+
+* The `get_column_totals()` function calculates the total number and unique number of non-null values in each column of a database table called "sentenceallview".
+The function first connects to the database, then creates a list of column names to analyze. It then loops through each column name in the list and determines its data type by querying the `INFORMATION_SCHEMA.COLUMNS` table in the MySQL database.
+Based on the data type, the function calculates the total number and unique number of non-null values in each column by executing SQL queries using the `cursor` object. If the column is a `tinyint` data type, the function calculates the total and unique number of rows that have a value of 1. If the column is a text data type, the function calculates the total and unique number of non-null rows.
+Finally, the function returns a dictionary object where the keys are the column names and the values are the calculated total and unique numbers.
+
+Percentages of Database KPIs:
+
+Defines a function called `get_column_percentages`* that uses the column names obtained from the "sentence-all" table to calculate the percentages of non-null values, "1" values, "yes" or "true" values of specific columns, and stores the percentages in a dictionary. The function then returns the dictionary.
+Uses the `get_column_percentages` function to calculate the percentages of the columns of the "sentence-all" table and stores the results in a dictionary called `percentages`.
+Generates a timestamp using the `datetime.now().strftime()` function and stores it in a variable called `now`.
+Writes the percentages to a CSV file called "Updated__Factors_&_Percentage.csv" using the `csv.writer()` function. If the file does not exist, the function creates the header row.
+Creates a table in the MySQL database called "percentageS_table" if it does not exist using a `CREATE TABLE IF NOT EXISTS` statement.
+Inserts the percentages into the "percentageS_table" using an `INSERT INTO` statement.
+Closes the database connection.
+Sends an email to the specified recipient with the CSV file as an attachment using the `smtplib` library.
+
+
+
+* This fucntion works as following:
+•For columns with data type "tinyint", the function calculates the percentage of "1" values.
+•For columns with column names "Member of the S&P500" and "Member of the Russell 1000 Index", the function calculates the percentage of "yes" values.
+•For columns with column name "climateaction100", the function calculates the percentage of "true" values.
+•For all other columns, the function calculates the percentage of non-null values.
 
 
 
