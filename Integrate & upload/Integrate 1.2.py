@@ -111,10 +111,10 @@ print('Starting upload MySQL')
 
 #Mysql details for website
 # old
-hostname="sql447.main-hosting.eu"
-dbname="u606410301_8QjL7"
-uname="u606410301_5ZhyZ"
-pwd="Robslee12!"
+hostname="esgroadmap.cwco2pchjykw.us-east-2.rds.amazonaws.com"
+dbname="esgroadmap"
+uname="admin"
+pwd="hassanarshad1122"
 # new
 '''hostname="server64.web-hosting.com"
 dbname="esgrzlyo_wp275"
