@@ -150,7 +150,7 @@ Unique and Total KPIs Data:
 16.	The `column_names` list is written to the output CSV file as the header row.
 17.	The values from the `totals` dictionary are written to the output CSV file, with the columns in the same order as in the `column_names` list.
 18.	The output CSV file is closed.
-19. Email containing the output csv is sent to the specific recipient.
+19.    Email containing the output csv is sent to the specific recipient.
 
 * The `get_column_totals()` function calculates the total number and unique number of non-null values in each column of a database table called "sentenceallview".
 The function first connects to the database, then creates a list of column names to analyze. It then loops through each column name in the list and determines its data type by querying the `INFORMATION_SCHEMA.COLUMNS` table in the MySQL database.
@@ -159,23 +159,21 @@ Finally, the function returns a dictionary object where the keys are the column 
 
 Percentages of Database KPIs:
 
-Defines a function called `get_column_percentages`* that uses the column names obtained from the "sentence-all" table to calculate the percentages of non-null values, "1" values, "yes" or "true" values of specific columns, and stores the percentages in a dictionary. The function then returns the dictionary.
-Uses the `get_column_percentages` function to calculate the percentages of the columns of the "sentence-all" table and stores the results in a dictionary called `percentages`.
-Generates a timestamp using the `datetime.now().strftime()` function and stores it in a variable called `now`.
-Writes the percentages to a CSV file called "Updated__Factors_&_Percentage.csv" using the `csv.writer()` function. If the file does not exist, the function creates the header row.
-Creates a table in the MySQL database called "percentageS_table" if it does not exist using a `CREATE TABLE IF NOT EXISTS` statement.
-Inserts the percentages into the "percentageS_table" using an `INSERT INTO` statement.
-Closes the database connection.
-Sends an email to the specified recipient with the CSV file as an attachment using the `smtplib` library.
-
-
-
-* This fucntion works as following:
-•For columns with data type "tinyint", the function calculates the percentage of "1" values.
-•For columns with column names "Member of the S&P500" and "Member of the Russell 1000 Index", the function calculates the percentage of "yes" values.
-•For columns with column name "climateaction100", the function calculates the percentage of "true" values.
-•For all other columns, the function calculates the percentage of non-null values.
-
+1.	Imports required modules including mysql.connector, csv, datetime, smtplib, email.mime.multipart, email.mime.text, email.mime.application, and os.
+2.	Connects to a MySQL database and gets a list of columns of the "sentence-all" table using the `DESCRIBE` statement and stores the column names in a list called `columns`.
+3.	Defines a function called `get_column_percentages` that uses the column names obtained from the "sentence-all" table to calculate the percentages of non-null values, "1" values, "yes" or "true" values of specific columns, and stores the percentages in a dictionary. The function then returns the dictionary.
+4.	Uses the `get_column_percentages` function to calculate the percentages of the columns of the "sentence-all" table and stores the results in a dictionary called `percentages`.
+5.	Generates a timestamp using the `datetime.now().strftime()` function and stores it in a variable called `now`.
+6.	Writes the percentages to a CSV file called "Updated__Factors_&_Percentage.csv" using the `csv.writer()` function. If the file does not exist, the function creates the header row.
+7.	Creates a table in the MySQL database called "percentageS_table" if it does not exist using a `CREATE TABLE IF NOT EXISTS` statement.
+8.	Inserts the percentages into the "percentageS_table" using an `INSERT INTO` statement.
+9.	Closes the database connection.
+10.	Sends an email to the specified recipient with the CSV file as an attachment using the `smtplib` library.
+11.	The `get_column_percentages` function calculates the percentages of non-null values, "1" values, "yes" or "true" values of specific columns of the "sentence-all" table using the following methods:
+	•For columns with data type "tinyint", the function calculates the percentage of "1" values.
+	•For columns with column names "Member of the S&P500" and "Member of the Russell 1000 Index", the function calculates the percentage of "yes" values.
+	•For columns with column name "climateaction100", the function calculates the percentage of "true" values.
+	•For all other columns, the function calculates the percentage of non-null values.
 
 
 
