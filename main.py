@@ -11,10 +11,12 @@ logging.basicConfig(filename='log_app.log',
 
 py_list = ['Scraper-PDF/scrape_pdfs.py',
            #'Scraper-Gmail/Gmail PR scraper 1.0.py', 
-		   'Scraping-cleaner/ScraperCleaner 1.3.py', 
-		   'NLP/CompanyProcessing 2.6.py', 
-           'Integrate & upload/Integrate 1.2.py'
-	    'Database KPI/Database KPI 1.0 code.py']
+	   'Scraping-cleaner/ScraperCleaner 1.3.py', 
+	   'NLP/CompanyProcessing 2.6.py', 
+           'Integrate & upload/Integrate 1.2.py',
+	   'Database KPI/Percentages Database Table/Database KPI 1.0 code.py',
+           'Database KPI/Unique Data Table/Unique Data Table.py',
+           'Duplicates Remover.py']
 
 
 if __name__=='__main__':
