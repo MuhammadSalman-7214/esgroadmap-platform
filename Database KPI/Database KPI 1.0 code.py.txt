@@ -9,11 +9,11 @@ import os
 
 # Connect to the database
 connection = mysql.connector.connect(
-    host='sql447.main-hosting.eu',
-    user='u606410301_5ZhyZ',
-    password='Robslee12!',
-    database='u606410301_8QjL7'
-)
+    host='esgroadmap.cwco2pchjykw.us-east-2.rds.amazonaws.com',
+    user='admin',
+    password='hassanarshad1122',
+    database='esgroadmap')
+    
 cursor = connection.cursor()
 cursor.execute("DESCRIBE `sentence-all`")
 columns = [row[0] for row in cursor.fetchall()]
