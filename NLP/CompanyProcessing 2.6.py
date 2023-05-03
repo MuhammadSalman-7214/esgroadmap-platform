@@ -15,6 +15,9 @@ import openpyxl
 from datetime import date
 import logging
 import re
+import glob
+import os
+from datetime import date
 
 
 # Trial file
@@ -22,7 +25,15 @@ import re
 #df = pd.read_csv('210218releases clean.csv')
 
 #Open file that has been cleaned by ScraperCleaner + where only press releases with forward-looking components are included (target year)
-df = pd.read_csv(f'../Scraping-cleaner/cleaner-output/sources withtargetyears-{date.today().strftime("%B")}.csv')
+
+
+# get the latest csv file in the directory
+list_of_files = glob.glob('C:/Users/Administrator/Desktop/Projects/esg-roadmap/Scraping-cleaner/cleaner-output/sources withtargetyears*.csv')
+latest_file = max(list_of_files, key=os.path.getctime)
+
+# read the csv file
+df = pd.read_csv(latest_file)
+
 
 
 
@@ -233,7 +244,7 @@ df2 = df[df.SentenceTargetYear.notnull()]
 logging.info(df2.head(n=3))
 
 #to test saving
-df2.to_csv(f'nlp-output/targetsentences clean {date.today().strftime("%B")}.csv', encoding="utf-8-sig", index=False)
+df2.to_csv(f'C:/Users/Administrator/Desktop/Projects/esg-roadmap/NLP/nlp-output/targetsentences clean {date.today().strftime("%B")}.csv', encoding="utf-8-sig", index=False)
 
 
 #only 2021 sentences with targets
