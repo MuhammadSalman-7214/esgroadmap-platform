@@ -80,7 +80,7 @@ df3['pr_site'].fillna('Unknown', inplace=True)
 # date.today().year, date.today().strftime("%B")
 df3.to_csv(f'integrate-output/integratedtargetdata-{date.today().strftime("%B")}{date.today().year}.csv', encoding="utf-8-sig", index=False)
 
-'''dfmaster = pd.read_csv('integrate-input/integratedtargetdata-master.csv')
+dfmaster = pd.read_csv('integrate-input/integratedtargetdata-master.csv')
 dfmonth = pd.read_csv(f'integrate-output/integratedtargetdata-{date.today().strftime("%B")}{date.today().year}.csv')
 
 # Check if source is a Primary Source, i.e. from company, one of its aliases or its subsidiaries. First requires values in each source and companylist column
@@ -90,14 +90,39 @@ logging.info("Checking for new entries")
 
 # column '_merge' do not exists
 
-df = pd.concat([dfmaster, dfmonth])
 
-dfnewentries = df[ df['_merge'] == 'right_only' ]
 
-logging.info(dfnewentries.head(n=3))
+# Read the parent CSV file
+parent_df = dfmaster
 
-newmasterdf = pd.concat([dfnewentries,dfmaster])
-newmasterdf.to_csv('integrate-input/integratedtargetdata-master.csv', encoding="utf-8-sig", index=False)'''
+# Read the child CSV file
+child_df = dfmonth
+
+import pandas as pd
+
+
+
+# Find the common columns
+common_columns = list(set(child_df.columns).intersection(parent_df.columns))
+
+# Convert the columns to compatible data types
+for column in common_columns:
+    parent_df[column] = parent_df[column].astype(str)
+    child_df[column] = child_df[column].astype(str)
+
+# Merge the parent_df with the child_df using pd.concat()
+merged_df = pd.concat([parent_df[common_columns], child_df[common_columns]])
+
+# Save the merged DataFrame to a new CSV file
+merged_df.to_csv('merged.csv', index=False)
+
+
+
+
+
+
+# newmasterdf = pd.concat([dfnewentries,dfmaster])
+# newmasterdf.to_csv('integrate-input/integratedtargetdata-master.csv', encoding="utf-8-sig", index=False)
 
 df = pd.read_csv(f'integrate-output/integratedtargetdata-{date.today().strftime("%B")}{date.today().year}.csv')
 df = df.drop(columns=['company press release alias'], errors='ignore')
@@ -129,11 +154,10 @@ engine = create_engine("mysql+pymysql://{user}:{pw}@{host}/{db}"
 logging.info('Starting all sentence upload')
 print('Starting all sentence upload')
 
-df.to_sql('sentence-all', engine, index=False, if_exists='append')
+merged_df.to_sql('sentence-all', engine, index=False, if_exists='append')
 
 # No more thematic tables (eg. with only carbon sentences). These all are now created as views from the main 'sentence-all' MySQL database. This saves disk space
 # MySql code example: CREATE view sentencewaterview as SELECT * from `sentence-all` where `sentence-water`=1
 
 logging.info("All done")
 print("All done")
-
