@@ -124,8 +124,8 @@ merged_df.to_csv('merged.csv', index=False)
 # newmasterdf = pd.concat([dfnewentries,dfmaster])
 # newmasterdf.to_csv('integrate-input/integratedtargetdata-master.csv', encoding="utf-8-sig", index=False)
 
-df = pd.read_csv(f'integrate-output/integratedtargetdata-{date.today().strftime("%B")}{date.today().year}.csv')
-df = df.drop(columns=['company press release alias'], errors='ignore')
+merged_df = pd.read_csv(f'integrate-output/integratedtargetdata-{date.today().strftime("%B")}{date.today().year}.csv')
+merged_df = df.drop(columns=['company press release alias'], errors='ignore')
 # 2 Save to mysql
 
 # https://stackoverflow.com/questions/16476413/how-to-insert-pandas-dataframe-via-mysqldb-into-database
