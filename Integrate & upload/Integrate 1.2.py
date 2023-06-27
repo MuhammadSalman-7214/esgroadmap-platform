@@ -75,6 +75,7 @@ df3.rename(columns=dict,
 
 df3['source'].fillna('Unknown', inplace=True)
 df3['pr_site'].fillna('Unknown', inplace=True)
+df3['upload-date'].fillna('Unkown', inplace=True)
 
 #Change csvfile name for relevant month
 # date.today().year, date.today().strftime("%B")
@@ -98,7 +99,7 @@ parent_df = dfmaster
 # Read the child CSV file
 child_df = dfmonth
 
-import pandas as pd
+
 
 
 
@@ -111,10 +112,17 @@ for column in common_columns:
     child_df[column] = child_df[column].astype(str)
 
 # Merge the parent_df with the child_df using pd.concat()
-merged_df = pd.concat([parent_df[common_columns], child_df[common_columns]])
+merged_df = pd.concat([child_df, parent_df.drop_duplicates(subset='Company')], ignore_index=True)
+columns_to_convert = ['sentence-carbon', 'sentence-gender', 'sentence-renewables', 'sentence-suppliers',
+                      'sentence-water', 'sentence-waste', 'sentence-other']
+merged_df = file
+# Replace True/False values with 1/0 for the specified columns
+merged_df[columns_to_convert] = merged_df[columns_to_convert].replace({True: 1, False: 0})
+merged_df['upload-date'] = child_df['upload-date']
+
 
 # Save the merged DataFrame to a new CSV file
-merged_df.to_csv('merged.csv', index=False)
+
 
 
 
@@ -124,8 +132,8 @@ merged_df.to_csv('merged.csv', index=False)
 # newmasterdf = pd.concat([dfnewentries,dfmaster])
 # newmasterdf.to_csv('integrate-input/integratedtargetdata-master.csv', encoding="utf-8-sig", index=False)
 
-merged_df = pd.read_csv(f'integrate-output/integratedtargetdata-{date.today().strftime("%B")}{date.today().year}.csv')
-merged_df = df.drop(columns=['company press release alias'], errors='ignore')
+df = pd.read_csv(f'integrate-output/integratedtargetdata-{date.today().strftime("%B")}{date.today().year}.csv')
+df = df.drop(columns=['company press release alias'], errors='ignore')
 # 2 Save to mysql
 
 # https://stackoverflow.com/questions/16476413/how-to-insert-pandas-dataframe-via-mysqldb-into-database
@@ -155,6 +163,8 @@ logging.info('Starting all sentence upload')
 print('Starting all sentence upload')
 
 merged_df.to_sql('sentence-all', engine, index=False, if_exists='append')
+merged_df['upload-date'].to_sql('sentence-all', engine, index=False, if_exists='append')
+
 
 # No more thematic tables (eg. with only carbon sentences). These all are now created as views from the main 'sentence-all' MySQL database. This saves disk space
 # MySql code example: CREATE view sentencewaterview as SELECT * from `sentence-all` where `sentence-water`=1
