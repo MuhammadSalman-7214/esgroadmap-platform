@@ -3,6 +3,7 @@ import pandas as pd
 import requests
 from lxml import etree
 import undetected_chromedriver as uc
+from webdriver_manager.chrome import ChromeDriverManager
 from settings import num_companies,  crawl_press_release,crawl_annual_and_sustainability#download_pdfs, extract_text,
 import traceback
 import pipelines
@@ -226,7 +227,7 @@ def crawlPdfs(dfRoadmap,existing_links):
 	cleanPipeline = pipelines.CrawlmasterPipeline()
 	options = uc.ChromeOptions()
 	options.add_argument('--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36')
-	driver = uc.Chrome(options=options)
+	driver = uc.Chrome(options=options, driver_executable_path=ChromeDriverManager().install())
 	pdfDocuments = []
 	cleanPdfs = []
 	seenPdfUrls = []
