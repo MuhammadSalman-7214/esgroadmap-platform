@@ -31,3 +31,6 @@ Assistant Response: The information extracted from the sentences related to Mode
     A mention of the Moderna Charitable Foundation, which suggests a focus on community investment and philanthropy.
     An articulation of a global public health strategy, indicating efforts in community engagement and addressing public health issues.
 
+
+![image](https://github.com/arthurkrebbers/esgroadmap/assets/84612798/1fa74b8d-210c-4fa6-be65-9bfe4b7de79b)
+As you can see, as of 10-12-2023, the tool is working well.
