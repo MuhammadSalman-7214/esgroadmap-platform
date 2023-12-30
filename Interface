@@ -1,0 +1,23 @@
+Interface
+https://esgroadmap-tool-9m5ef8lwuxhfxv8oqv6bci.streamlit.app/
+
+Getting following error:
+Requests.exceptions.ConnectionError: This app has encountered an error. The original error message is redacted to prevent data leaks. Full error details have been recorded in the logs (if you're on Streamlit Cloud, click on 'Manage app' in the lower right of your app).
+Traceback:
+File "/home/adminuser/venv/lib/python3.9/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 534, in _run_script
+    exec(code, module.__dict__)
+File "/mount/src/esgroadmap-tool/app.py", line 80, in <module>
+    result = update_request(company_name, esg_link, annual_report_link)
+File "/mount/src/esgroadmap-tool/app.py", line 20, in update_request
+    res = requests.put(url, headers=headers, data=json.dumps(data))
+File "/home/adminuser/venv/lib/python3.9/site-packages/requests/api.py", line 130, in put
+    return request("put", url, data=data, **kwargs)
+File "/home/adminuser/venv/lib/python3.9/site-packages/requests/api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+File "/home/adminuser/venv/lib/python3.9/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+File "/home/adminuser/venv/lib/python3.9/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+File "/home/adminuser/venv/lib/python3.9/site-packages/requests/adapters.py", line 519, in send
+    raise ConnectionError(e, request=request)
+
