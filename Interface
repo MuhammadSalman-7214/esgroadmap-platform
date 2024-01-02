@@ -1,7 +1,8 @@
 Interface
 https://esgroadmap-tool-9m5ef8lwuxhfxv8oqv6bci.streamlit.app/
 
-Getting following error:
+When trying various companies (eg. https://www.enexisgroep.com/investor-relations/publications/) getting following error:
+--
 Requests.exceptions.ConnectionError: This app has encountered an error. The original error message is redacted to prevent data leaks. Full error details have been recorded in the logs (if you're on Streamlit Cloud, click on 'Manage app' in the lower right of your app).
 Traceback:
 File "/home/adminuser/venv/lib/python3.9/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 534, in _run_script
@@ -20,4 +21,4 @@ File "/home/adminuser/venv/lib/python3.9/site-packages/requests/sessions.py", li
     r = adapter.send(request, **kwargs)
 File "/home/adminuser/venv/lib/python3.9/site-packages/requests/adapters.py", line 519, in send
     raise ConnectionError(e, request=request)
-
+--
