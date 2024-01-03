@@ -46,7 +46,6 @@ print("Here")
 print("SQL DB:")
 print(df_R)
 df_R.to_csv("oct-db-2023.csv")
-time.sleep(10000)
 
 df = pd.read_csv(f'testdb.csv')
 print(len(df3))
