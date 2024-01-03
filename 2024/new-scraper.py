@@ -28,13 +28,17 @@ from re import search
 import pdfplumber
 #from webdriver_manager.chrome import ChromeDriverManager
 from datetime import datetime
+
 #import seleniumwire.undetected_chromedriver as uc
+
+
+##Run on virtual machine (linux support)
 from pyvirtualdisplay import Display
 display = Display(visible=0, size=(1920, 1080))
 display.start()
 
 
-
+##Proxy service
 username = "upwork100"
 password = "f7a25785-8c6a-413f-af20-e043f869e40e"
 
@@ -91,6 +95,7 @@ driver.delete_all_cookies()
 driver.maximize_window()
 action = ActionChains(driver)
 
+##Read existing links and get urls from company universe
 el=pd.read_csv("Existing_Links_p1.csv")
 
 existing_links=pd.DataFrame()
@@ -126,8 +131,9 @@ y=0#len(existing_links)
 #y=
 x=0
 z=0#len(errors)
-
+##Go to each link in the list 
 for link in all_links[company:]:
+    ##Check if company has been scraped previously - test
     if df['Company'].to_list()[company] in existing_company_names:
         print("Skipping Company")
         company+=1
@@ -136,17 +142,23 @@ for link in all_links[company:]:
         print("Link:",link)
         el=pd.read_csv("Existing_Links_p1.csv")
         print("Number of existing links",len(el))
+        ##Get pdf and update excel sheets
         try:
             cName=df['Company'].to_list()[company]
             print(cName)
             ticker=df['Ticker(s)'].to_list()[company]
             errors.at[z,"Company"]=cName
-            errors.at[z,"Link"]=link    
+            errors.at[z,"Link"]=link 
+
+            ##Open page link
             driver.get(link)
             time.sleep(2)
-            print(driver.find_element(By.XPATH,"//body").text)
             time.sleep(30)
+            #Get all pdf on page
             documents=driver.find_elements(By.XPATH,"//a[contains(@href,'.pdf') or contains(@href,'static-file')]")
+            
+    
+            ###Added support for iframes to improve coverage
             if len(documents)==0:
                 documents=[]
                 frames=driver.find_elements(By.XPATH,"//iframe")
@@ -157,6 +169,8 @@ for link in all_links[company:]:
                         documents.append(k)
             print("Found ",len(documents),"pdfs at ",link)
             errors.at[z,"Link-Count"]=len(documents)
+
+            ##DOwnload all pdfs in page
             for doc in documents:
                 el=el[el['PageURL']==link]
                 print(len(el))
@@ -164,9 +178,11 @@ for link in all_links[company:]:
                 doc_link=doc.get_attribute('href')
                 given_url_components = doc_link.split("/")
                 avg_similarity_scores = []
+                ###CHeck if pdf has already been previously scraped
                 for url in existing_linkz:
                     url_components = url.split("/")
                     similarity_scores = []
+                    ##Check similarity to skip existing pdfs
                     for comp1, comp2 in zip(given_url_components, url_components):
                         similarity = fuzz.ratio(comp1, comp2)
                         similarity_scores.append(similarity)
@@ -198,6 +214,7 @@ for link in all_links[company:]:
                     pass
                 if maxFlag==0 or lenFlag==0:
                     try:
+                        #Create/append existing links row with all details below
                         try:
                             doc_title=doc.text
                         except Exception as e:
@@ -214,6 +231,7 @@ for link in all_links[company:]:
                         existing_links.at[y,"DocName"]=doc_name
                         print("Extracting Text from: ",doc_link)
 
+                        ##Added headers to bypass cloudflare
                         headers = {
                         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
                         'Accept-Encoding': 'gzip, deflate, br',
@@ -231,28 +249,33 @@ for link in all_links[company:]:
                         'Upgrade-Insecure-Requests': '1',
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
                         }
-                        
+                        #DOwnloading the PDF
                         response = requests.get(doc_link,headers=headers,timeout=10)
                         print(response.status_code)
                         with io.BytesIO(response.content) as f:
+                            ##Open the pdf
                             with pdfplumber.open(f) as pdf:
                                 pages=len(pdf.pages)
                                 print("There are ",pages," pages")
-                                text=""
+                                text=""#This is 
                                 s_count=0
+                                #Navigate to each page
                                 for i in range(pages):
                                     page=pdf.pages[i]
                                     try:
+                                        #Regex and NLP operations to improve text collection
                                         regex_dot=r'([^0-9])\.([^ 0-9])'
                                         doc_text=page.extract_text(x_tolerance=1)
                                         new_text = re.sub(regex_dot, r'. \1', doc_text.replace("\n","").replace(" .","."))
                                         new_text=doc_text
                                         new_text = new_text.lower()
                                         sentence_list=nlp(new_text).sents
+                                        #Tokenize into sentences and search for specific years in the text
                                         for s in sentence_list:
                                             #print(s.text,"\n\n")
                                             sy=searchyears(s.text)
                                             if sy:
+                                                #Add a row with company details to the sentence database
                                                 output_df.at[x,"Company"]=cName
                                                 output_df.at[x,"Ticker"]=ticker
                                                 output_df.at[x,"PageURL"]=link
