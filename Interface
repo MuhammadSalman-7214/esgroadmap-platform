@@ -15,6 +15,8 @@ Aldi - https://cr.aldisouthgroup.com/en/responsibility/library
 Huawei - https://www.huawei.com/en/annual-report
 Source:
 https://en.wikipedia.org/wiki/List_of_largest_private_non-governmental_companies_by_revenue
+26th March => seems to work, sentences added for some
+however, KPI data table not fully working - Company non-null unique has not changed (stayed at 940)
 
 
 Add country + sector fields, so full company info can be added
