@@ -1,3 +1,9 @@
+16th September 2024
+Request for Salman
+**Pleased to share I have identified a potential developer that could help us resolve the issues we have faced with namecheap and certain functionalities. Before they start however, they have asked for detailed step-by-step instructions on setting up this Next.JS project on a local device/environment.
+I had shared the Readme file (and full github access) but this does not seem to work for them.
+**
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
