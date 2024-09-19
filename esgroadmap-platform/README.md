@@ -1,10 +1,32 @@
-16th September 2024
-Request for Salman
-**Pleased to share I have identified a potential developer that could help us resolve the issues we have faced with namecheap and certain functionalities. Before they start however, they have asked for detailed step-by-step instructions on setting up this Next.JS project on a local device/environment.
-I had shared the Readme file (and full github access) but this does not seem to work for them.
-**
-
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+## Setting up on local environment
+
+Step 1: In order to first run the project, Please clone the repo using git
+git clone <repo-url>
+
+Step 2: Install all packages using pnpm, if you don't have npm run this command (npm i -g pnpm)
+pnpm install
+
+Step 3: Create a .env file in the root of your project
+
+DATABASE_URL="mysql://admin:hassanarshad1122@esgroadmap.cwco2pchjykw.us-east-2.rds.amazonaws.com:3306/esgroadmap?schema=public"
+
+JWT_ACCESS_TOKEN_SECRET=abcd1234
+JWT_ACCESS_TOKEN_EXPIRY=365d
+
+API_BASE_URL=http://localhost:4000/api
+NEXT_PUBLIC_API_BASE_URL=http://localhost:4000/api
+
+STRIPE_PUBLISHABLE_KEY=pk_test_51M9E7JHISpnSlXUl05fBbd3PDx8Md9xpOH5RE5h4721TPWp0RPHUPsaIs9F4JlLO3hkLCTRAX49RO7QwMSaE0Rjk005EdVLxt2
+STRIPE_SECRET_KEY=sk_test_51M9E7JHISpnSlXUlKEW3BwZvoFs0Fe6nOYMPdRDHhYdOLUje7vnP4Tsyn3nHyZcOjPuOCk02kbkPDIjDLK7EP4fN00AYbE4xVp
+STRIPE_WEBHOOK_SECRET=whsec_a4409cd7462b28f2e1ecbdc8ea1a97b2eb2e1c5500ca48900f5f5e6dfde991c4
+NEXT_PUBLIC_STRIPE_PAYMENT_LINK=https://buy.stripe.com/test_aEU2ce0xu2Wn3sI288
+
+Paste these things inside the .env file
+
+Step 4: Run the project with pnpm run dev
+
 
 ## Getting Started
 
