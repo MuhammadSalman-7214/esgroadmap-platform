@@ -75,7 +75,7 @@ def send_csv_email(log, filename):
     @return None
     """
     try:
-        with smtplib.SMTP(os.getenv("SMTP_SERVER"), os.getenv("SMTP_PORT")) as server:
+        with smtplib.SMTP(host=os.getenv("SMTP_SERVER"), port=os.getenv("SMTP_PORT")) as server:
             msg = MIMEMultipart()
             msg["From"] = os.getenv("SMTP_FROM")
             msg["To"] = "info@esgroadmap.com"

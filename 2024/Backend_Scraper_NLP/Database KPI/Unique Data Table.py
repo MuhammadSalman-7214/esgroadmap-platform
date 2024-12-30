@@ -12,6 +12,13 @@ import pymysql
 
 
 def get_column_totals(cursor, log):
+    """
+    Function to add columns to sentencesall View for further processing
+    @param cursor: PyMYSQL cursor object (Object)
+    @param log: Logger Object (Object)
+
+    @return totals: Totals associated with columns (dict)
+    """
     try:
         columns = [
             "Company",
