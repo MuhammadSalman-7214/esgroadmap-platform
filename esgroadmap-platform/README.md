@@ -23,6 +23,8 @@ STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 NEXT_PUBLIC_STRIPE_PAYMENT_LINK=
 
+BYPASS_AUTH=true
+
 Paste these things inside the .env file
 
 Step 4: Run the project with pnpm run dev
