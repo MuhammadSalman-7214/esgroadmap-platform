@@ -1,33 +1,13 @@
 import { HttpUnAuthorizedError } from '@/errors'
 import prisma from '@/lib/prisma'
 import token from '@/utils/token'
-import { cookies, headers } from 'next/headers'
+import { headers } from 'next/headers'
+import { createMockUser } from '@/mocks/mockUser'
 
 export default async function authorizer() {
-
-
-   if (process.env.BYPASS_AUTH === 'true') {
-    return {
-      user: {
-        id: 1, // Mock user ID (you can change this)
-        email: 'mockuser@example.com',
-        username: 'mockuser',
-        role: 'user', // Or 'admin' if needed
-        plan: 1, // Changed from 'paid' to 1 to match Prisma schema
-        isActive: true,
-        profileImage: '',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: null,
-        stripeId: 'mock-stripe-id'
-      },
-      payload: {
-        id: 1,
-        email: 'mockuser@example.com',
-        username: 'mockuser',
-        role: 'user'
-      }
-    }
+  if (process.env.BYPASS_AUTH === 'true') {
+    const { user, credentials: payload } = createMockUser();
+    return { user, payload };
   }
   const authorization = headers().get('Authorization')
 
