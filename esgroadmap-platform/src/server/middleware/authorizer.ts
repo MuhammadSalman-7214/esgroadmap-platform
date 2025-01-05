@@ -6,14 +6,14 @@ import { cookies, headers } from 'next/headers'
 export default async function authorizer() {
 
 
-  if (process.env.BYPASS_AUTH === 'true') {
+   if (process.env.BYPASS_AUTH === 'true') {
     return {
       user: {
         id: 1, // Mock user ID (you can change this)
         email: 'mockuser@example.com',
         username: 'mockuser',
         role: 'user', // Or 'admin' if needed
-        plan: 'paid', // Or 'free' if needed
+        plan: 1, // Changed from 'paid' to 1 to match Prisma schema
         isActive: true,
         profileImage: '',
         createdAt: new Date(),
@@ -22,8 +22,11 @@ export default async function authorizer() {
         stripeId: 'mock-stripe-id'
       },
       payload: {
-        // You might not need a payload in the mock scenario
-      },
+        id: 1,
+        email: 'mockuser@example.com',
+        username: 'mockuser',
+        role: 'user'
+      }
     }
   }
   const authorization = headers().get('Authorization')

@@ -10,7 +10,7 @@ export const currentUser = async () => {
         email: 'mockuser@example.com',
         username: 'mockuser',
         role: 'user', // Or 'admin'
-        plan: 'paid', // Or 'free'
+        plan: 1, // Assuming 'plan' is an integer based on your schema
         isActive: true,
         profileImage: '',
         createdAt: new Date(),
@@ -18,7 +18,12 @@ export const currentUser = async () => {
         deletedAt: null,
         stripeId: 'mock-stripe-id'
       },
-      payload: {}
+      credentials: {
+        id: 1,
+        email: 'mockuser@example.com',
+        username: 'mockuser',
+        role: 'user'
+      }
     };
   }
   const accessToken = cookies().get('token')
