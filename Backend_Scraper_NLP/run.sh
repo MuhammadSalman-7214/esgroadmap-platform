@@ -39,9 +39,9 @@ while true; do
             #cd "Database KPI"
             #log_message "1"
             # Run the sequential scripts
-            python3 "/home/ubuntu/pdf-test/Database KPI/Database KPI 1.0 code.py"
+            python3 "/home/ubuntu/backend_scraper_nlp/Database KPI/Database KPI 1.0 code.py"
             #log_message "2"
-            python3 "/home/ubuntu/pdf-test/Database KPI/Unique Data Table.py"
+            python3 "/home/ubuntu/backend_scraper_nlp/Database KPI/Unique Data Table.py"
             
             log_message "Sent KPI and Unique Data Table, Turning off VM"
             tmux kill-session -t "parallel_scripts"
