@@ -340,8 +340,6 @@ def main():
                 errors.at[z, "Link-Count"] = len(documents)
                 el = el[el["Company"] == cName]
                 for ind, doc in enumerate(documents):
-                    if ind > 6:  # remove
-                        break
                     logger.info(f"Found {len(el)} links for {cName}")
                     existing_linkz = el["DocURL"].to_list()
                     try:
@@ -523,8 +521,6 @@ def main():
                     add_existing_links(logger, existing_links)
                     logger.error(f"Error Updating Database {str(e)}")
             company += 1
-            if company > 4:
-                break
     except Exception as e:
         logger.error(f"Error occured: {e}")
 
