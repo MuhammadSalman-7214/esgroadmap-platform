@@ -461,10 +461,10 @@ def main():
                     df_out["SentenceTargetYear"] = df_out["Target Sentence Year"]
                     df_out["upload-date"] = pd.to_datetime("today").normalize()
                     sql_update(df_out, logger, connection)
-                    add_existing_links(logger, existing_links)
                 except Exception as e:
-                    add_existing_links(logger, existing_links)
                     logger.error(f"Error Updating Database {str(e)}")
+            if len(existing_links) > 0:
+                add_existing_links(logger, existing_links)
             company += 1
             logger.info(f"Error number: {company}")
     except Exception as e:

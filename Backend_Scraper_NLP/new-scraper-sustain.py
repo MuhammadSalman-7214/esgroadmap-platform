@@ -516,10 +516,10 @@ def main():
                 try:
                     df_update = process_sustainability_sentences(logger)
                     sql_update(df_update, logger, connection)
-                    add_existing_links(logger, existing_links)
                 except Exception as e:
-                    add_existing_links(logger, existing_links)
                     logger.error(f"Error Updating Database {str(e)}")
+            if len(existing_links) > 0:
+                add_existing_links(logger, existing_links)
             company += 1
     except Exception as e:
         logger.error(f"Error occured: {e}")
