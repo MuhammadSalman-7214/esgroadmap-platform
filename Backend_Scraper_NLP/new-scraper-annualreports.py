@@ -429,14 +429,10 @@ def main():
                                                         )
                                             except Exception as e:
                                                 logger.error(f"Error during regex extraction: {e}")
-                                                # import traceback
-                                                # traceback.print_exc()
                             logger.info(f"Extracted {s_count} Target Sentences")
                             existing_links.at[y, "Number of Sentences"] = s_count
                         except Exception as e:
                             logger.error(f"Error during Fetching Document: {e}")
-                            import traceback
-                            traceback.print_exc()
 
                         y = y + 1
                     else:
