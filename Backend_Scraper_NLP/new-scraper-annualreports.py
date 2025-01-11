@@ -8,7 +8,7 @@ from re import search
 from datetime import datetime
 
 import spacy
-import pdfplumber
+import fitz
 import numpy as np
 import pandas as pd
 import pymysql.cursors
@@ -371,19 +371,17 @@ def main():
                             )
                             logger.info(response.status_code)
                             with io.BytesIO(response.content) as f:
-                                with pdfplumber.open(f) as pdf:
-                                    pages = len(pdf.pages)
+                                with fitz.open(stream=f, filetype="pdf") as pdf:
+                                    pages = len(pdf)
                                     logger.info(f"There are {pages} pages")
                                     text = ""
                                     s_count = 0
                                     if pages < 400:
                                         for i in range(pages):
-                                            page = pdf.pages[i]
+                                            page = pdf[i]
                                             try:
                                                 regex_dot = r"([^0-9])\.([^ 0-9])"
-                                                doc_text = page.extract_text(
-                                                    x_tolerance=1
-                                                )
+                                                doc_text = page.get_text("text")
                                                 new_text = re.sub(
                                                     regex_dot,
                                                     r". \1",
@@ -391,11 +389,10 @@ def main():
                                                         " .", "."
                                                     ),
                                                 )
-                                                new_text = doc_text
                                                 new_text = new_text.lower()
                                                 sentence_list = nlp(new_text).sents
-                                                for s in sentence_list:
-                                                    sy = searchyears(s.text, logger)
+                                                for sent in sentence_list:
+                                                    sy = searchyears(sent.text, logger)
                                                     if sy:
                                                         output_df.at[x, "Company"] = (
                                                             cName
@@ -417,7 +414,7 @@ def main():
                                                         )
                                                         output_df.at[
                                                             x, "Target sentence"
-                                                        ] = s.text
+                                                        ] = sent.text
                                                         output_df.at[
                                                             x, "Target Sentence Page"
                                                         ] = (i + 1)
@@ -431,11 +428,15 @@ def main():
                                                             index=False,
                                                         )
                                             except Exception as e:
-                                                pass
+                                                logger.error(f"Error during regex extraction: {e}")
+                                                # import traceback
+                                                # traceback.print_exc()
                             logger.info(f"Extracted {s_count} Target Sentences")
                             existing_links.at[y, "Number of Sentences"] = s_count
                         except Exception as e:
-                            pass
+                            logger.error(f"Error during Fetching Document: {e}")
+                            import traceback
+                            traceback.print_exc()
 
                         y = y + 1
                     else:
@@ -445,7 +446,7 @@ def main():
                 errors.to_csv("Errors-extra.csv", index=False)
             except Exception as e:
 
-                logger.error(f"Error: {e}")
+                logger.error(f"Error while processing the link: {e}")
                 try:
                     errors.at[z, "DocURL"] = doc_link
                     errors.at[z, "Error"] = e
@@ -455,6 +456,7 @@ def main():
                 z += 1
             logger.info(f"Number of existing_links: {len(existing_links)}")
             existing_links.to_csv("Existing_Links-extra.csv", index=False)
+            logger.info(f"Number of Output Rows: {len(output_df)}")
             if len(output_df) > 0:
                 try:
                     df_out = pd.read_csv("Test_output-extra-2_annualreports.csv")
@@ -466,9 +468,9 @@ def main():
             if len(existing_links) > 0:
                 add_existing_links(logger, existing_links)
             company += 1
-            logger.info(f"Error number: {company}")
+            logger.info(f"Company number number: {company}")
     except Exception as e:
-        logger.error(f"Error occured: {e}")
+        logger.error(f"Unexpected Error occured: {e}")
 
 
 if __name__ == "__main__":
