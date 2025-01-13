@@ -312,7 +312,7 @@ def main():
                         avg_similarity_scores.append(average_similarity_score)
 
                     try:
-                        if max(avg_similarity_scores) > 90:
+                        if max(avg_similarity_scores) < 90:
                             maxFlag = 0
                         else:
                             maxFlag = 1
