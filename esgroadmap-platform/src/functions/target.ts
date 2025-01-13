@@ -5,6 +5,7 @@ import { Prisma } from '@prisma/client'
 import prisma from '@/lib/prisma'
 import { cache } from 'react'
 import { TargetTables } from '@/types/target'
+import { getMockSentenceCarbonData } from '@/mocks/targets'
 
 export type TargetSentenceData = TableData<
   Prisma.$SentenceAllViewPayload,
@@ -158,16 +159,29 @@ const getSentenceRenewablesData = async () => {
   ) as TargetSentenceData[]
 }
 
+const getCarbonData = cache(() => {
+  if (
+    process.env.NODE_ENV === "development" &&
+    process.env.USE_MOCK_TARGETS === "true"
+  ) {
+    return getMockSentenceCarbonData();
+  } else {
+    return getSentenceCarbonData();
+  }
+});
 
-const targetSentences: Record<TargetTables, () => Promise<TargetSentenceData[]>> = {
+const targetSentences: Record<
+  TargetTables,
+  () => Promise<TargetSentenceData[]>
+> = {
   "waste_&_recycling": cache(getSentenceWasteData),
-  carbon_reduction: cache(getSentenceCarbonData),
+  carbon_reduction: getCarbonData,
   gender_diversity: cache(getSentenceGenderData),
   renewables: cache(getSentenceRenewablesData),
   supply_chain: cache(getSentenceSupplierData),
   water_management: cache(getSentenceWaterData),
   all_company: cache(getSentenceAllCompanyData),
-}
+};
 
 
 const target =  {
