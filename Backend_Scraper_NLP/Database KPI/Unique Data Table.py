@@ -124,6 +124,7 @@ def send_csv_email(log, filename):
             text = msg.as_string()
             server.sendmail(os.getenv("SMTP_FROM"), "info@esgroadmap.com", text)
             server.quit()
+            log.info("Email Sent Successfully")
     except Exception as e:
         log.error(f"Error while sending CSV emai: {e}")
 

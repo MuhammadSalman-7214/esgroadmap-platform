@@ -43,32 +43,15 @@ log_message() {
 }
 
 # Check if both scripts have completed in a loop
-while true; do
-    if tmux list-sessions | grep -q "parallel_scripts2"; then
-        if [[ -f "log1.log" && -f "log2.log" ]]; then
-            log_message "Both scripts have completed. Deleting session..."
-            #tmux kill-session -t "parallel_scripts2"
-            # Change directory to Database KPI
-            #cd "Database KPI"
-            #log_message "1"
-            # Run the sequential scripts
-            python3 "/home/ubuntu/backend_scraper_nlp/Database KPI/Database KPI 1.0 code.py"
-            #log_message "2"
-            python3 "/home/ubuntu/backend_scraper_nlp/Database KPI/Unique Data Table.py"
-            
-            log_message "Sent KPI and Unique Data Table, Turning off VM"
-            tmux kill-session -t "parallel_scripts2"
-            break
-        else
-            log_message "Some scripts have not completed."
-        fi
-    else
-        log_message "Session has been terminated."
-        break
-    fi
-    sleep 1
-done
 
+log_message "Both scripts have completed. Deleting session..."
+
+# Run the sequential scripts
+python3 "/home/ubuntu/backend_scraper_nlp/Database KPI/Database KPI 1.0 code.py"
+#log_message "2"
+python3 "/home/ubuntu/backend_scraper_nlp/Database KPI/Unique Data Table.py"
+
+log_message "Sent KPI and Unique Data Table, Turning off VM"
 #kill all chrome processes
 killall -9 chrome
 # Make a curl request and log the result
