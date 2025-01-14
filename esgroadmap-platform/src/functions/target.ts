@@ -161,7 +161,6 @@ const getSentenceRenewablesData = async () => {
 
 const getCarbonData = cache(() => {
   if (
-    process.env.NODE_ENV === "development" &&
     process.env.USE_MOCK_TARGETS === "true"
   ) {
     return getMockSentenceCarbonData();
