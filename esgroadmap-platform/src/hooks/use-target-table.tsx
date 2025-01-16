@@ -90,18 +90,63 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 	}, [data]);
 
 	const getWordLimitAndWidth = (key: string) => {
-		const hasEnoughSpaces = key.split(" ").length > 4;
-		let width =
-			calculateWidthBasedOnWordLength(key, hasEnoughSpaces ? 2 : 1) + 40;
-
-		let limit = 10000;
-
-		if (key === dbColumns.TargetSentenceView.Target_sentence) {
-			limit = 100;
-			width += 200;
+		// Optimized column widths
+		switch(key) {
+			case 'ID':
+				return {
+					limit: 10000,
+					width: '100px',
+					style: {
+						width: '100px',
+						minWidth: '100px',
+						maxWidth: '150px',
+						overflow: 'hidden',
+						textOverflow: 'ellipsis'
+					}
+				};
+			case dbColumns.TargetSentenceView.Target_sentence:
+				return {
+					limit: 100,
+					width: '400px',
+					style: { width: '400px' }
+				};
+			case dbColumns.TargetSentenceView.DocURL:
+				return {
+					limit: 10000,
+					width: '100px',
+					style: { width: '100px' }
+				};
+			case dbColumns.TargetSentenceView.Company:
+				return {
+					limit: 10000,
+					width: '150px',
+					style: { width: '150px' }
+				};
+			case dbColumns.TargetSentenceView.Target_Years:
+				return {
+					limit: 10000,
+					width: '120px',
+					style: { width: '120px' }
+				};
+			case dbColumns.TargetSentenceView.Country:
+				return {
+					limit: 10000,
+					width: '120px',
+					style: { width: '120px' }
+				};
+			case dbColumns.TargetSentenceView.Upload_Date:
+				return {
+					limit: 10000,
+					width: '120px',
+					style: { width: '120px' }
+				};
+			default:
+				return {
+					limit: 10000,
+					width: '130px',
+					style: { width: '130px' }
+				};
 		}
-
-		return { limit, width };
 	};
 
 	const renderHeader = useCallback((key: string) => {
@@ -178,27 +223,43 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 	const columns = useMemo(() => {
 		if (data.length === 0) return [];
 		return Object.keys(data[0]).map((key) => {
-			const { width } = getWordLimitAndWidth(key);
+			const { width, style } = getWordLimitAndWidth(key);
 
 			const options = {
 				header: renderHeader(key),
 				field: key,
 				body: renderBody(key),
-				headerStyle: { paddingLeft: 0, paddingRight: 0 },
-				bodyStyle: { paddingLeft: 0, paddingRight: 0 },
-				headerClassName:
-					"text-[14px] text-center items-center py-2 font-semibold",
-				bodyClassName: "text-[14px] px-2 py-2 text-center",
+				headerStyle: { 
+					paddingLeft: '0.75rem', 
+					paddingRight: '1.5rem',
+					whiteSpace: 'normal',
+					minHeight: '3rem',
+					position: 'relative'
+				},
+				bodyStyle: { 
+					paddingLeft: '0.75rem', 
+					paddingRight: '0.75rem',
+					whiteSpace: 'normal'
+				},
+				headerClassName: "text-[14px] text-center items-center py-3 font-semibold",
+				bodyClassName: "text-[14px] px-4 py-3 text-center",
 				sortable: true,
 				filter: key in filters,
 				showFilterMenuOptions: false,
 				showFilterMenu: false,
+				sortIconClassName: "ml-2",
+				style: {
+					...style,
+					textAlign: 'center'
+				},
 			} as React.ComponentProps<typeof Column>;
 
 			if (key in filters) {
-				options.filterHeaderStyle = { minWidth: width + 100 };
+				options.filterHeaderStyle = { 
+					minWidth: width + 100,
+					textAlign: 'center'
+				};
 				let filterKey = key as keyof typeof filters;
-				// If filter match mode is IN
 				const matchMode = filters[filterKey];
 				options.filterMatchMode = matchMode;
 				if (matchMode === FilterMatchMode.IN) {

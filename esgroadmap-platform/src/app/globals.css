@@ -89,3 +89,73 @@
 html {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
+
+/* Base table styling */
+.p-datatable {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  border-radius: var(--radius);
+}
+
+/* Header styling */
+.p-datatable .p-datatable-thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+/* Basic row and cell styling */
+.p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.6rem 0.75rem;
+  line-height: 1.4;
+  vertical-align: top;
+}
+
+/* Filter row */
+.p-datatable .p-datatable-thead tr.p-datatable-filters {
+  position: sticky;
+  top: 43px;
+  z-index: 1;
+  background: white;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Filter components */
+.p-column-filter {
+  width: calc(100% - 1rem) !important;
+  margin: 0.15rem 0.5rem;  /* Equal margins left and right */
+}
+
+/* Input and MultiSelect styling */
+.p-column-filter .p-inputtext,
+.p-column-filter .p-multiselect {
+  width: 100%;
+  height: 2.2rem;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+/* MultiSelect specific adjustments */
+.p-column-filter .p-multiselect .p-multiselect-label {
+  padding: 0.25rem;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* MultiSelect panel items */
+.p-multiselect-panel .p-multiselect-items .p-multiselect-item {
+  padding: 0.4rem 0.5rem;
+  font-size: 0.8rem;
+}
+
+/* Striped rows with hover */
+.p-datatable .p-datatable-tbody > tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background-color: #e9ecef !important;
+}

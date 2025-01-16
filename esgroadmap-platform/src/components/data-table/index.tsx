@@ -190,11 +190,22 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 						"FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport",
 				}}
 				paginatorPosition="bottom"
-				tableStyle={{ minWidth: "50rem" }}
+				className="p-datatable-sm"
+				tableStyle={{ 
+					width: '100%',
+					minWidth: 'auto'
+				}}
+				resizableColumns
+				columnResizeMode="expand"
+				scrollable
+				scrollHeight="calc(100vh - 300px)"
+				breakpoint="960px"
 				onValueChange={(value) => {
 					setData(value);
 				}}
 				onFilter={(event) => setFilters(event.filters)}
+				reorderableColumns
+				virtualScroller={false}
 			>
 				{props.columns.map((col, index) => (
 					<Column
@@ -202,6 +213,8 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 						columnKey={index.toString()}
 						{...col}
 						className="py-2"
+						resizeable={true}
+						style={{ width: col.width }}
 					/>
 				))}
 			</PRDataTable>
