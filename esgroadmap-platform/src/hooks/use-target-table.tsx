@@ -122,7 +122,7 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 					width: '150px',
 					style: { width: '150px' }
 				};
-			case dbColumns.TargetSentenceView.Target_Years:
+			case dbColumns.TargetSentenceView.SentenceTargetYear:
 				return {
 					limit: 10000,
 					width: '120px',
@@ -134,7 +134,7 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 					width: '120px',
 					style: { width: '120px' }
 				};
-			case dbColumns.TargetSentenceView.Upload_Date:
+			case dbColumns.TargetSentenceView.upload_date:
 				return {
 					limit: 10000,
 					width: '120px',

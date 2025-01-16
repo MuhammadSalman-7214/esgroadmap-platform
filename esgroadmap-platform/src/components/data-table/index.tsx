@@ -205,7 +205,6 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 				}}
 				onFilter={(event) => setFilters(event.filters)}
 				reorderableColumns
-				virtualScroller={false}
 			>
 				{props.columns.map((col, index) => (
 					<Column
@@ -214,7 +213,7 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 						{...col}
 						className="py-2"
 						resizeable={true}
-						style={{ width: col.width }}
+						style={col.style}
 					/>
 				))}
 			</PRDataTable>
