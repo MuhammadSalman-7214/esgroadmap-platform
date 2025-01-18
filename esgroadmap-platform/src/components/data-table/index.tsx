@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useRef, useState, useEffect } from "react";
 import {
 	DataTableFilterMeta,
 	DataTableFilterMetaData,
@@ -64,6 +64,11 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 	});
 	const [data, setData] = useState<TRow[]>(props.data);
 	const [globalFilterValue, setGlobalFilterValue] = useState("");
+	const [pageLinkSize, setPageLinkSize] = useState(6);
+	const [paginatorTemplate, setPaginatorTemplate] = useState({
+		layout: "FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
+	});
+	const [rowsPerPageOptions, setRowsPerPageOptions] = useState([10, 50, 100, 150]);
 
 	const setDialogValue = useCallback(
 		(key: keyof typeof showDialogs, value: boolean) => {
@@ -152,8 +157,41 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 		URL.revokeObjectURL(url);
 	};
 
+	useEffect(() => {
+		const handleResize = () => {
+			const width = window.innerWidth;
+			if (width < 640) { // sm breakpoint
+				setPageLinkSize(0);
+				setPaginatorTemplate({
+					layout: "FirstPageLink PrevPageLink NextPageLink LastPageLink CurrentPageReport"
+				});
+			} else if (width < 768) { // md breakpoint
+				setPageLinkSize(2);
+				setPaginatorTemplate({
+					layout: "FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
+				});
+			} else if (width < 1024) { // lg breakpoint
+				setPageLinkSize(4);
+				setPaginatorTemplate({
+					layout: "FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
+				});
+			} else {
+				setPageLinkSize(6);
+				setPaginatorTemplate({
+					layout: "FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
+				});
+			}
+		};
+
+		// Set initial value
+		handleResize();
+
+		window.addEventListener('resize', handleResize);
+		return () => window.removeEventListener('resize', handleResize);
+	}, []);
+
 	return (
-		<div className="bg-white border border-gray-200 rounded-lg shadow w-100 flex-1">
+		<div className="bg-white border border-gray-200 rounded-lg shadow flex-1 flex flex-col min-h-0 [&_.p-datatable-header]:p-2">
 			<PRDataTable
 				value={props.data}
 				ref={ref}
@@ -162,58 +200,73 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 				loading={loading}
 				dataKey="id"
 				emptyMessage="No data found."
-				pageLinkSize={6}
+				pageLinkSize={pageLinkSize}
 				header={
-					<Header
-						globalFilterValue={globalFilterValue}
-						onGlobalFilterChange={onGlobalFilterChange}
-						onDownloadOptionSelect={async (option) => {
-							if (option === "csv") {
-								await saveToCSV();
-							} else if (option === "excel") {
-								await saveToExcel();
-							}
-						}}
-						onFilterOptionSelect={onFilterOptionSelect}
-					/>
+						<Header
+							globalFilterValue={globalFilterValue}
+							onGlobalFilterChange={onGlobalFilterChange}
+							onDownloadOptionSelect={async (option) => {
+								if (option === "csv") {
+									await saveToCSV();
+								} else if (option === "excel") {
+									await saveToExcel();
+								}
+							}}
+							onFilterOptionSelect={onFilterOptionSelect}
+						/>
 				}
 				filters={filters}
 				globalFilterFields={props.filters ? Object.keys(props.filters) : []}
-				filterDisplay="row"
+				filterDisplay="menu"
+				filterIcon="pi pi-sliders-h"
 				alwaysShowPaginator
 				showGridlines
 				stripedRows
-				rowsPerPageOptions={[10, 50, 100, 150]}
-				exportFilename={Date.now().toString()}
-				paginatorTemplate={{
-					layout:
-						"FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport",
-				}}
-				paginatorPosition="bottom"
-				className="p-datatable-sm"
-				tableStyle={{ 
-					width: '100%',
-					minWidth: 'auto'
-				}}
-				resizableColumns
-				columnResizeMode="expand"
+				rowsPerPageOptions={rowsPerPageOptions}
 				scrollable
-				scrollHeight="calc(100vh - 300px)"
-				breakpoint="960px"
+				scrollHeight="flex"
+				exportFilename={Date.now().toString()}
+				paginatorTemplate={paginatorTemplate.layout}
+				paginatorPosition="bottom"
+				tableStyle={{ minWidth: "50rem" }}
 				onValueChange={(value) => {
 					setData(value);
 				}}
 				onFilter={(event) => setFilters(event.filters)}
-				reorderableColumns
+				className="
+					flex-1
+					flex
+					flex-col
+					[&_.p-datatable-wrapper]:flex-1
+					[&_.p-datatable-wrapper]:flex
+					[&_.p-datatable-wrapper]:flex-col
+					[&_.p-datatable-table]:flex-1
+					[&_.p-datatable-scrollable-wrapper]:flex-1
+					[&_.p-datatable-scrollable-view]:flex-1
+					[&_.p-paginator]:flex-wrap 
+					[&_.p-paginator]:gap-1 
+					[&_.p-paginator]:justify-center 
+					[&_.p-paginator-current]:text-sm
+					[&_.p-paginator-current]:text-center
+					[&_.p-paginator-current]:order-last 
+					[&_.p-paginator-current]:w-full 
+					sm:[&_.p-paginator-current]:w-auto
+					[&_.p-sortable-column-icon]:ml-2
+				"
+				paginatorLeft={null}
+				paginatorRight={null}
+				sortIcon={(options) => (
+					<span className="text-500 mr-2">
+						{options.sorted ? (options.sortOrder === 1 ? '▼' : '▲') : ''}
+					</span>
+				)}
 			>
 				{props.columns.map((col, index) => (
 					<Column
 						key={index}
 						columnKey={index.toString()}
 						{...col}
-						className="py-2"
-						resizeable={true}
-						style={col.style}
+						className="py-1"
 					/>
 				))}
 			</PRDataTable>

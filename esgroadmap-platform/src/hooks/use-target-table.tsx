@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import dbColumns from "@/constants/columns";
 import { Column } from "primereact/column";
 import Link from "next/link";
-import { FilterMatchMode } from "primereact/api";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { MultiSelect } from "primereact/multiselect";
 
 const filters = {
@@ -90,63 +90,26 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 	}, [data]);
 
 	const getWordLimitAndWidth = (key: string) => {
-		// Optimized column widths
-		switch(key) {
-			case 'ID':
-				return {
-					limit: 10000,
-					width: '100px',
-					style: {
-						width: '100px',
-						minWidth: '100px',
-						maxWidth: '150px',
-						overflow: 'hidden',
-						textOverflow: 'ellipsis'
-					}
-				};
-			case dbColumns.TargetSentenceView.Target_sentence:
-				return {
-					limit: 100,
-					width: '400px',
-					style: { width: '400px' }
-				};
-			case dbColumns.TargetSentenceView.DocURL:
-				return {
-					limit: 10000,
-					width: '100px',
-					style: { width: '100px' }
-				};
-			case dbColumns.TargetSentenceView.Company:
-				return {
-					limit: 10000,
-					width: '150px',
-					style: { width: '150px' }
-				};
-			case dbColumns.TargetSentenceView.SentenceTargetYear:
-				return {
-					limit: 10000,
-					width: '120px',
-					style: { width: '120px' }
-				};
-			case dbColumns.TargetSentenceView.Country:
-				return {
-					limit: 10000,
-					width: '120px',
-					style: { width: '120px' }
-				};
-			case dbColumns.TargetSentenceView.upload_date:
-				return {
-					limit: 10000,
-					width: '120px',
-					style: { width: '120px' }
-				};
-			default:
-				return {
-					limit: 10000,
-					width: '130px',
-					style: { width: '130px' }
-				};
+		// Special handling for sector code column to prevent excessive width
+		if (key.includes("sector code")) {
+			return { 
+				limit: 10000, 
+				width: 150  // Fixed width for sector code columns
+			};
 		}
+
+		const hasEnoughSpaces = key.split(" ").length > 4;
+		let width =
+			calculateWidthBasedOnWordLength(key, hasEnoughSpaces ? 2 : 1) + 40;
+
+		let limit = 10000;
+
+		if (key === dbColumns.TargetSentenceView.Target_sentence) {
+			limit = 80;
+			width += 100;
+		}
+
+		return { limit, width };
 	};
 
 	const renderHeader = useCallback((key: string) => {
@@ -180,14 +143,27 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 
 			if (key === dbColumns.TargetSentenceView.DocURL) {
 				return (
+					// <Link
+					// 	href={value}
+					// 	target="_blank"
+					// 	className="text-blue-600 text-[15px]"
+					// >
+					// 	Click Here
+					// </Link>
 					<Link
 						href={value}
 						target="_blank"
-						className="text-blue-600 text-[15px]"
+						rel="noopener noreferrer"
+						aria-label="Open document"
+						className="inline-flex items-center text-blue-600"
 					>
-						Click Here
-					</Link>
+  						<i className="pi pi-external-link"></i>
+						</Link>
+
+
+
 				);
+
 			}
 
 			if (key === dbColumns.TargetSentenceView.Target_sentence) {
@@ -223,42 +199,25 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 	const columns = useMemo(() => {
 		if (data.length === 0) return [];
 		return Object.keys(data[0]).map((key) => {
-			const { width, style } = getWordLimitAndWidth(key);
+			const { width } = getWordLimitAndWidth(key);
 
 			const options = {
 				header: renderHeader(key),
 				field: key,
 				body: renderBody(key),
-				headerStyle: { 
-					paddingLeft: '0.75rem', 
-					paddingRight: '1.5rem',
-					whiteSpace: 'normal',
-					minHeight: '3rem',
-					position: 'relative'
-				},
-				bodyStyle: { 
-					paddingLeft: '0.75rem', 
-					paddingRight: '0.75rem',
-					whiteSpace: 'normal'
-				},
-				headerClassName: "text-[14px] text-center items-center py-3 font-semibold",
-				bodyClassName: "text-[14px] px-4 py-3 text-center",
+				headerStyle: { paddingLeft: 0, paddingRight: 0 },
+				bodyStyle: { padding: '0.5rem 1rem' },
+				headerClassName:
+					"text-[14px] text-center items-center py-2 font-semibold [&_.p-sortable-column-icon]:mr-2",
+				bodyClassName: "text-[14px] py-2 text-center px-2 sm:px-3 md:px-4 lg:px-6",
 				sortable: true,
 				filter: key in filters,
-				showFilterMenuOptions: false,
-				showFilterMenu: false,
-				sortIconClassName: "ml-2",
-				style: {
-					...style,
-					textAlign: 'center'
-				},
+				showFilterMenuOptions: true,
+				showFilterMenu: true,
+				filterMenuStyle: { width: '250px' },
 			} as React.ComponentProps<typeof Column>;
 
 			if (key in filters) {
-				options.filterHeaderStyle = { 
-					minWidth: width + 100,
-					textAlign: 'center'
-				};
 				let filterKey = key as keyof typeof filters;
 				const matchMode = filters[filterKey];
 				options.filterMatchMode = matchMode;
@@ -269,6 +228,9 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 							data: filterData,
 							key,
 						});
+						options.showFilterOperator = false;
+						options.filterMatchModeOptions = [{ value: 'in', label: 'In' }];
+						options.showFilterMatchModes = false;
 					}
 				}
 			}
