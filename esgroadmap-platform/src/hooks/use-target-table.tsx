@@ -151,14 +151,15 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 					// 	Click Here
 					// </Link>
 					<Link
-  						href={value}
-  						target="_blank"
-  						rel="noopener noreferrer"
-  						aria-label="Open document"
-  						className="inline-flex items-center text-blue-600"
-						>
-  						<i className="pi pi-external-link mr-1"></i> View
-					</Link>
+						href={value}
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="Open document"
+						className="inline-flex items-center text-blue-600"
+					>
+  						<i className="pi pi-external-link"></i>
+						</Link>
+
 
 
 				);
