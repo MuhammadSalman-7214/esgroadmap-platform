@@ -153,7 +153,7 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 	};
 
 	return (
-		<div className="bg-white border border-gray-200 rounded-lg shadow w-100 flex-1">
+		<div className="bg-white border border-gray-200 rounded-lg shadow w-100 flex-1 [&_.p-datatable-header]:p-2">
 			<PRDataTable
 				value={props.data}
 				ref={ref}
@@ -164,22 +164,23 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 				emptyMessage="No data found."
 				pageLinkSize={6}
 				header={
-					<Header
-						globalFilterValue={globalFilterValue}
-						onGlobalFilterChange={onGlobalFilterChange}
-						onDownloadOptionSelect={async (option) => {
-							if (option === "csv") {
-								await saveToCSV();
-							} else if (option === "excel") {
-								await saveToExcel();
-							}
-						}}
-						onFilterOptionSelect={onFilterOptionSelect}
-					/>
+						<Header
+							globalFilterValue={globalFilterValue}
+							onGlobalFilterChange={onGlobalFilterChange}
+							onDownloadOptionSelect={async (option) => {
+								if (option === "csv") {
+									await saveToCSV();
+								} else if (option === "excel") {
+									await saveToExcel();
+								}
+							}}
+							onFilterOptionSelect={onFilterOptionSelect}
+						/>
 				}
 				filters={filters}
 				globalFilterFields={props.filters ? Object.keys(props.filters) : []}
-				filterDisplay="row"
+				filterDisplay="menu"
+				filterIcon="pi pi-sliders-h"
 				alwaysShowPaginator
 				showGridlines
 				stripedRows

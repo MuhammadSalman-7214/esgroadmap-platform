@@ -23,7 +23,7 @@ function TargetTable<TRow extends object>({ tableName, data }: Props<TRow>) {
 		filters,
 	} = useTargetTable(data);
 	return (
-		<div className="w-full py-4 px-10 overflow-x-hidden">
+		<div className="w-full px-4 py-2 overflow-x-hidden">
 			<DataTable
 				tableName={tableName}
 				data={data}

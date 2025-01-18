@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import dbColumns from "@/constants/columns";
 import { Column } from "primereact/column";
 import Link from "next/link";
-import { FilterMatchMode } from "primereact/api";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { MultiSelect } from "primereact/multiselect";
 
 const filters = {
@@ -90,6 +90,14 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 	}, [data]);
 
 	const getWordLimitAndWidth = (key: string) => {
+		// Special handling for sector code column to prevent excessive width
+		if (key.includes("sector code")) {
+			return { 
+				limit: 10000, 
+				width: 150  // Fixed width for sector code columns
+			};
+		}
+
 		const hasEnoughSpaces = key.split(" ").length > 4;
 		let width =
 			calculateWidthBasedOnWordLength(key, hasEnoughSpaces ? 2 : 1) + 40;
@@ -97,8 +105,8 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 		let limit = 10000;
 
 		if (key === dbColumns.TargetSentenceView.Target_sentence) {
-			limit = 100;
-			width += 200;
+			limit = 80;
+			width += 100;
 		}
 
 		return { limit, width };
@@ -135,14 +143,26 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 
 			if (key === dbColumns.TargetSentenceView.DocURL) {
 				return (
+					// <Link
+					// 	href={value}
+					// 	target="_blank"
+					// 	className="text-blue-600 text-[15px]"
+					// >
+					// 	Click Here
+					// </Link>
 					<Link
-						href={value}
-						target="_blank"
-						className="text-blue-600 text-[15px]"
-					>
-						Click Here
+  						href={value}
+  						target="_blank"
+  						rel="noopener noreferrer"
+  						aria-label="Open document"
+  						className="inline-flex items-center text-blue-600"
+						>
+  						<i className="pi pi-external-link mr-1"></i> View
 					</Link>
+
+
 				);
+
 			}
 
 			if (key === dbColumns.TargetSentenceView.Target_sentence) {
@@ -185,20 +205,19 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 				field: key,
 				body: renderBody(key),
 				headerStyle: { paddingLeft: 0, paddingRight: 0 },
-				bodyStyle: { paddingLeft: 0, paddingRight: 0 },
+				bodyStyle: { padding: '0.5rem 1rem' },
 				headerClassName:
-					"text-[14px] text-center items-center py-2 font-semibold",
-				bodyClassName: "text-[14px] px-2 py-2 text-center",
+					"text-[14px] text-center items-center py-2 font-semibold [&_.p-sortable-column-icon]:mr-2",
+				bodyClassName: "text-[14px] py-2 text-center px-2 sm:px-3 md:px-4 lg:px-6",
 				sortable: true,
 				filter: key in filters,
-				showFilterMenuOptions: false,
-				showFilterMenu: false,
+				showFilterMenuOptions: true,
+				showFilterMenu: true,
+				filterMenuStyle: { width: '250px' },
 			} as React.ComponentProps<typeof Column>;
 
 			if (key in filters) {
-				options.filterHeaderStyle = { minWidth: width + 100 };
 				let filterKey = key as keyof typeof filters;
-				// If filter match mode is IN
 				const matchMode = filters[filterKey];
 				options.filterMatchMode = matchMode;
 				if (matchMode === FilterMatchMode.IN) {
@@ -208,6 +227,9 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 							data: filterData,
 							key,
 						});
+						options.showFilterOperator = false;
+						options.filterMatchModeOptions = [{ value: 'in', label: 'In' }];
+						options.showFilterMatchModes = false;
 					}
 				}
 			}
