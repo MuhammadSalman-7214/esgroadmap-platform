@@ -109,3 +109,140 @@ html {
   border-style: solid;
   border-color: #1f2937 transparent transparent transparent;
 }
+
+/* Header button styles */
+.p-splitbutton.p-button-outlined {
+  @apply border-gray-300 hover:border-gray-400 transition-colors;
+}
+
+.p-splitbutton .p-button {
+  @apply text-sm font-medium;
+}
+
+.p-splitbutton-menu .p-menuitem-link {
+  @apply flex items-center gap-2 px-4 py-2;
+}
+
+.p-splitbutton-menu .p-menuitem-icon {
+  @apply text-gray-600;
+}
+
+/* Updated Search input styles */
+.search-input {
+  @apply bg-gray-50 border border-gray-200 rounded-md;
+  @apply hover:bg-white hover:border-gray-300;
+  @apply focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100;
+  @apply w-[200px] sm:w-[250px];
+  @apply text-sm text-gray-600;
+  @apply transition-all duration-200;
+  @apply pl-9 pr-4 py-1.5;
+}
+
+.p-input-icon-left {
+  @apply relative inline-block;
+}
+
+.p-input-icon-left i {
+  @apply absolute left-3 top-1/2 -translate-y-1/2;
+  @apply text-gray-400 text-sm;
+  @apply pointer-events-none;
+  @apply transition-colors duration-200;
+  z-index: 1;
+}
+
+/* Search focus effects */
+.search-input:focus + i {
+  @apply text-blue-500;
+}
+
+/* Remove previous search input styles that might conflict */
+.p-input-icon-left input {
+  all: unset;
+}
+
+.p-inputtext-sm {
+  all: unset;
+}
+
+/* Add these specific button and input styles */
+.p-button.p-button-outlined.p-button-secondary {
+  @apply bg-white text-gray-700 border-gray-300;
+  @apply hover:bg-gray-50 hover:border-gray-400;
+}
+
+.p-button.p-button-outlined.p-button-secondary .p-button-icon {
+  @apply text-gray-600;
+}
+
+.p-splitbutton-menubutton {
+  @apply border-l-gray-300;
+}
+
+.p-input-icon-left > i {
+  @apply text-gray-400 left-3;
+}
+
+.p-input-icon-left > .p-inputtext {
+  @apply pl-10;
+}
+
+/* Icon-only button styles */
+.p-button-icon-only {
+  @apply !p-2;
+  min-width: 2.25rem !important;
+  padding: 0.5rem !important;
+}
+
+.p-button-icon-only .p-button-icon {
+  margin: 0 !important;
+}
+
+/* Adjust split button for icon-only */
+.p-splitbutton.p-button-icon-only .p-splitbutton-defaultbutton {
+  padding: 0.5rem !important;
+}
+
+.p-splitbutton.p-button-icon-only .p-splitbutton-menubutton {
+  padding: 0.5rem !important;
+}
+
+/* Search input compact style */
+.p-input-icon-left .p-inputtext-sm {
+  @apply w-[200px];
+}
+
+/* Modern search styles */
+.search-container {
+  @apply relative flex items-center;
+}
+
+.search-icon {
+  @apply absolute left-3 text-gray-400;
+  font-size: 14px;
+}
+
+.modern-search {
+  @apply h-9 w-[250px] pl-9 pr-4 rounded-full;
+  @apply bg-gray-50 border border-gray-200;
+  @apply text-sm text-gray-600;
+  @apply placeholder:text-gray-400;
+  @apply outline-none;
+  @apply transition-all duration-200;
+}
+
+.modern-search:hover {
+  @apply border-gray-300 bg-white;
+}
+
+.modern-search:focus {
+  @apply border-blue-500 bg-white;
+  @apply ring-2 ring-blue-50;
+  @apply placeholder:text-gray-500;
+}
+
+/* Remove any conflicting styles */
+.p-input-icon-left,
+.p-inputtext-sm,
+.search-input {
+  all: unset;
+}
