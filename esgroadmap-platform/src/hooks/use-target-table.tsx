@@ -75,18 +75,7 @@ const getFilterData = <T extends object>(data: Array<T>) => {
 		if (key in filters) {
 			let filterKey = key as keyof typeof filters;
 			if (filters[filterKey] === FilterMatchMode.IN) {
-				let filterData: string[];
-				
-				// Special handling for Country column
-				if (key === dbColumns.TargetSentenceView.Country) {
-					filterData = [...new Set(data.map((i) => {
-						const country = i[key as keyof T] as string;
-						return countryCodeMap[country] || country;
-					}))];
-				} else {
-					filterData = [...new Set(data.map((i) => i[key as keyof T]) as string[])];
-				}
-
+				const filterData = [...new Set(data.map((i) => i[key as keyof T]) as string[])];
 				filterKeysData[filterKey] = filterData.map(name => ({ name }));
 			}
 		}
@@ -102,35 +91,21 @@ const getMultiSelectFilterTemplate = (templateOptions: {
 	const renderComponent: React.ComponentProps<
 		typeof Column
 	>["filterElement"] = (options) => {
-		// Special handling for Country filter
-		const isCountryFilter = templateOptions.key === dbColumns.TargetSentenceView.Country;
-
 		return (
 			<MultiSelect
 				value={
 					options.value === null
 						? []
-						: options.value.map((i: string) => ({ 
-							name: isCountryFilter ? (countryCodeMap[i] || i) : i 
-						}))
+						: options.value.map((i: string) => ({ name: i }))
 				}
 				options={templateOptions.data}
 				itemTemplate={representativesItemTemplate}
 				onChange={(e) => {
-					const values = e.value.map((i: any) => {
-						if (isCountryFilter) {
-							return reverseCountryMap[i.name] || i.name;
-						}
-						return i.name;
-					});
-					options.filterApplyCallback(values);
+					options.filterApplyCallback(e.value.map((i: any) => i.name));
 				}}
 				optionLabel="name"
 				filter
-				placeholder={`Select ${templateOptions.key
-					.split(" ")
-					.slice(0, 2)
-					.join(" ")}`}
+				placeholder={`Select ${templateOptions.key.split(" ").slice(0, 2).join(" ")}`}
 				className="p-column-filter"
 			/>
 		);
