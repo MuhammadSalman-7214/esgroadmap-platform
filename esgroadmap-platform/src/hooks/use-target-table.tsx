@@ -125,6 +125,9 @@ const getMultiSelectFilterTemplate = (templateOptions: {
 		);
 	};
 
+	// Using type assertion to allow setting displayName
+	(renderComponent as any).displayName = `MultiSelectFilter_${templateOptions.key}`;
+
 	return renderComponent;
 };
 
@@ -183,7 +186,7 @@ export default function useTargetTable<T extends object>(data: Array<T>) {
 
 	const renderBody = useCallback((key: string) => {
 		const { width, limit } = getWordLimitAndWidth(key);
-		return (row: any) => {
+		const BodyComponent = (row: any) => {
 			let value = row[key];
 
 			if (value === null) {
@@ -267,6 +270,8 @@ export default function useTargetTable<T extends object>(data: Array<T>) {
 				</span>
 			);
 		};
+		BodyComponent.displayName = `BodyRenderer_${key}`;
+		return BodyComponent;
 	}, []);
 
 	const columns = useMemo(() => {
