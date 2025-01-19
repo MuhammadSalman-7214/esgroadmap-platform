@@ -42,6 +42,59 @@ def add_existing_links(log, existing_links):
         log.error(f"Error adding Existing Links {str(e)}")
         pass
 
+def process_sustainability_sentences(log):
+    """
+    Process to check the target sentences and updated tags accordingly
+    @param log: Logger Object (Object)
+
+    @return df: Dataframe of updated data (Object)
+    """
+    def other_theme(row):
+        if (
+            row["sentence-carbon"] == False
+            and row["sentence-gender"] == False
+            and row["sentence-renewables"] == False
+            and row["sentence-suppliers"] == False
+            and row["sentence-water"] == False
+            and row["sentence-waste"] == False
+        ):
+            return "True"
+        else:
+            return "False"
+
+    try:
+        df = pd.read_csv("Test_output-extra-2_annualreports.csv")
+        df["sentence-carbon"] = np.where(
+            df["Target sentence"].str.contains("climate|carbon|co2|emissions"),
+            True,
+            False,
+        )
+        df["sentence-gender"] = np.where(
+            df["Target sentence"].str.contains("gender|female"), True, False
+        )
+        df["sentence-renewables"] = np.where(
+            df["Target sentence"].str.contains(
+                "renewables|wind|solar|renewable|energy"
+            ),
+            True,
+            False,
+        )
+        df["sentence-suppliers"] = np.where(
+            df["Target sentence"].str.contains("scope 3|supply chain|suppliers"),
+            True,
+            False,
+        )
+        df["sentence-water"] = np.where(
+            df["Target sentence"].str.contains("water|h20|freshwater"), True, False
+        )
+        df["sentence-waste"] = np.where(
+            df["Target sentence"].str.contains("waste|landfill|recycling"), True, False
+        )
+        df["SentenceTargetYear"] = df["Target Sentence Year"]
+        df["upload-date"] = pd.to_datetime("today").normalize()
+        return df
+    except Exception as e:
+        log.error(f"Error while processing sentences: {e}")
 
 def sql_update(df, log, connection):
     """
@@ -455,9 +508,7 @@ def main():
             logger.info(f"Number of Output Rows: {len(output_df)}")
             if len(output_df) > 0:
                 try:
-                    df_out = pd.read_csv("Test_output-extra-2_annualreports.csv")
-                    df_out["SentenceTargetYear"] = df_out["Target Sentence Year"]
-                    df_out["upload-date"] = pd.to_datetime("today").normalize()
+                    df_out = process_sustainability_sentences(logger)
                     sql_update(df_out, logger, connection)
                 except Exception as e:
                     logger.error(f"Error Updating Database {str(e)}")
