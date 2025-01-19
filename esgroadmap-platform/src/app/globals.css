@@ -274,9 +274,12 @@ html {
   overflow: hidden !important;
   display: -webkit-box !important;
   -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
   font-weight: 600 !important;
   font-size: 0.875rem !important;
+  text-align-last: center;
+  text-align: center !important;
   line-height: 1.25rem !important;
 }
 
@@ -423,4 +426,14 @@ html {
 /* Ensure the footer/paginator has rounded bottom corners */
 .p-datatable .p-paginator {
   @apply rounded-b-lg !important;
+}
+
+.p-paginator-bottom {
+  gap: 0 !important;
+}
+
+.p-paginator-current {
+  height: auto;
+  line-height: 0.6rem;
+  font-size: 0.6rem;
 }
