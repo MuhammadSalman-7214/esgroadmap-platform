@@ -90,72 +90,264 @@ html {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-/* Base table styling */
-.p-datatable {
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  border-radius: var(--radius);
+.group:hover .group-hover\:block {
+  display: block;
 }
 
-/* Header styling */
-.p-datatable .p-datatable-thead {
-  position: sticky;
-  top: 0;
+.group .absolute {
+  pointer-events: none;
+}
+
+/* Tooltip arrow */
+.group .absolute:after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #1f2937 transparent transparent transparent;
+}
+
+/* Header button styles */
+.p-splitbutton.p-button-outlined {
+  @apply border-gray-300 hover:border-gray-400 transition-colors;
+}
+
+.p-splitbutton .p-button {
+  @apply text-sm font-medium;
+}
+
+.p-splitbutton-menu .p-menuitem-link {
+  @apply flex items-center gap-2 px-4 py-2;
+}
+
+.p-splitbutton-menu .p-menuitem-icon {
+  @apply text-gray-600;
+}
+
+/* Updated Search input styles */
+.search-input {
+  @apply bg-gray-50 border border-gray-200 rounded-md;
+  @apply hover:bg-white hover:border-gray-300;
+  @apply focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100;
+  @apply w-[200px] sm:w-[250px];
+  @apply text-sm text-gray-600;
+  @apply transition-all duration-200;
+  @apply pl-9 pr-4 py-1.5;
+}
+
+.p-input-icon-left {
+  @apply relative inline-block;
+}
+
+.p-input-icon-left i {
+  @apply absolute left-3 top-1/2 -translate-y-1/2;
+  @apply text-gray-400 text-sm;
+  @apply pointer-events-none;
+  @apply transition-colors duration-200;
   z-index: 1;
-  background: white;
-  border-bottom: 2px solid #f0f0f0;
 }
 
-/* Basic row and cell styling */
-.p-datatable .p-datatable-tbody > tr > td {
-  padding: 0.6rem 0.75rem;
-  line-height: 1.4;
-  vertical-align: top;
+/* Search focus effects */
+.search-input:focus + i {
+  @apply text-blue-500;
 }
 
-/* Filter row */
-.p-datatable .p-datatable-thead tr.p-datatable-filters {
-  position: sticky;
-  top: 43px;
-  z-index: 1;
-  background: white;
-  border-bottom: 1px solid #f0f0f0;
+/* Remove previous search input styles that might conflict */
+.p-input-icon-left input {
+  all: unset;
 }
 
-/* Filter components */
+.p-inputtext-sm {
+  all: unset;
+}
+
+/* Add these specific button and input styles */
+.p-button.p-button-outlined.p-button-secondary {
+  @apply bg-white text-gray-700 border-gray-300;
+  @apply hover:bg-gray-50 hover:border-gray-400;
+}
+
+.p-button.p-button-outlined.p-button-secondary .p-button-icon {
+  @apply text-gray-600;
+}
+
+.p-splitbutton-menubutton {
+  @apply border-l-gray-300;
+}
+
+.p-input-icon-left > i {
+  @apply text-gray-400 left-3;
+}
+
+.p-input-icon-left > .p-inputtext {
+  @apply pl-10;
+}
+
+/* Icon-only button styles */
+.p-button-icon-only {
+  @apply !p-2;
+  min-width: 2.25rem !important;
+  padding: 0.5rem !important;
+}
+
+.p-button-icon-only .p-button-icon {
+  margin: 0 !important;
+}
+
+/* Adjust split button for icon-only */
+.p-splitbutton.p-button-icon-only .p-splitbutton-defaultbutton {
+  padding: 0.5rem !important;
+}
+
+.p-splitbutton.p-button-icon-only .p-splitbutton-menubutton {
+  padding: 0.5rem !important;
+}
+
+/* Search input compact style */
+.p-input-icon-left .p-inputtext-sm {
+  @apply w-[200px];
+}
+
+/* Modern search styles */
+.search-container {
+  @apply relative flex items-center;
+}
+
+.search-icon {
+  @apply absolute left-3 text-gray-400;
+  font-size: 14px;
+}
+
+.modern-search {
+  @apply h-9 w-[250px] pl-9 pr-4 rounded-full;
+  @apply bg-gray-50 border border-gray-200;
+  @apply text-sm text-gray-600;
+  @apply placeholder:text-gray-400;
+  @apply outline-none;
+  @apply transition-all duration-200;
+}
+
+.modern-search:hover {
+  @apply border-gray-300 bg-white;
+}
+
+.modern-search:focus {
+  @apply border-blue-500 bg-white;
+  @apply ring-2 ring-blue-50;
+  @apply placeholder:text-gray-500;
+}
+
+/* Remove any conflicting styles */
+.p-input-icon-left,
+.p-inputtext-sm,
+.search-input {
+  all: unset;
+}
+
+/* Update DataTable header styles */
+.p-sortable-column {
+  position: relative !important;
+  padding: 0 !important;
+  height: auto !important;
+  max-height: 4rem !important;
+}
+
+.p-column-header-content {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 0.75rem 0.5rem !important;
+  gap: 0rem !important;
+}
+
+/* Style for the column title span */
+.p-column-title {
+  flex: 1 !important;
+  min-width: 0 !important;
+  text-align: left !important;
+  white-space: normal !important;
+  overflow: hidden !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+/* Icons container */
 .p-column-filter {
-  width: calc(100% - 1rem) !important;
-  margin: 0.15rem 0.5rem;  /* Equal margins left and right */
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.25rem !important;
+  margin-left: auto !important;
 }
 
-/* Input and MultiSelect styling */
-.p-column-filter .p-inputtext,
-.p-column-filter .p-multiselect {
-  width: 100%;
-  height: 2.2rem;
-  font-size: 0.8rem;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
+/* Sort icon container */
+[data-pc-section="sort"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
 }
 
-/* MultiSelect specific adjustments */
-.p-column-filter .p-multiselect .p-multiselect-label {
-  padding: 0.25rem;
-  margin: 0;
-  line-height: 1.2;
+/* Filter button */
+.p-column-filter-menu-button {
+  width: 2rem !important;
+  height: 2rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 0.375rem !important;
+  transition: background-color 0.2s !important;
 }
 
-/* MultiSelect panel items */
-.p-multiselect-panel .p-multiselect-items .p-multiselect-item {
-  padding: 0.4rem 0.5rem;
-  font-size: 0.8rem;
+.p-column-filter-menu-button:hover {
+  background-color: rgba(0, 0, 0, 0.04) !important;
 }
 
-/* Striped rows with hover */
-.p-datatable .p-datatable-tbody > tr:nth-child(even) {
-  background-color: #f8f9fa;
+/* Remove previous absolute positioning */
+.p-sortable-column-icon,
+.p-column-filter-menu-button {
+  position: static !important;
+  transform: none !important;
 }
 
-.p-datatable .p-datatable-tbody > tr:hover {
-  background-color: #e9ecef !important;
+
+/* Add these paginator styles */
+.p-paginator {
+  @apply p-0 !important;
+}
+
+/* Split button menu styles */
+.p-splitbutton-menu {
+  @apply min-w-[160px] py-1 !important;
+}
+
+.p-menuitem {
+  @apply w-full !important;
+}
+
+.p-menuitem-link {
+  @apply flex items-center gap-2 px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-50 transition-colors !important;
+}
+
+.p-menuitem-icon {
+  @apply text-gray-500 text-base !important;
+}
+
+.p-menuitem-text {
+  @apply font-medium !important;
+}
+
+/* Active/hover states */
+.p-menuitem-link:hover .p-menuitem-icon,
+.p-menuitem-link:hover .p-menuitem-text {
+  @apply text-gray-900 !important;
 }

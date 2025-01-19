@@ -16,6 +16,8 @@ import ApplyFilterDialog from "./apply-filter";
 import { convertArrayToCSV } from "convert-array-to-csv";
 import * as XLSX from "xlsx";
 import convertTargetName from "@/utils/conver-target-name";
+import { SplitButton } from "primereact/splitbutton";
+import { InputText } from "primereact/inputtext";
 
 type DataTableProps<TRow extends object> = {
 	tableName: string;
@@ -128,9 +130,6 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 		a.click();
 		document.body.removeChild(a);
 		URL.revokeObjectURL(url);
-
-		if (!ref.current) return;
-		return ref.current.exportCSV({ selectionOnly: true });
 	};
 
 	const saveToExcel = async () => {
@@ -251,13 +250,15 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 					[&_.p-paginator-current]:order-last 
 					[&_.p-paginator-current]:w-full 
 					sm:[&_.p-paginator-current]:w-auto
-					[&_.p-sortable-column-icon]:ml-2
+					[&_.p-sortable-column]:hover:bg-gray-50
+					[&_.p-column-header]:border-b
+					[&_.p-column-header]:border-gray-200
 				"
 				paginatorLeft={null}
 				paginatorRight={null}
 				sortIcon={(options) => (
-					<span className="text-500 mr-2">
-						{options.sorted ? (options.sortOrder === 1 ? '▼' : '▲') : ''}
+					<span className="text-500">
+						{options.sorted ? options.sortOrder === 1 ? '▼' : '▲' : ''}
 					</span>
 				)}
 			>

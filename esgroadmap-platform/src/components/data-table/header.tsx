@@ -1,75 +1,79 @@
 "use client";
 import React from "react";
-import { Dropdown } from "primereact/dropdown";
-import { IconField } from "primereact/iconfield";
-import { InputIcon } from "primereact/inputicon";
+import { SplitButton } from "primereact/splitbutton";
 import { InputText } from "primereact/inputtext";
 
-const Header: React.FC<{
+type HeaderProps = {
 	globalFilterValue: string;
-	onGlobalFilterChange: React.ChangeEventHandler<HTMLInputElement>;
-	onDownloadOptionSelect: (option: string) => Promise<void>;
-	onFilterOptionSelect: (option: string) => Promise<void>;
-}> = ({
+	onGlobalFilterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	onDownloadOptionSelect: (option: "csv" | "excel") => void;
+	onFilterOptionSelect: (option: "save" | "apply") => void;
+};
+
+function Header({
 	globalFilterValue,
 	onGlobalFilterChange,
 	onDownloadOptionSelect,
 	onFilterOptionSelect,
-}) => {
-	const downloadOptions = [
-		{ label: "CSV", value: "csv" },
-		{ label: "Excel", value: "excel" },
+}: HeaderProps) {
+	const downloadItems = [
+		{
+			label: 'CSV',
+			icon: 'pi pi-file',
+			command: () => onDownloadOptionSelect("csv")
+		},
+		{
+			label: 'Excel',
+			icon: 'pi pi-file-excel',
+			command: () => onDownloadOptionSelect("excel")
+		}
 	];
 
-	const filtersOptions = [
-		{ label: "Save", value: "save" },
-		{ label: "Apply", value: "apply" },
+	const filterItems = [
+		{
+			label: 'Apply Saved Filter',
+			icon: 'pi pi-filter-fill',
+			command: () => onFilterOptionSelect("apply")
+		},
+		{
+			label: 'Save Filter',
+			icon: 'pi pi-save',
+			command: () => onFilterOptionSelect("save")
+		}
 	];
 
 	return (
-		<div className="flex flex-col md:flex-row md:gap-0 gap-4 justify-between items-center">
-			<div className="flex flex-col sm:flex-row items-center gap-4 w-[100%] md:w-[40%]">
-				{/* Download dropdown */}
-				<Dropdown
-					value={null}
-					options={downloadOptions}
-					className="w-[100%] flex-1 md:flex-0"
-					placeholder="Download"
-					onChange={async (e) => {
-						console.log("Selected Download option:", e.value);
-						await onDownloadOptionSelect(e.value);
-					}}
+		<div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+			<div className="flex items-center gap-2">
+				<SplitButton
+					icon="pi pi-download"
+					model={downloadItems}
+					className="p-button-outlined p-button-secondary p-button-icon-only"
+					size="small"
+					onClick={() => onDownloadOptionSelect("csv")}
 				/>
 
-				{/* Filters dropdown */}
-				<Dropdown
-					value={null}
-					options={filtersOptions}
-					placeholder="Filters"
-					className="w-[100%] flex-1 md:flex-0"
-					onChange={async (e) => {
-						console.log("Selected Filters option:", e.value);
-						// Add logic to handle filter action
-						await onFilterOptionSelect(e.value);
-					}}
+				<SplitButton
+					icon="pi pi-filter"
+					model={filterItems}
+					className="p-button-outlined p-button-secondary p-button-icon-only"
+					size="small"
+					onClick={() => onFilterOptionSelect("apply")}
 				/>
 			</div>
 
-			<IconField
-				iconPosition="left"
-				style={{ minWidth: 120 }}
-				className="md:max-w-[250px] max-w-[1000px] w-[100%]"
-			>
-				<InputIcon className="pi pi-search" />
-				<InputText
+			<div className="search-container w-full sm:w-auto">
+				<i className="pi pi-search search-icon" />
+				<input
+					type="text"
 					value={globalFilterValue}
 					onChange={onGlobalFilterChange}
-					placeholder="Keyword Search"
-					className="w-[100%] flex-1 md:flex-0"
+					placeholder="Keyword search"
+					className="modern-search w-full sm:w-[250px]"
 				/>
-			</IconField>
+			</div>
 		</div>
 	);
-};
+}
 
 export default Header;
