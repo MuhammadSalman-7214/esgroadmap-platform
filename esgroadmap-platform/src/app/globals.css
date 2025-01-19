@@ -351,3 +351,54 @@ html {
 .p-menuitem-link:hover .p-menuitem-text {
   @apply text-gray-900 !important;
 }
+
+/* Add these styles at the end of the file */
+.active-filters {
+	@apply flex flex-wrap gap-2 items-center text-sm;
+}
+
+.filter-tag {
+	@apply bg-[#F0F9F7] text-[#0B6E5D] px-2 py-0.5 rounded text-xs whitespace-nowrap;
+	max-width: 250px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: inline-block;
+}
+
+.filter-tag:hover {
+	@apply bg-[#E2F4F1];
+}
+
+.filter-label {
+	@apply font-medium text-gray-700;
+}
+
+/* Update the filter display styles */
+.filter-display {
+	@apply flex items-center gap-1.5;
+}
+
+.filter-title {
+	@apply font-medium text-[#0B6E5D] bg-[#F0F9F7] border border-[#D8EFEB] px-2 py-1 rounded text-sm whitespace-nowrap;
+}
+
+/* Add styles for the overlay panel */
+.p-overlaypanel {
+	@apply shadow-lg border border-gray-200 rounded-lg !important;
+}
+
+.p-overlaypanel-content {
+	@apply p-0 !important;
+}
+
+/* Make the header row more responsive */
+@media (max-width: 640px) {
+	.filter-display {
+		max-width: 100%;
+		margin-top: 0.5rem;
+	}
+	
+	.modern-search {
+		@apply w-full;
+	}
+}

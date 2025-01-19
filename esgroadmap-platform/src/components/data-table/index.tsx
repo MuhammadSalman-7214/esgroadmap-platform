@@ -24,6 +24,7 @@ type DataTableProps<TRow extends object> = {
 	data: TRow[];
 	columns: React.ComponentProps<typeof Column>[];
 	filters?: Record<string, FilterMatchMode>;
+	filterTitle?: string;
 };
 
 const convertToFilters = <TRow extends object>(
@@ -71,6 +72,7 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 		layout: "FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
 	});
 	const [rowsPerPageOptions, setRowsPerPageOptions] = useState([10, 50, 100, 150]);
+	const [activeFilters, setActiveFilters] = useState<Record<string, any>>({});
 
 	const setDialogValue = useCallback(
 		(key: keyof typeof showDialogs, value: boolean) => {
@@ -201,18 +203,20 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 				emptyMessage="No data found."
 				pageLinkSize={pageLinkSize}
 				header={
-						<Header
-							globalFilterValue={globalFilterValue}
-							onGlobalFilterChange={onGlobalFilterChange}
-							onDownloadOptionSelect={async (option) => {
-								if (option === "csv") {
-									await saveToCSV();
-								} else if (option === "excel") {
-									await saveToExcel();
-								}
-							}}
-							onFilterOptionSelect={onFilterOptionSelect}
-						/>
+					<Header
+						globalFilterValue={globalFilterValue}
+						onGlobalFilterChange={onGlobalFilterChange}
+						onDownloadOptionSelect={async (option) => {
+							if (option === "csv") {
+								await saveToCSV();
+							} else if (option === "excel") {
+								await saveToExcel();
+							}
+						}}
+						onFilterOptionSelect={onFilterOptionSelect}
+						filterTitle={props.filterTitle}
+						activeFilters={activeFilters}
+					/>
 				}
 				filters={filters}
 				globalFilterFields={props.filters ? Object.keys(props.filters) : []}
@@ -231,7 +235,18 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 				onValueChange={(value) => {
 					setData(value);
 				}}
-				onFilter={(event) => setFilters(event.filters)}
+				onFilter={(event) => {
+					setFilters(event.filters);
+					const newActiveFilters: Record<string, any> = {};
+					Object.entries(event.filters).forEach(([key, filter]) => {
+						if (filter && 'value' in filter && filter.value !== null && filter.value !== '') {
+							if (key !== 'global') {
+								newActiveFilters[key] = filter.value;
+							}
+						}
+					});
+					setActiveFilters(newActiveFilters);
+				}}
 				className="
 					flex-1
 					flex

@@ -12,9 +12,10 @@ const DataTable = dynamic(() => import("@/components/data-table"), {
 type Props<TRow extends object> = {
 	tableName: string;
 	data: TRow[];
+	filterTitle?: string;
 };
 
-function TargetTable<TRow extends object>({ tableName, data }: Props<TRow>) {
+function TargetTable<TRow extends object>({ tableName, data, filterTitle }: Props<TRow>) {
 	const {
 		columns,
 		selectedTargetSentence: targetSentence,
@@ -29,6 +30,7 @@ function TargetTable<TRow extends object>({ tableName, data }: Props<TRow>) {
 				data={data}
 				columns={columns}
 				filters={filters}
+				filterTitle={filterTitle}
 			/>
 			<Dialog
 				header="Target Sentence"
