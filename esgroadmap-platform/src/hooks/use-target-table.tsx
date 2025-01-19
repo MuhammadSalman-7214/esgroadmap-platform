@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import dbColumns from "@/constants/columns";
 import { Column } from "primereact/column";
 import Link from "next/link";
-import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { FilterMatchMode } from "primereact/api";
 import { MultiSelect } from "primereact/multiselect";
 
 const filters = {
@@ -128,7 +128,7 @@ const getMultiSelectFilterTemplate = (templateOptions: {
 	return renderComponent;
 };
 
-const useTargetTable = <T extends object>(data: Array<T>) => {
+export default function useTargetTable<T extends object>(data: Array<T>) {
 	const [showModal, setShowModal] = useState(false);
 	const [selectedTargetSentence, setSelectedTargetSentence] = useState("");
 
@@ -137,94 +137,76 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 	}, [data]);
 
 	const getWordLimitAndWidth = (key: string) => {
-		// Special handling for sector code column to prevent excessive width
+		// Calculate minimum width needed for two lines based on character count
+		const charWidth = 8; // Approximate width per character in pixels
+		const minWidth = Math.ceil((key.length * charWidth) / 2); // Width needed for 2 lines
+		
+		// Base widths for different column types
+		let baseWidth = 140;
 		if (key.includes("sector code")) {
-			return { 
-				limit: 10000, 
-				width: 150  // Fixed width for sector code columns
-			};
+			baseWidth = 120;
+		} else if (key === "Target Sentence") {
+			baseWidth = 250;
+		} else if (key === "ID") {
+			baseWidth = 95;
+		} else if (key === "Country") {
+			baseWidth = 125;
+		} else if (key === "Upload Date") {
+			baseWidth = 110;
+		} else if (key.includes("sector name")) {
+			baseWidth = 160;
+
+		} else if (key === "Target Year(s)") {
+			baseWidth = 150;
 		}
-
-		const hasEnoughSpaces = key.split(" ").length > 4;
-		let width =
-			calculateWidthBasedOnWordLength(key, hasEnoughSpaces ? 2 : 1) + 40;
-
-		let limit = 10000;
-
-		if (key === dbColumns.TargetSentenceView.Target_sentence) {
-			limit = 80;
-			width += 100;
+		
+		else if (key === "DocURL") {
+			baseWidth = 95;
 		}
-
-		return { limit, width };
+		
+		// Use the larger of minWidth or baseWidth
+		const width = Math.max(minWidth, baseWidth);
+		
+		return {
+			width,
+			limit: key === "Target Sentence" ? 80 : 100
+		};
 	};
 
 	const renderHeader = useCallback((key: string) => {
-		const { width } = getWordLimitAndWidth(key);
-
-		const header = () => {
-			return (
-				<div
-					style={{
-						width: width,
-						textAlign: "center",
-					}}
-				>
-					{key}
-				</div>
-			);
-		};
-
-		return header;
+		return (
+			<div className="w-full whitespace-normal break-words max-h-[3rem] line-clamp-2">
+				{key}
+			</div>
+		);
 	}, []);
 
 	const renderBody = useCallback((key: string) => {
 		const { width, limit } = getWordLimitAndWidth(key);
-
-		const body = (row: any) => {
+		return (row: any) => {
 			let value = row[key];
 
 			if (value === null) {
 				return "N/A";
 			}
 
-			// Updated country code display with tooltip
+			// Country code mapping with hover tooltip
 			if (key === dbColumns.TargetSentenceView.Country) {
 				return (
-					<div className="relative group">
-						<span>{countryCodeMap[value] || value}</span>
-						<div className="
-							absolute 
-							hidden 
-							group-hover:block 
-							bg-gray-800 
-							text-white 
-							text-sm 
-							px-2 
-							py-1 
-							rounded 
-							-top-8 
-							left-1/2 
-							transform 
-							-translate-x-1/2 
-							whitespace-nowrap
-							z-50
-						">
-							{value}
-						</div>
+					<div
+						className="relative group overflow-hidden whitespace-nowrap text-ellipsis"
+						style={{ width: width }}
+					>
+						<span title={value}>
+							{countryCodeMap[value] || value}
+						</span>
 					</div>
 				);
 			}
 
+			// Document URL - simplified
 			if (key === dbColumns.TargetSentenceView.DocURL) {
 				return (
-					// <Link
-					// 	href={value}
-					// 	target="_blank"
-					// 	className="text-blue-600 text-[15px]"
-					// >
-					// 	Click Here
-					// </Link>
 					<Link
 						href={value}
 						target="_blank"
@@ -232,15 +214,12 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 						aria-label="Open document"
 						className="inline-flex items-center text-blue-600"
 					>
-  						<i className="pi pi-external-link"></i>
-						</Link>
-
-
-
+						<i className="pi pi-external-link" />
+					</Link>
 				);
-
 			}
 
+			// Target Sentence -> open modal on click. No tooltip truncation.
 			if (key === dbColumns.TargetSentenceView.Target_sentence) {
 				return (
 					<span
@@ -249,26 +228,45 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 							setSelectedTargetSentence(value);
 						}}
 						className="cursor-pointer"
+						style={{
+							width: width,
+							display: "inline-block",
+							overflow: "hidden",
+							whiteSpace: "nowrap",
+							textOverflow: "ellipsis",
+						}}
 					>
 						{value.length > limit ? value.slice(0, limit) + "..." : value}
 					</span>
 				);
 			}
 
+			// Generic date check
 			if (value instanceof Date) {
-				return <span>{value.toLocaleDateString()}</span>;
+				return (
+					<span style={{ width: width }}>
+						{value.toLocaleDateString()}
+					</span>
+				);
 			}
 
-			// value = value?.trim();
-
+			// For other columns, truncate + hover full text
 			return (
-				<span>
+				<span
+					style={{
+						// width: (key === dbColumns.TargetSentenceView.Company || key === dbColumns.TargetSentenceView.sector_code__1__NAICS_ || key === dbColumns.TargetSentenceView.SentenceTargetYear) ? 'auto' : width,
+						width: 'auto',
+						display: "inline-block",
+						whiteSpace: "nowrap",
+						overflow: "hidden",
+						textOverflow: "ellipsis"
+					}}
+					title={value}
+				>
 					{value.length > limit ? value.slice(0, limit) + "..." : value}
 				</span>
 			);
 		};
-
-		return body;
 	}, []);
 
 	const columns = useMemo(() => {
@@ -276,15 +274,47 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 		return Object.keys(data[0]).map((key) => {
 			const { width } = getWordLimitAndWidth(key);
 
+			// Define which columns should be center-aligned
+			const centerAlignedColumns = [
+				dbColumns.TargetSentenceView.DocURL,
+				dbColumns.TargetSentenceView.Country,
+				'Target Year(s)',
+				'Company',
+				'sector code #1 (NAICS)'
+			];
+			
+			const isCentered = centerAlignedColumns.includes(key);
+
 			const options = {
 				header: renderHeader(key),
 				field: key,
 				body: renderBody(key),
-				headerStyle: { paddingLeft: 0, paddingRight: 0 },
-				bodyStyle: { padding: '0.5rem 1rem' },
-				headerClassName:
-					"text-[14px] text-center items-center py-2 font-semibold [&_.p-sortable-column-icon]:mr-2",
-				bodyClassName: "text-[14px] py-2 text-center px-2 sm:px-3 md:px-4 lg:px-6",
+				headerStyle: {
+					width: `${width}px`,
+					minWidth: `${width}px`,
+					maxWidth: `${width}px`,
+					overflow: 'visible',
+					height: 'auto',
+				},
+				bodyStyle: {
+					width: `${width}px`,
+					minWidth: `${width}px`,
+					maxWidth: `${width}px`,
+					overflow: 'hidden',
+					...(isCentered && {
+						textAlign: 'center',
+						placeItems: 'center'
+					})
+				},
+				headerClassName: `
+					overflow-visible
+					py-2
+					${isCentered ? 'text-center items-center' : ''}
+				`,
+				bodyClassName: `
+					text-[14px]
+					${isCentered ? 'text-center items-center  py-2 justify-center' : 'text-left py-2 px-2'}
+				`,
 				sortable: true,
 				filter: key in filters,
 				showFilterMenuOptions: true,
@@ -292,8 +322,9 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 				filterMenuStyle: { width: '250px' },
 			} as React.ComponentProps<typeof Column>;
 
+			// Hook up prime filters
 			if (key in filters) {
-				let filterKey = key as keyof typeof filters;
+				const filterKey = key as keyof typeof filters;
 				const matchMode = filters[filterKey];
 				options.filterMatchMode = matchMode;
 				if (matchMode === FilterMatchMode.IN) {
@@ -321,6 +352,4 @@ const useTargetTable = <T extends object>(data: Array<T>) => {
 		selectedTargetSentence,
 		filters,
 	};
-};
-
-export default useTargetTable;
+}
