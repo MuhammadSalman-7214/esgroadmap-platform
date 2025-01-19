@@ -178,7 +178,10 @@ export default function useTargetTable<T extends object>(data: Array<T>) {
 
 	const renderHeader = useCallback((key: string) => {
 		return (
-			<div className="w-full whitespace-normal break-words max-h-[3rem] line-clamp-2">
+			<div 
+				className="w-full whitespace-normal break-words max-h-[3rem] line-clamp-2"
+				title={key}
+			>
 				{key}
 			</div>
 		);
@@ -191,6 +194,20 @@ export default function useTargetTable<T extends object>(data: Array<T>) {
 
 			if (value === null) {
 				return "N/A";
+			}
+
+			// Add specific padding for ID column
+			if (key === 'ID') {
+				return (
+					<span
+						style={{
+							width: width,
+							paddingLeft: '12px' // Add left padding for ID column
+						}}
+					>
+						{value}
+					</span>
+				);
 			}
 
 			// Country code mapping with hover tooltip
@@ -279,6 +296,16 @@ export default function useTargetTable<T extends object>(data: Array<T>) {
 		return Object.keys(data[0]).map((key) => {
 			const { width } = getWordLimitAndWidth(key);
 
+			// Add specific header style for ID column
+			const headerStyle = {
+				width: `${width}px`,
+				minWidth: `${width}px`,
+				maxWidth: `${width}px`,
+				overflow: 'visible',
+				height: 'auto',
+				...(key === 'ID' && { paddingLeft: '12px' }) // Add left padding for ID header
+			};
+
 			// Define which columns should be center-aligned
 			const centerAlignedColumns = [
 				dbColumns.TargetSentenceView.DocURL,
@@ -294,13 +321,7 @@ export default function useTargetTable<T extends object>(data: Array<T>) {
 				header: renderHeader(key),
 				field: key,
 				body: renderBody(key),
-				headerStyle: {
-					width: `${width}px`,
-					minWidth: `${width}px`,
-					maxWidth: `${width}px`,
-					overflow: 'visible',
-					height: 'auto',
-				},
+				headerStyle,
 				bodyStyle: {
 					width: `${width}px`,
 					minWidth: `${width}px`,
