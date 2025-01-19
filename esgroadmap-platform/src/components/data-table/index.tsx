@@ -158,6 +158,20 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 		URL.revokeObjectURL(url);
 	};
 
+	const clearFilters = useCallback(() => {
+		// Reset filters to initial state
+		const initialFilters = convertToFilters<TRow>(props.filters);
+		setFilters(initialFilters);
+		// Clear global filter value
+		setGlobalFilterValue('');
+		// Clear active filters
+		setActiveFilters({});
+		// Reset DataTable's internal filter state
+		if (ref.current) {
+			ref.current.reset();
+		}
+	}, [props.filters]);
+
 	useEffect(() => {
 		const handleResize = () => {
 			const width = window.innerWidth;
@@ -216,6 +230,7 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 						onFilterOptionSelect={onFilterOptionSelect}
 						filterTitle={props.filterTitle}
 						activeFilters={activeFilters}
+						onClearFilters={clearFilters}
 					/>
 				}
 				filters={filters}

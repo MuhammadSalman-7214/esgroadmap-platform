@@ -363,10 +363,12 @@ html {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: inline-block;
+	cursor: help;
 }
 
 .filter-tag:hover {
 	@apply bg-[#E2F4F1];
+	background-color: rgba(11, 110, 93, 0.1);
 }
 
 .filter-label {
