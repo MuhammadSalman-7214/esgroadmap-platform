@@ -222,7 +222,7 @@ html {
 }
 
 .modern-search {
-  @apply h-9 w-[250px] pl-9 pr-4 rounded-full;
+  @apply h-9 w-[250px] pl-9 pr-4 rounded-lg;
   @apply bg-gray-50 border border-gray-200;
   @apply text-sm text-gray-600;
   @apply placeholder:text-gray-400;
@@ -401,4 +401,24 @@ html {
 	.modern-search {
 		@apply w-full;
 	}
+}
+
+/* Add these styles to make the table edges rounded */
+.p-datatable {
+  @apply rounded-lg overflow-hidden !important;
+}
+
+/* Optional: If you want to ensure the inner corners stay sharp */
+.p-datatable .p-datatable-wrapper {
+  @apply first:rounded-t-lg last:rounded-b-lg !important;
+}
+
+/* Ensure the header has rounded top corners */
+.p-datatable .p-datatable-header {
+  @apply rounded-t-lg !important;
+}
+
+/* Ensure the footer/paginator has rounded bottom corners */
+.p-datatable .p-paginator {
+  @apply rounded-b-lg !important;
 }
