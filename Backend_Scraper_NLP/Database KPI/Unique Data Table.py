@@ -153,6 +153,50 @@ def set_logs(logfile):
     log.addHandler(console_handler)
     return log
 
+def fix_csv_columns(path, new_data):
+    """
+    Fix the CSV columns according to the new data
+    @param path: Log filename (str)
+    @param new_data: New data (dict)
+
+    @return None
+    """
+    with open(path, 'r', newline='') as f:
+        reader = csv.reader(f)
+        try:
+            existing_headers = next(reader)
+        except StopIteration:
+            existing_headers = []
+        
+    # Filter out unnamed columns and create clean headers list
+    clean_headers = [header for header in existing_headers 
+                    if not header.startswith('Unnamed:')]
+    
+    new_columns = [col for col in new_data.keys() 
+                    if col not in clean_headers]
+    if not new_columns:
+        return None
+    
+    # Read existing data, excluding unnamed columns
+    with open(path, 'r', newline='') as f:
+        reader = csv.DictReader(f)
+        existing_data = []
+        for row in reader:
+            cleaned_row = {k: v for k, v in row.items() 
+                            if not k.startswith('Unnamed:')}
+            existing_data.append(cleaned_row)
+    
+    final_headers = clean_headers + new_columns
+    
+    # Write back with clean headers and new columns
+    with open(path, 'w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=final_headers)
+        writer.writeheader()
+        
+        for row in existing_data:
+            for col in new_columns:
+                row[col] = ''
+            writer.writerow(row)
 
 def main():
     """Main Process"""
@@ -168,36 +212,12 @@ def main():
             with connection.cursor() as cursor:
                 totals = get_column_totals(cursor, logger)
 
-                column_names = [
-                    "Company (NON-NULL Total)",
-                    "Company (NON-NULL Unique)",
-                    "Member of the S&P500 (YES Total)",
-                    "Member of the Russell 1000 Index (YES Total)",
-                    "Ticker(s) (NON-NULL Total)",
-                    "Ticker(s) (NON-NULL Unique)",
-                    "Country (NON-NULL Total)",
-                    "Country (NON-NULL Unique)",
-                    "sector code #1 (NAICS) (NON-NULL Unique)",
-                    "sector code #2 (NAICS) (NON-NULL Unique)",
-                    "sector code #3 (NAICS) (NON-NULL Unique)",
-                    "sector code #4 (NAICS) (NON-NULL Unique)",
-                    "sector code #5 (NAICS) (NON-NULL Unique)",
-                    "sector codes all (NAICS) (NON-NULL Unique)",
-                    "ArticleTargetYear (NON-NULL Unique)",
-                    "Source Date (NON-NULL Unique)",
-                    "PressReleaseYear (NON-NULL Unique)",
-                    "Target sentence (NON-NULL Total)",
-                    "Target sentence (NON-NULL Unique)",
-                    "Targetyear(s) (NON-NULL Unique)",
-                    "sentence-carbon (1 Total)",
-                    "sentence-gender (1 Total)",
-                    "sentence-renewables (1 Total)",
-                    "sentence-suppliers (1 Total)",
-                    "sentence-water (1 Total)",
-                    "sentence-waste (1 Total)",
-                    "sentence-other (1 Total)",
-                ]
+                column_names = list(totals.keys())
+                kpi_values = list(totals.values())
                 filename = "Updated__Factors_Unique_&_Totals.csv"
+
+                totals["KPI Report Date"] = datetime.now().strftime("%y-%m-%d %H:%M:%S")
+                fix_csv_columns(filename, totals)
 
                 # Open the CSV file in "append" mode
                 with open(filename, mode="a", newline="") as f:
@@ -208,14 +228,6 @@ def main():
                         totals.get(col, "") for col in column_names
                     ]
                     writer.writerow(data_row)
-
-                # Read the CSV file and extract the required values
-                with open(filename, "r") as file:
-                    reader = csv.reader(file)
-                    column_names = next(reader)
-                    current_date_values = next(reader)
-                    current_date = date.today().strftime("%Y-%m-%d")
-                    kpi_values = current_date_values[1:]
 
                 # Create the table if it does not exist
                 table_name = "Unique_Factors_Table"
@@ -259,13 +271,13 @@ def main():
 
                 # Insert the totals into the table
                 insert_query = f"INSERT INTO {table_name} (`KPI Report Date`"
-                for column_name in column_names[1:]:
+                for column_name in column_names:
                     insert_query += f", `{column_name}`"
                 insert_query += ") VALUES (%s"
                 for i in range(len(kpi_values)):
                     insert_query += ", %s"
                 insert_query += ")"
-                values = [current_date] + kpi_values
+                values = [date.today().strftime("%Y-%m-%d")] + kpi_values
                 try:
                     cursor.execute(insert_query, values)
                     connection.commit()
