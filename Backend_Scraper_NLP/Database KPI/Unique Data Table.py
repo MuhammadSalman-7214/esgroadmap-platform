@@ -55,7 +55,7 @@ def get_column_totals(cursor, log):
             )
             data_type = cursor.fetchone()[0]
 
-            if data_type == "tinyint":
+            if "sentence-" in column_name:
                 # Calculate the total number of '1' values
                 query_total_1 = (
                     f"SELECT COUNT(*) FROM `sentenceallview` WHERE `{column_name}` = 1"
@@ -153,6 +153,7 @@ def set_logs(logfile):
     log.addHandler(console_handler)
     return log
 
+
 def fix_csv_columns(path, new_data):
     """
     Fix the CSV columns according to the new data
@@ -161,42 +162,42 @@ def fix_csv_columns(path, new_data):
 
     @return None
     """
-    with open(path, 'r', newline='') as f:
+    with open(path, "r", newline="") as f:
         reader = csv.reader(f)
         try:
             existing_headers = next(reader)
         except StopIteration:
             existing_headers = []
-        
+
     # Filter out unnamed columns and create clean headers list
-    clean_headers = [header for header in existing_headers 
-                    if not header.startswith('Unnamed:')]
-    
-    new_columns = [col for col in new_data.keys() 
-                    if col not in clean_headers]
+    clean_headers = [
+        header for header in existing_headers if not header.startswith("Unnamed:")
+    ]
+
+    new_columns = [col for col in new_data.keys() if col not in clean_headers]
     if not new_columns:
         return None
-    
+
     # Read existing data, excluding unnamed columns
-    with open(path, 'r', newline='') as f:
+    with open(path, "r", newline="") as f:
         reader = csv.DictReader(f)
         existing_data = []
         for row in reader:
-            cleaned_row = {k: v for k, v in row.items() 
-                            if not k.startswith('Unnamed:')}
+            cleaned_row = {k: v for k, v in row.items() if not k.startswith("Unnamed:")}
             existing_data.append(cleaned_row)
-    
+
     final_headers = clean_headers + new_columns
-    
+
     # Write back with clean headers and new columns
-    with open(path, 'w', newline='') as f:
+    with open(path, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=final_headers)
         writer.writeheader()
-        
+
         for row in existing_data:
             for col in new_columns:
-                row[col] = ''
+                row[col] = ""
             writer.writerow(row)
+
 
 def main():
     """Main Process"""
@@ -216,8 +217,11 @@ def main():
                 kpi_values = list(totals.values())
                 filename = "Updated__Factors_Unique_&_Totals.csv"
 
+                # create if doesn;t exist, or make it completely empty
+                with open(filename, "w", newline="") as csvfile:
+                    pass
+
                 totals["KPI Report Date"] = datetime.now().strftime("%y-%m-%d %H:%M:%S")
-                fix_csv_columns(filename, totals)
 
                 # Open the CSV file in "append" mode
                 with open(filename, mode="a", newline="") as f:

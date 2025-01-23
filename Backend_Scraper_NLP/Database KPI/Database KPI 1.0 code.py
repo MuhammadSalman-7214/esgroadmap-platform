@@ -31,7 +31,7 @@ def get_column_percentages(cursor, columns, log):
             )
             data_type = cursor.fetchone()[0]
 
-            if data_type == "tinyint":
+            if "sentence-" in column_name:
                 # Calculate the percentage of '1' values
                 query_percentage_1 = f"SELECT (COUNT(*) * 100) / (SELECT COUNT(*) FROM `sentenceallview` WHERE `{column_name}` IS NOT NULL) AS percentage FROM `sentenceallview` WHERE `{column_name}` = %s"
                 cursor.execute(query_percentage_1, ("1",))
@@ -75,7 +75,9 @@ def send_csv_email(log, filename):
     @return None
     """
     try:
-        with smtplib.SMTP(host=os.getenv("SMTP_SERVER"), port=os.getenv("SMTP_PORT")) as server:
+        with smtplib.SMTP(
+            host=os.getenv("SMTP_SERVER"), port=os.getenv("SMTP_PORT")
+        ) as server:
             msg = MIMEMultipart()
             msg["From"] = os.getenv("SMTP_FROM")
             msg["To"] = "info@esgroadmap.com"
@@ -136,20 +138,19 @@ def main():
             with connection.cursor() as cursor:
                 cursor.execute("DESCRIBE `sentenceallview`")
                 columns = [row[0] for row in cursor.fetchall()]
-                columns.remove('id')
+                columns.remove("id")
 
                 percentages = get_column_percentages(cursor, columns, logger)
                 now = datetime.now().strftime("%y-%m-%d %H:%M:%S")
 
                 # Write the percentages to a CSV file
                 filename = "Updated__Factors_&_Percentage.csv"
-                if not os.path.exists(filename):
-                    with open(filename, mode="w", newline="") as csvfile:
-                        writer = csv.writer(csvfile)
-                        writer.writerow(["KPI Report Date"] + list(percentages.keys()))
+                with open(filename, "w", newline="") as csvfile:
+                    pass
 
                 with open(filename, mode="a", newline="") as csvfile:
                     writer = csv.writer(csvfile)
+                    writer.writerow(["KPI Report Date"] + list(percentages.keys()))
                     writer.writerow([now] + list(percentages.values()))
 
                 # Create the table if it does not exist
@@ -165,14 +166,17 @@ def main():
                 except Exception as err:
                     logger.error(f"Error while creating table: {err}")
 
-                #Insert column if not exists
+                # Insert column if not exists
                 try:
-                    cursor.execute("""
+                    cursor.execute(
+                        """
                         SELECT COLUMN_NAME 
                         FROM INFORMATION_SCHEMA.COLUMNS 
                         WHERE TABLE_NAME = %s
-                    """, (table_name,))
-                    
+                    """,
+                        (table_name,),
+                    )
+
                     existing_columns = {row[0].lower() for row in cursor.fetchall()}
                     columns_to_add = []
                     for column_name in columns:
@@ -180,9 +184,11 @@ def main():
                             columns_to_add.append(
                                 f"ADD COLUMN `{column_name}` VARCHAR(10)"
                             )
-                        
+
                     if columns_to_add:
-                        alter_query = f"ALTER TABLE `{table_name}` {', '.join(columns_to_add)}"
+                        alter_query = (
+                            f"ALTER TABLE `{table_name}` {', '.join(columns_to_add)}"
+                        )
                         cursor.execute(alter_query)
                 except Exception as e:
                     logger.error(f"Error occured while adding column: {e}")
