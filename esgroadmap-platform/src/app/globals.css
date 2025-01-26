@@ -311,6 +311,12 @@ html {
   transition: background-color 0.2s !important;
 }
 
+@media (max-width: 1440px) {
+  .p-column-filter-menu-button {
+    width: 100% !important;
+  }
+}
+
 .p-column-filter-menu-button:hover {
   background-color: rgba(0, 0, 0, 0.04) !important;
 }
@@ -436,4 +442,42 @@ html {
   height: auto;
   line-height: 0.6rem;
   font-size: 0.6rem;
+}
+
+@media (max-width: 1440px) {
+    [data-pc-section="sort"],
+    [data-pc-section="columnfilter"] {
+        transform: scale(0.5) !important;
+        transform-origin: center !important;
+    }
+}
+
+/* Table cell styles */
+.p-datatable .p-datatable-tbody > tr > td {
+    @apply p-0 !important;
+}
+
+/* Adjust text sizes for different screen sizes */
+.p-datatable .p-datatable-tbody > tr > td {
+    @apply text-sm max-lg:text-xs !important;
+}
+
+/* Ensure truncation works properly */
+.truncate {
+    @apply max-w-full overflow-hidden text-ellipsis whitespace-nowrap !important;
+}
+
+/* Add hover effect for truncated text */
+.truncate:hover {
+    @apply opacity-90 !important;
+}
+
+/* Ensure proper cell height */
+.p-datatable .p-datatable-tbody > tr > td {
+    @apply h-12 min-h-[3rem] !important;
+}
+
+/* Center align specific columns */
+.p-datatable .p-datatable-tbody > tr > td[data-pc-section="cell"] {
+    @apply align-middle !important;
 }

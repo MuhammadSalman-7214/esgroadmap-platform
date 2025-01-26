@@ -145,26 +145,26 @@ export default function useTargetTable<T extends object>(data: Array<T>) {
 		const minWidth = Math.ceil((key.length * charWidth) / 2); // Width needed for 2 lines
 		
 		// Base widths for different column types
-		let baseWidth = 140;
+		let baseWidth = 110;
 		if (key.includes("sector code")) {
-			baseWidth = 120;
+			baseWidth = 100;
 		} else if (key === "Target Sentence") {
-			baseWidth = 250;
+			baseWidth = 120;
 		} else if (key === "ID") {
-			baseWidth = 95;
+			baseWidth = 90;
 		} else if (key === "Country") {
-			baseWidth = 125;
+			baseWidth = 100;
 		} else if (key === "Upload Date") {
-			baseWidth = 110;
+			baseWidth = 95;
 		} else if (key.includes("sector name")) {
-			baseWidth = 160;
+			baseWidth = 110;
 
 		} else if (key === "Target Year(s)") {
-			baseWidth = 150;
+			baseWidth = 100;
 		}
 		
 		else if (key === "DocURL") {
-			baseWidth = 95;
+			baseWidth = 90;
 		}
 		
 		// Use the larger of minWidth or baseWidth
@@ -172,20 +172,37 @@ export default function useTargetTable<T extends object>(data: Array<T>) {
 		
 		return {
 			width,
-			limit: key === "Target Sentence" ? 80 : 100
+			limit:"auto"
 		};
 	};
 
+	// const renderHeader = useCallback((key: string) => {
+	// 	return (
+	// 		<div 
+	// 			// className="w-full whitespace-normal break-words max-h-[3rem] line-clamp-2"
+	// 			   className="w-full whitespace-nowrap overflow-hidden text-ellipsis"
+	// 			title={key}
+	// 		>
+	// 			{key}
+	// 		</div>
+	// 	);
+	// }, []);
+
+	// ... existing code ...
+
 	const renderHeader = useCallback((key: string) => {
-		return (
-			<div 
-				className="w-full whitespace-normal break-words max-h-[3rem] line-clamp-2"
-				title={key}
-			>
-				{key}
-			</div>
-		);
-	}, []);
+    return ( 
+        <div 
+            className="w-full overflow-hidden text-ellipsis text-sm max-xl:text-xs" // between lg and md breakpoints there is another breakpoint at 1440px, called
+            title={key}
+        >
+            <span className="inline-flex items-center [&_[data-pc-section='sort']]:max-lg:scale-50 [&_[data-pc-section='columnfilter']]:max-lg:scale-50">
+                {key}
+            </span>
+        </div>
+    );
+}, []);
+
 
 	const renderBody = useCallback((key: string) => {
 		const { width, limit } = getWordLimitAndWidth(key);
@@ -196,27 +213,22 @@ export default function useTargetTable<T extends object>(data: Array<T>) {
 				return "N/A";
 			}
 
+			// Generic cell wrapper style
+			const cellBaseStyle = "w-full h-full flex items-center px-2";
+
 			// Add specific padding for ID column
 			if (key === 'ID') {
 				return (
-					<span
-						style={{
-							width: width,
-							paddingLeft: '12px' // Add left padding for ID column
-						}}
-					>
+					<div className={`${cellBaseStyle} justify-center`}>
 						{value}
-					</span>
+					</div>
 				);
 			}
 
 			// Country code mapping with hover tooltip
 			if (key === dbColumns.TargetSentenceView.Country) {
 				return (
-					<div
-						className="relative group overflow-hidden whitespace-nowrap text-ellipsis"
-						style={{ width: width }}
-					>
+					<div className={`${cellBaseStyle} justify-center`}>
 						<span title={value}>
 							{countryCodeMap[value] || value}
 						</span>
@@ -227,66 +239,62 @@ export default function useTargetTable<T extends object>(data: Array<T>) {
 			// Document URL - simplified
 			if (key === dbColumns.TargetSentenceView.DocURL) {
 				return (
-					<Link
-						href={value}
-						target="_blank"
-						rel="noopener noreferrer"
-						aria-label="Open document"
-						className="inline-flex items-center text-blue-600"
-					>
-						<i className="pi pi-external-link" />
-					</Link>
+					<div className={`${cellBaseStyle} justify-center`}>
+						<Link
+							href={value}
+							target="_blank"
+							rel="noopener noreferrer"
+							aria-label="Open document"
+							className="text-blue-600 hover:text-blue-700"
+						>
+							<i className="pi pi-external-link" />
+						</Link>
+					</div>
 				);
 			}
 
-			// Target Sentence -> open modal on click. No tooltip truncation.
+			// Target Sentence -> open modal on click
 			if (key === dbColumns.TargetSentenceView.Target_sentence) {
 				return (
-					<span
+					<div 
+						className={`${cellBaseStyle} justify-start cursor-pointer`}
 						onClick={() => {
 							setShowModal(true);
 							setSelectedTargetSentence(value);
 						}}
-						className="cursor-pointer"
-						style={{
-							width: width,
-							display: "inline-block",
-							overflow: "hidden",
-							whiteSpace: "nowrap",
-							textOverflow: "ellipsis",
-						}}
 					>
-						{value.length > limit ? value.slice(0, limit) + "..." : value}
-					</span>
+						<span 
+							className="truncate text-sm"
+							title={value}
+						>
+							{value}
+						</span>
+					</div>
 				);
 			}
 
 			// Generic date check
 			if (value instanceof Date) {
 				return (
-					<span style={{ width: width }}>
+					<div className={`${cellBaseStyle} justify-center`}>
 						{value.toLocaleDateString()}
-					</span>
+					</div>
 				);
 			}
 
-			// For other columns, truncate + hover full text
+			// For other columns
 			return (
-				<span
-					style={{
-						// width: (key === dbColumns.TargetSentenceView.Company || key === dbColumns.TargetSentenceView.sector_code__1__NAICS_ || key === dbColumns.TargetSentenceView.SentenceTargetYear) ? 'auto' : width,
-						width: 'auto',
-						display: "inline-block",
-						whiteSpace: "nowrap",
-						overflow: "hidden",
-						textOverflow: "ellipsis"
-					}}
-					title={value}
-				>
-					{value.length > limit ? value.slice(0, limit) + "..." : value}
-				</span>
+				<div className={`${cellBaseStyle} justify-center`}>
+					<span 
+						className="truncate text-sm"
+						title={value}
+					>
+						{value}
+					</span>
+				</div>
 			);
 		};
+		
 		BodyComponent.displayName = `BodyRenderer_${key}`;
 		return BodyComponent;
 	}, []);
