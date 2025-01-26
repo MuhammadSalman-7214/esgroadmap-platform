@@ -2,13 +2,8 @@ import { HttpUnAuthorizedError } from '@/errors'
 import prisma from '@/lib/prisma'
 import token from '@/utils/token'
 import { headers } from 'next/headers'
-import { createMockUser } from '@/mocks/mockUser'
 
 export default async function authorizer() {
-  if (process.env.BYPASS_AUTH === 'true') {
-    const { user, credentials: payload } = createMockUser();
-    return { user, payload };
-  }
   const authorization = headers().get('Authorization')
 
   if (!authorization) {

@@ -16,10 +16,6 @@ interface CustomNextRequest extends NextRequest {
 
 const middleware = async (req: CustomNextRequest) => {
   
-  if (process.env.BYPASS_AUTH === 'true') {
-    return NextResponse.next()
-  }
-
   const { pathname } = req.nextUrl
 
   if (pathname === '' || pathname === '/') {
