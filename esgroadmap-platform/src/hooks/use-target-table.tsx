@@ -193,10 +193,10 @@ export default function useTargetTable<T extends object>(data: Array<T>) {
 	const renderHeader = useCallback((key: string) => {
     return ( 
         <div 
-            className="w-full overflow-hidden text-ellipsis text-sm max-2xl:text-xs" // between lg and md breakpoints there is another breakpoint at 1440px, called
+            className="table-header-text"
             title={key}
         >
-            <span className="inline-flex items-center [&_[data-pc-section='sort']]:max-2xl:scale-50 [&_[data-pc-section='columnfilter']]:max-2xl:scale-50">
+            <span className="inline-flex items-center">
                 {key}
             </span>
         </div>

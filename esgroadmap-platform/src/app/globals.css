@@ -108,6 +108,10 @@ html {
   border-width: 5px;
   border-style: solid;
   border-color: #1f2937 transparent transparent transparent;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 
 /* Header button styles */
@@ -288,7 +292,7 @@ html {
 
 @media (max-width: 1536px) {
   .p-column-title {
-    max-height: 2rem !important;  /* Smaller height for screens <= 1024px */
+    max-height: 2.5rem !important;  /* Smaller height for screens <= 1024px */
   }
 }
 
@@ -302,6 +306,9 @@ html {
   position: absolute;
   top: 100%;
   left: 50%;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
   transform: translateX(-50%);
   background: #1f2937;
   color: white;
@@ -461,8 +468,14 @@ html {
 
 .p-datatable-header .p-button-outlined .p-button-secondary .p-button-icon-only .p-splitbutton {
   @media screen {max-width: 1440px;
+    -webkit-transform: scaleY(0.8) !important;
+    -webkit-transform-origin: top left !important;
+    -moz-transform: scaleY(0.8) !important;
+    -moz-transform-origin: top left !important;
+    -ms-transform: scaleY(0.8) !important;
+    -ms-transform-origin: top left !important;
     transform: scaleY(0.8) !important;
-    transform-origin: top left ;
+    transform-origin: top left !important;
   }
 }
 /* Ensure the footer/paginator has rounded bottom corners */
@@ -483,6 +496,12 @@ html {
 @media (max-width: 1536px) {
     [data-pc-section="sort"],
     [data-pc-section="columnfilter"] {
+        -webkit-transform: scale(0.5) !important;
+        -webkit-transform-origin: center !important;
+        -moz-transform: scale(0.5) !important;
+        -moz-transform-origin: center !important;
+        -ms-transform: scale(0.5) !important;
+        -ms-transform-origin: center !important;
         transform: scale(0.5) !important;
         transform-origin: center !important;
     }
@@ -516,4 +535,35 @@ html {
 /* Center align specific columns */
 .p-datatable .p-datatable-tbody > tr > td[data-pc-section="cell"] {
     @apply align-middle !important;
+}
+
+/* Add these header text styles */
+.table-header-text {
+  @apply w-full overflow-hidden text-ellipsis;
+  font-size: 0.875rem !important; /* 14px - default size */
+  
+  /* Cross-browser text handling */
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Responsive text sizing with better cross-browser support */
+@media (max-width: 1536px) {
+  .table-header-text {
+    font-size: 0.75rem !important; /* 12px */
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+}
+
+/* Ensure consistent rendering across browsers */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .table-header-text {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 }
