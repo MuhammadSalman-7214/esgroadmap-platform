@@ -252,7 +252,7 @@ html {
   position: relative !important;
   padding: 0 !important;
   height: auto !important;
-  max-height: 4rem !important;
+  max-height: 3.5rem !important;
 }
 
 .p-column-header-content {
@@ -263,6 +263,7 @@ html {
   min-width: 0 !important;
   padding: 0.75rem 0.5rem !important;
   gap: 0rem !important;
+  max-height: 3rem !important;
 }
 
 /* Style for the column title span */
@@ -281,6 +282,35 @@ html {
   text-align-last: center;
   text-align: center !important;
   line-height: 1.25rem !important;
+  text-overflow: ellipsis !important;
+  max-height: 2.5rem !important;  /* Default for large screens */
+}
+
+@media (max-width: 1536px) {
+  .p-column-title {
+    max-height: 2rem !important;  /* Smaller height for screens <= 1024px */
+  }
+}
+
+/* Add hover tooltip for truncated headers */
+.p-column-title {
+  position: relative !important;
+}
+
+.p-column-title:hover::after {
+  content: attr(title);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 50;
+  pointer-events: none;
 }
 
 /* Icons container */
@@ -429,6 +459,12 @@ html {
   @apply rounded-t-lg !important;
 }
 
+.p-datatable-header .p-button-outlined .p-button-secondary .p-button-icon-only .p-splitbutton {
+  @media screen {max-width: 1440px;
+    transform: scaleY(0.8) !important;
+    transform-origin: top left ;
+  }
+}
 /* Ensure the footer/paginator has rounded bottom corners */
 .p-datatable .p-paginator {
   @apply rounded-b-lg !important;
@@ -444,7 +480,7 @@ html {
   font-size: 0.6rem;
 }
 
-@media (max-width: 1440px) {
+@media (max-width: 1536px) {
     [data-pc-section="sort"],
     [data-pc-section="columnfilter"] {
         transform: scale(0.5) !important;
