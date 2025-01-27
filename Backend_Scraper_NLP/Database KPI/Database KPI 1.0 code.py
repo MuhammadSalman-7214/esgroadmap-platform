@@ -36,7 +36,7 @@ def get_column_percentages(cursor, columns, log):
                 query_percentage_1 = f"SELECT (COUNT(*) * 100) / (SELECT COUNT(*) FROM `sentenceallview` WHERE `{column_name}` IS NOT NULL) AS percentage FROM `sentenceallview` WHERE `{column_name}` = %s"
                 cursor.execute(query_percentage_1, ("1",))
                 percentage_1 = cursor.fetchone()[0]
-                percentages[f"{column_name} (1 %)"] = f"{percentage_1:.2f}%"
+                percentages[f"{column_name} (%)"] = f"{percentage_1:.2f}%"
             elif column_name in [
                 "Member of the S&P500",
                 "Member of the Russell 1000 Index",
