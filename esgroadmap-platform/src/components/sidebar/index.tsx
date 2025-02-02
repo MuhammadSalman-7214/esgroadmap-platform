@@ -82,7 +82,7 @@ const Sidebar: React.FC<{ user: Omit<User, "password" | "deletedAt"> }> = ({
 									label={nav.name}
 									style={styles}
 									component={<Link href={nav.submenus?.[0].link} />}
-									open={pathname.startsWith(nav.link)}
+									open={pathname?.startsWith(nav.link) ?? false}
 								>
 									{nav.submenus.map((submenu) => {
 										const isSubmenuActive = submenu.link === pathname;

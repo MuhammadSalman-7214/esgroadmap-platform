@@ -20,6 +20,9 @@ importers:
       '@radix-ui/react-accordion':
         specifier: ^1.2.0
         version: 1.2.0(@types/react-dom@18.3.0)(@types/react@18.3.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@sendgrid/mail':
+        specifier: ^8.1.4
+        version: 8.1.4
       '@t3-oss/env-nextjs':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.4.5)(zod@3.23.8)
@@ -34,7 +37,7 @@ importers:
         version: 1.7.2
       bcrypt:
         specifier: ^5.1.1
-        version: 5.1.1
+        version: 5.1.1(encoding@0.1.13)
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -171,6 +174,9 @@ importers:
       '@types/react-loader-spinner':
         specifier: ^4.0.0
         version: 4.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@types/sendgrid':
+        specifier: ^4.3.0
+        version: 4.3.0
       '@types/stripe':
         specifier: ^8.0.417
         version: 8.0.417
@@ -693,6 +699,18 @@ packages:
   '@rushstack/eslint-patch@1.10.3':
     resolution: {integrity: sha512-qC/xYId4NMebE6w/V33Fh9gWxLgURiNYgVNObbJl2LZv0GUUItCcCqC5axQSwRaAgaxl2mELq1rMzlswaQ0Zxg==}
 
+  '@sendgrid/client@8.1.4':
+    resolution: {integrity: sha512-VxZoQ82MpxmjSXLR3ZAE2OWxvQIW2k2G24UeRPr/SYX8HqWLV/8UBN15T2WmjjnEb5XSmFImTJOKDzzSeKr9YQ==}
+    engines: {node: '>=12.*'}
+
+  '@sendgrid/helpers@8.0.0':
+    resolution: {integrity: sha512-Ze7WuW2Xzy5GT5WRx+yEv89fsg/pgy3T1E3FS0QEx0/VvRmigMZ5qyVGhJz4SxomegDkzXv/i0aFPpHKN8qdAA==}
+    engines: {node: '>= 12.0.0'}
+
+  '@sendgrid/mail@8.1.4':
+    resolution: {integrity: sha512-MUpIZykD9ARie8LElYCqbcBhGGMaA/E6I7fEcG7Hc2An26QJyLtwOaKQ3taGp8xO8BICPJrSKuYV4bDeAJKFGQ==}
+    engines: {node: '>=12.*'}
+
   '@swc/counter@0.1.3':
     resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
 
@@ -801,6 +819,10 @@ packages:
   '@types/send@0.17.4':
     resolution: {integrity: sha512-x2EM6TJOybec7c52BX0ZspPodMsQUd5L6PRwOunVyVUhXiBSKf3AezDL8Dgvgt5o0UfKNfuA0eMLr2wLT4AiBA==}
 
+  '@types/sendgrid@4.3.0':
+    resolution: {integrity: sha512-IllGHyMdT/2vNFGmaW7LdhiJmDJxwIbJcArclb9kPW+0FVOb8h3JmjP0FrnCx6anSigi8hBeDymBzWtNyfj+bw==}
+    deprecated: This is a stub types definition for sendgrid (https://github.com/sendgrid/sendgrid-nodejs). sendgrid provides its own type definitions, so you don't need @types/sendgrid installed!
+
   '@types/serve-static@1.15.7':
     resolution: {integrity: sha512-W8Ym+h8nhuRwaKPaDw34QUkwsGi6Rc4yYqvKFo5rm2FUEhCFbzVWrxXUxuKK8TASjWsysJY0nsmNCGhCOIsrOw==}
 
@@ -864,6 +886,9 @@ packages:
     resolution: {integrity: sha512-Y9rRfJG5jcKOE0CLisYbojUjIrIEE7AGMzA/Sm4BslANhbS+cDMpgBdcPT91oJ7OuJ9hYJBx59RjbhxVnrF8Xg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+
+  addressparser@1.0.1:
+    resolution: {integrity: sha512-aQX7AISOMM7HFE0iZ3+YnD07oIeJqWGVnJ+ZIKaBZAk03ftmVYVqsGas/rbXKR21n4D/hKCSHypvcyOkds/xzg==}
 
   adler-32@1.3.1:
     resolution: {integrity: sha512-ynZ4w/nUUv5rrsR8UUGoe1VC9hZj6V5hU9Qw1HlMDJGEJw5S7TfTErWTjMys6M7vr0YWcPqs3qAr4ss0nDfP+A==}
@@ -967,6 +992,39 @@ packages:
   ast-types-flow@0.0.8:
     resolution: {integrity: sha512-OH/2E5Fg20h2aPrbe+QL8JZQFko0YZaF+j4mnQ7BGhfavO7OpSLa8a0y9sBwomHdSbkhTS8TQNayBfnW5DwbvQ==}
 
+  async.ensureasync@0.5.2:
+    resolution: {integrity: sha512-eez/kJFHbnnHUBWpYlmWcjZpho/Oh7SHwnnnuscM8nOZcIJ41t+ACMSYTfNtdrES+XfbGVQtyw+6YK2evQgV5w==}
+
+  async.queue@0.5.2:
+    resolution: {integrity: sha512-SX5gCWh47bIRLqHAt/zfJmRl2xpCF4OM4kkT3HehVJLmgQfLzYjL6QhLHe+SS4e7FOYU6NgMy2kXPB2wVchncg==}
+
+  async.util.arrayeach@0.5.2:
+    resolution: {integrity: sha512-PIb4rVYjwzLqb93XX2wj0+mA9YTgSWtxQRKxtuLqxXvGj1xZMB6qJUfr1NhS+FSaMPJIE1tF40Gl/o/vlfIz/A==}
+
+  async.util.ensureasync@0.5.2:
+    resolution: {integrity: sha512-sQufNz4JYLHO/7ZUklaTGJtiX36gCp28McNNcMZfVYPm/wqi1pKk4xRCPr2DOZDM6KfA54zjG36jQjBU2mLzXg==}
+
+  async.util.isarray@0.5.2:
+    resolution: {integrity: sha512-wbUzlrwON8RUgi+v/rhF0U99Ce8Osjcn+JP/mFNg6ymvShcobAOvE6cvLajSY5dPqKCOE1xfdhefgBif11zZgw==}
+
+  async.util.map@0.5.2:
+    resolution: {integrity: sha512-uXZhyNIH9Jo25jn35lUoEwFLAdZWC2ZQKjLO5PLq8VAisfW6qvSfgDLH4H57/WQSKZSo6OOmuqGhtdvIHDTi1Q==}
+
+  async.util.noop@0.5.2:
+    resolution: {integrity: sha512-AdwShXwE0KoskgqVJAck8zcM32nIHj3AC8ZN62ZaR5srhrY235Nw18vOJZWxcOfhxdVM0hRVKM8kMx7lcl7cCQ==}
+
+  async.util.onlyonce@0.5.2:
+    resolution: {integrity: sha512-UgQvkU9JZ+I0Cm1f56XyGXcII+J3d/5XWUuHpcevlItuA3WFSJcqZrsyAUck2FkRSD8BwYQX1zUTDp3SJMVESg==}
+
+  async.util.queue@0.5.2:
+    resolution: {integrity: sha512-DlKOFnhCzERL9D3bLKlNdgXwSckckcj+XkCvNuX4KMs4brBc2lHvPg8MK4NoPIhwAvUBGvE4NECdNRY0I5UOEQ==}
+
+  async.util.restparam@0.5.2:
+    resolution: {integrity: sha512-Q9Z+zgmtMxFX5i7CnBvNOkgrL5hptztCqwarQluyNudUUk4iCmyjmsQl8MuQEjNh3gGqP5ayvDaextL1VXXgIg==}
+
+  async.util.setimmediate@0.5.2:
+    resolution: {integrity: sha512-aCYF85ZFCQ9Xn0106GcOVx+LvFguIIzfbfRTOlQoie3G4KeSjURfA6f7CfpFAF09FNP2A1MtdjeFdvYeTGDebw==}
+
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
@@ -985,6 +1043,9 @@ packages:
 
   axios@1.7.2:
     resolution: {integrity: sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==}
+
+  axios@1.7.9:
+    resolution: {integrity: sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==}
 
   axobject-query@3.2.1:
     resolution: {integrity: sha512-jsyHu61e6N4Vbz/v18DHwWYKK0bSWLqn47eeDSKPB7m8tqMHF9YJ+mhIk2lVteyZrY8tnSj/jHOv4YiTCuCJgg==}
@@ -1007,6 +1068,9 @@ packages:
   binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
+
+  bottleneck@1.16.0:
+    resolution: {integrity: sha512-HinT6aCt+ZLPVvMtOy8Vd1vQtR2R/Qi06fKRCa4oGiIuFF+CQwNYR/KZTjrEynkER7y9WaY8fhwWKqZp+/aXeg==}
 
   brace-expansion@1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
@@ -1205,6 +1269,14 @@ packages:
     resolution: {integrity: sha512-t/Ygsytq+R995EJ5PZlD4Cu56sWa8InXySaViRzw9apusqsOO2bQP+SbYzAhR0pFKoB+43lYy8rWban9JSuXnA==}
     engines: {node: '>= 0.4'}
 
+  debug@2.6.9:
+    resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+
   debug@3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
     peerDependencies:
@@ -1228,6 +1300,10 @@ packages:
 
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
+
+  deepmerge@4.3.1:
+    resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
+    engines: {node: '>=0.10.0'}
 
   define-data-property@1.1.4:
     resolution: {integrity: sha512-rBMvIzlpA8v6E+SJZoo++HAYqsLrkg7MSfIinMPFhmkorw7X+dOXVJQs+QT69zGkzMyfDnIMN2Wid1+NbL3T+A==}
@@ -1280,6 +1356,10 @@ packages:
   dompurify@2.5.5:
     resolution: {integrity: sha512-FgbqnEPiv5Vdtwt6Mxl7XSylttCC03cqP5ldNT2z+Kj0nLxPHJH4+1Cyf5Jasxhw93Rl4Oo11qRoUV72fmya2Q==}
 
+  dotenv@4.0.0:
+    resolution: {integrity: sha512-XcaMACOr3JMVcEv0Y/iUM2XaOsATRZ3U1In41/1jjK6vJZ2PZbQ1bzCG8uvaByfaBpl9gqc9QWJovpUGBXLLYQ==}
+    engines: {node: '>=4.6.0'}
+
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
@@ -1291,6 +1371,9 @@ packages:
 
   emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
+
+  encoding@0.1.13:
+    resolution: {integrity: sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==}
 
   enhanced-resolve@5.16.1:
     resolution: {integrity: sha512-4U5pNsuDl0EhuZpq46M5xPslstkviJuhrdobaRDBk2Jy2KO37FDAJl4lb2KlNabxT0m4MTK2UHNrsAcphE8nyw==}
@@ -1652,6 +1735,10 @@ packages:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
     engines: {node: '>=0.10.0'}
 
+  iconv-lite@0.6.3:
+    resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
+    engines: {node: '>=0.10.0'}
+
   ignore@5.3.1:
     resolution: {integrity: sha512-5Fytz/IraMjqpwfd34ke28PTVMjZjJG2MPn5t7OE4eUCUNf8BAa7b5WUS9/Qvr6mwOQS7Mk6vdsMno5he+T8Xw==}
     engines: {node: '>= 4'}
@@ -1887,6 +1974,9 @@ packages:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
 
+  lodash.chunk@4.2.0:
+    resolution: {integrity: sha512-ZzydJKfUHJwHa+hF5X66zLFCBrWn5GeF28OHEr4WVWtNDXlQ/IjWKPBiikqKo2ne0+v6JgCgJ0GzJp8k8bHC7w==}
+
   lodash.includes@4.3.0:
     resolution: {integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==}
 
@@ -1927,6 +2017,10 @@ packages:
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
 
+  mailparser@0.6.2:
+    resolution: {integrity: sha512-5Z5nv7TYojrdrKHjhCOKKFaYs0Lo7PCja4RnLZ2kFE1Fskqg+rRVwFpG9Oqx3YjosGM2QEItjHo7+Jc9qvxGqw==}
+    deprecated: Mailparser versions older than v2.3.0 are deprecated
+
   make-dir@3.1.0:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
     engines: {node: '>=8'}
@@ -1955,6 +2049,15 @@ packages:
   mime-types@2.1.35:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
+
+  mime@1.6.0:
+    resolution: {integrity: sha512-x0Vn8spI+wuJ1O6S7gnbaQg8Pxh4NNHb7KSINmEWKiPE4RKOplvijn+NkmYmmRgP68mc70j2EbeTFRsrswaQeg==}
+    engines: {node: '>=4'}
+    hasBin: true
+
+  mimelib@0.3.1:
+    resolution: {integrity: sha512-ipzNp6TBsNfD3hButGlPVlGmuCgybIM9SBf8YwIG+SYmBgtU0u8wjf+BSrJX0mvqtv59SLmwphw/XiCbkLWv7w==}
+    deprecated: This project is unmaintained
 
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
@@ -1994,6 +2097,9 @@ packages:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
     engines: {node: '>=10'}
     hasBin: true
+
+  ms@2.0.0:
+    resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
 
   ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
@@ -2522,6 +2628,15 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  sendgrid-rest@2.6.1:
+    resolution: {integrity: sha512-W7gPROAPkEiD3+XQh+jeiU5mTNWqfgn45y1Xi8WiFA3CYKGOvHn+U0d62pTWjjynNqsmQIq9AJ0+93Bq67gbSQ==}
+    engines: {node: '>= 0.10'}
+
+  sendgrid@5.2.3:
+    resolution: {integrity: sha512-FD7oR9TbJFUew1p0Vw9JX0wBetDyq634LzylSXz4n9+hwaf+6a9dNloZl8CcjpsX4NuEc3HJanTN4GjDwNyi4A==}
+    engines: {node: '>= 4.0.0'}
+    deprecated: Please see v6.X+ at https://www.npmjs.com/org/sendgrid
+
   set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
 
@@ -2801,6 +2916,9 @@ packages:
   utrie@1.0.2:
     resolution: {integrity: sha512-1MLa5ouZiOmQzUbjbu9VmjLzn1QLXBhwpUa7kdLUQK+KQ5KA9I1vk5U4YHe/X2Ch7PYnJfWuWT+VbuxbGwljhw==}
 
+  uue@3.1.2:
+    resolution: {integrity: sha512-axKLXVqwtdI/czrjG0X8hyV1KLgeWx8F4KvSbvVCnS+RUvsQMGRjx0kfuZDXXqj0LYvVJmx3B9kWlKtEdRrJLg==}
+
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
@@ -3070,12 +3188,12 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  '@mapbox/node-pre-gyp@1.0.11':
+  '@mapbox/node-pre-gyp@1.0.11(encoding@0.1.13)':
     dependencies:
       detect-libc: 2.0.3
       https-proxy-agent: 5.0.1
       make-dir: 3.1.0
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
       nopt: 5.0.0
       npmlog: 5.0.1
       rimraf: 3.0.2
@@ -3374,6 +3492,24 @@ snapshots:
 
   '@rushstack/eslint-patch@1.10.3': {}
 
+  '@sendgrid/client@8.1.4':
+    dependencies:
+      '@sendgrid/helpers': 8.0.0
+      axios: 1.7.9
+    transitivePeerDependencies:
+      - debug
+
+  '@sendgrid/helpers@8.0.0':
+    dependencies:
+      deepmerge: 4.3.1
+
+  '@sendgrid/mail@8.1.4':
+    dependencies:
+      '@sendgrid/client': 8.1.4
+      '@sendgrid/helpers': 8.0.0
+    transitivePeerDependencies:
+      - debug
+
   '@swc/counter@0.1.3': {}
 
   '@swc/helpers@0.5.5':
@@ -3493,6 +3629,12 @@ snapshots:
       '@types/mime': 1.3.5
       '@types/node': 20.12.12
 
+  '@types/sendgrid@4.3.0':
+    dependencies:
+      sendgrid: 5.2.3
+    transitivePeerDependencies:
+      - supports-color
+
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
@@ -3559,6 +3701,8 @@ snapshots:
       acorn: 8.11.3
 
   acorn@8.11.3: {}
+
+  addressparser@1.0.1: {}
 
   adler-32@1.3.1: {}
 
@@ -3691,6 +3835,42 @@ snapshots:
 
   ast-types-flow@0.0.8: {}
 
+  async.ensureasync@0.5.2:
+    dependencies:
+      async.util.ensureasync: 0.5.2
+
+  async.queue@0.5.2:
+    dependencies:
+      async.util.queue: 0.5.2
+
+  async.util.arrayeach@0.5.2: {}
+
+  async.util.ensureasync@0.5.2:
+    dependencies:
+      async.util.restparam: 0.5.2
+      async.util.setimmediate: 0.5.2
+
+  async.util.isarray@0.5.2: {}
+
+  async.util.map@0.5.2: {}
+
+  async.util.noop@0.5.2: {}
+
+  async.util.onlyonce@0.5.2: {}
+
+  async.util.queue@0.5.2:
+    dependencies:
+      async.util.arrayeach: 0.5.2
+      async.util.isarray: 0.5.2
+      async.util.map: 0.5.2
+      async.util.noop: 0.5.2
+      async.util.onlyonce: 0.5.2
+      async.util.setimmediate: 0.5.2
+
+  async.util.restparam@0.5.2: {}
+
+  async.util.setimmediate@0.5.2: {}
+
   asynckit@0.4.0: {}
 
   atob@2.1.2: {}
@@ -3702,6 +3882,14 @@ snapshots:
   axe-core@4.7.0: {}
 
   axios@1.7.2:
+    dependencies:
+      follow-redirects: 1.15.6
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.7.9:
     dependencies:
       follow-redirects: 1.15.6
       form-data: 4.0.0
@@ -3724,15 +3912,17 @@ snapshots:
   base64-arraybuffer@1.0.2:
     optional: true
 
-  bcrypt@5.1.1:
+  bcrypt@5.1.1(encoding@0.1.13):
     dependencies:
-      '@mapbox/node-pre-gyp': 1.0.11
+      '@mapbox/node-pre-gyp': 1.0.11(encoding@0.1.13)
       node-addon-api: 5.1.0
     transitivePeerDependencies:
       - encoding
       - supports-color
 
   binary-extensions@2.3.0: {}
+
+  bottleneck@1.16.0: {}
 
   brace-expansion@1.1.11:
     dependencies:
@@ -3872,8 +4062,7 @@ snapshots:
 
   cookie@0.6.0: {}
 
-  core-js@3.37.1:
-    optional: true
+  core-js@3.37.1: {}
 
   core-util-is@1.0.3: {}
 
@@ -3930,6 +4119,10 @@ snapshots:
       es-errors: 1.3.0
       is-data-view: 1.0.1
 
+  debug@2.6.9:
+    dependencies:
+      ms: 2.0.0
+
   debug@3.2.7:
     dependencies:
       ms: 2.1.3
@@ -3948,6 +4141,8 @@ snapshots:
       regexp.prototype.flags: 1.5.2
 
   deep-is@0.1.4: {}
+
+  deepmerge@4.3.1: {}
 
   define-data-property@1.1.4:
     dependencies:
@@ -3995,6 +4190,8 @@ snapshots:
   dompurify@2.5.5:
     optional: true
 
+  dotenv@4.0.0: {}
+
   eastasianwidth@0.2.0: {}
 
   ecdsa-sig-formatter@1.0.11:
@@ -4004,6 +4201,10 @@ snapshots:
   emoji-regex@8.0.0: {}
 
   emoji-regex@9.2.2: {}
+
+  encoding@0.1.13:
+    dependencies:
+      iconv-lite: 0.6.3
 
   enhanced-resolve@5.16.1:
     dependencies:
@@ -4117,8 +4318,8 @@ snapshots:
       '@typescript-eslint/parser': 7.2.0(eslint@8.57.0)(typescript@5.4.5)
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-jsx-a11y: 6.8.0(eslint@8.57.0)
       eslint-plugin-react: 7.34.1(eslint@8.57.0)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.0)
@@ -4136,13 +4337,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0):
+  eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       debug: 4.3.4
       enhanced-resolve: 5.16.1
       eslint: 8.57.0
-      eslint-module-utils: 2.8.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
+      eslint-module-utils: 2.8.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.5
       is-core-module: 2.13.1
@@ -4153,18 +4354,18 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.8.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0))(eslint@8.57.0):
+  eslint-module-utils@2.8.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 7.2.0(eslint@8.57.0)(typescript@5.4.5)
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
+      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0):
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       array-includes: 3.1.8
       array.prototype.findlastindex: 1.2.5
@@ -4174,7 +4375,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.8.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0))(eslint@8.57.0)
+      eslint-module-utils: 2.8.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@7.2.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       hasown: 2.0.2
       is-core-module: 2.13.1
       is-glob: 4.0.3
@@ -4539,6 +4740,10 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
+  iconv-lite@0.6.3:
+    dependencies:
+      safer-buffer: 2.1.2
+
   ignore@5.3.1: {}
 
   import-fresh@3.3.0:
@@ -4780,6 +4985,8 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
+  lodash.chunk@4.2.0: {}
+
   lodash.includes@4.3.0: {}
 
   lodash.isboolean@3.0.3: {}
@@ -4808,6 +5015,13 @@ snapshots:
     dependencies:
       react: 18.3.1
 
+  mailparser@0.6.2:
+    dependencies:
+      encoding: 0.1.13
+      mime: 1.6.0
+      mimelib: 0.3.1
+      uue: 3.1.2
+
   make-dir@3.1.0:
     dependencies:
       semver: 6.3.1
@@ -4832,6 +5046,13 @@ snapshots:
   mime-types@2.1.35:
     dependencies:
       mime-db: 1.52.0
+
+  mime@1.6.0: {}
+
+  mimelib@0.3.1:
+    dependencies:
+      addressparser: 1.0.1
+      encoding: 0.1.13
 
   minimatch@3.1.2:
     dependencies:
@@ -4865,6 +5086,8 @@ snapshots:
       minimist: 1.2.8
 
   mkdirp@1.0.4: {}
+
+  ms@2.0.0: {}
 
   ms@2.1.2: {}
 
@@ -4936,9 +5159,11 @@ snapshots:
 
   node-addon-api@5.1.0: {}
 
-  node-fetch@2.7.0:
+  node-fetch@2.7.0(encoding@0.1.13):
     dependencies:
       whatwg-url: 5.0.0
+    optionalDependencies:
+      encoding: 0.1.13
 
   nopt@5.0.0:
     dependencies:
@@ -5348,6 +5573,23 @@ snapshots:
 
   semver@7.6.2: {}
 
+  sendgrid-rest@2.6.1:
+    dependencies:
+      core-js: 3.37.1
+      dotenv: 4.0.0
+
+  sendgrid@5.2.3:
+    dependencies:
+      async.ensureasync: 0.5.2
+      async.queue: 0.5.2
+      bottleneck: 1.16.0
+      debug: 2.6.9
+      lodash.chunk: 4.2.0
+      mailparser: 0.6.2
+      sendgrid-rest: 2.6.1
+    transitivePeerDependencies:
+      - supports-color
+
   set-blocking@2.0.0: {}
 
   set-function-length@1.2.2:
@@ -5673,6 +5915,11 @@ snapshots:
     dependencies:
       base64-arraybuffer: 1.0.2
     optional: true
+
+  uue@3.1.2:
+    dependencies:
+      escape-string-regexp: 1.0.5
+      extend: 3.0.2
 
   webidl-conversions@3.0.1: {}
 

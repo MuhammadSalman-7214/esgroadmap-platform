@@ -1,5 +1,5 @@
 import LostPassword from "@/containers/lost-password";
 
-const page = () => <LostPassword />;
+const Page = () => <LostPassword />;
 
-export default page;
+export default Page;
