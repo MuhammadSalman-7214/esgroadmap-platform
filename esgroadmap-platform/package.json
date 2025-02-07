@@ -16,6 +16,7 @@
   "dependencies": {
     "@mui/icons-material": "^5.15.18",
     "@mui/material": "^5.15.18",
+    "@paypal/paypal-server-sdk": "^0.6.1",
     "@prisma/client": "5.14.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@sendgrid/mail": "^8.1.4",

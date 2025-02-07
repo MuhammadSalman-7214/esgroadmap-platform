@@ -72,7 +72,7 @@ const buffer = (req: NextApiRequest) => {
     });
 
     req.on("end", () => {
-      resolve(Buffer.concat(chunks));
+      resolve(Buffer.concat(chunks as unknown as Uint8Array<ArrayBufferLike>[]));
     });
 
     req.on("error", reject);

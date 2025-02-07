@@ -41,13 +41,19 @@ const LostPassword = () => {
 
 		try {
 			setLoading(true);
-			await fetch('/api/auth/password/reset', {
+			const res= await fetch('/api/auth/password/reset', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ token, password }),
 			});
-			toast.success("Password has been reset successfully");
-			router.push('/auth/login');
+			const response = await res.json();
+			if (response.success) {
+				toast.success(response.message);
+				router.push(response.redirectTo);
+			} else {
+				console.log("response", response);
+				toast.error(response.error); // has to be parsed correctly, currently says "jwt token malformed", needs to be more user friendly
+			}
 		} catch (error) {
 			toast.error((error as Error)?.message || "Failed to reset password");
 		} finally {
