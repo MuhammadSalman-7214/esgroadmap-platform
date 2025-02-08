@@ -27,6 +27,8 @@ type DataTableProps<TRow extends object> = {
 	filterTitle?: string;
 };
 
+type DownloadOption = 'csv-all' | 'csv-page' | 'excel-all' | 'excel-page';
+
 const convertToFilters = <TRow extends object>(
 	filters: DataTableProps<TRow>["filters"]
 ) => {
@@ -73,6 +75,9 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 	});
 	const [rowsPerPageOptions, setRowsPerPageOptions] = useState([10, 50, 100, 150]);
 	const [activeFilters, setActiveFilters] = useState<Record<string, any>>({});
+	const [processedData, setProcessedData] = useState<TRow[]>(props.data);
+	const [first, setFirst] = useState(0);
+	const [rows, setRows] = useState(10);
 
 	const setDialogValue = useCallback(
 		(key: keyof typeof showDialogs, value: boolean) => {
@@ -120,27 +125,34 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 		[filters, setDialogValue]
 	);
 
-	const saveToCSV = async () => {
-		const csvData = convertArrayToCSV(data);
+	const getCurrentPageData = useCallback((): TRow[] => {
+		if (!ref.current) return [];
+		return processedData.slice(first, first + rows);
+	}, [processedData, first, rows]);
+
+	const saveToCSV = async (pageOnly: boolean = false) => {
+		const dataToExport = pageOnly ? getCurrentPageData() : data;
+		const csvData = convertArrayToCSV(dataToExport);
 
 		const blob = new Blob([csvData], { type: "text/csv" });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement("a");
 		a.href = url;
-		a.download = `${props.tableName}-${Date.now()}.csv`;
+		a.download = `${props.tableName}-${pageOnly ? 'current-page-' : ''}${Date.now()}.csv`;
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);
 		URL.revokeObjectURL(url);
 	};
 
-	const saveToExcel = async () => {
-		const worksheet = XLSX.utils.json_to_sheet(data);
+	const saveToExcel = async (pageOnly: boolean = false) => {
+		const dataToExport = pageOnly ? getCurrentPageData() : data;
+		const worksheet = XLSX.utils.json_to_sheet(dataToExport);
 		const workbook = XLSX.utils.book_new();
 		XLSX.utils.book_append_sheet(
 			workbook,
 			worksheet,
-			convertTargetName(props.tableName)
+			pageOnly ? 'Current Page' : convertTargetName(props.tableName)
 		);
 
 		const excelBuffer = XLSX.write(workbook, {
@@ -151,11 +163,28 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement("a");
 		a.href = url;
-		a.download = `${props.tableName}-${Date.now()}.xlsx`;
+		a.download = `${props.tableName}-${pageOnly ? 'current-page-' : ''}${Date.now()}.xlsx`;
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);
 		URL.revokeObjectURL(url);
+	};
+
+	const handleDownload = async (option: DownloadOption) => {
+		switch (option) {
+			case 'csv-all':
+				await saveToCSV(false);
+				break;
+			case 'csv-page':
+				await saveToCSV(true);
+				break;
+			case 'excel-all':
+				await saveToExcel(false);
+				break;
+			case 'excel-page':
+				await saveToExcel(true);
+				break;
+		}
 	};
 
 	const clearFilters = useCallback(() => {
@@ -211,7 +240,6 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 				value={props.data}
 				ref={ref}
 				paginator
-				rows={10}
 				loading={loading}
 				dataKey="id"
 				emptyMessage="No data found."
@@ -220,13 +248,7 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 					<Header
 						globalFilterValue={globalFilterValue}
 						onGlobalFilterChange={onGlobalFilterChange}
-						onDownloadOptionSelect={async (option) => {
-							if (option === "csv") {
-								await saveToCSV();
-							} else if (option === "excel") {
-								await saveToExcel();
-							}
-						}}
+						onDownloadOptionSelect={handleDownload}
 						onFilterOptionSelect={onFilterOptionSelect}
 						filterTitle={props.filterTitle}
 						activeFilters={activeFilters}
@@ -249,6 +271,7 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 				tableStyle={{ minWidth: "50rem" }}
 				onValueChange={(value) => {
 					setData(value);
+					setProcessedData(value);
 				}}
 				onFilter={(event) => {
 					setFilters(event.filters);
@@ -262,6 +285,12 @@ function DataTable<TRow extends object>(props: DataTableProps<TRow>) {
 					});
 					setActiveFilters(newActiveFilters);
 				}}
+				onPage={(e) => {
+					setFirst(e.first);
+					setRows(e.rows);
+				}}
+				first={first}
+				rows={rows}
 				className="
 					flex-1
 					flex

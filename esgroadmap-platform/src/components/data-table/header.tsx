@@ -6,7 +6,7 @@ import { OverlayPanel } from 'primereact/overlaypanel';
 type HeaderProps = {
 	globalFilterValue: string;
 	onGlobalFilterChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	onDownloadOptionSelect: (option: string) => void;
+	onDownloadOptionSelect: (option: 'csv-all' | 'csv-page' | 'excel-all' | 'excel-page') => void;
 	onFilterOptionSelect: (option: string) => void;
 	filterTitle?: string;
 	activeFilters: Record<string, any>;
@@ -94,14 +94,24 @@ const Header = ({
 
 	const downloadItems = [
 		{
-			label: 'CSV',
+			label: 'CSV (All)',
 			icon: 'pi pi-file',
-			command: () => onDownloadOptionSelect("csv")
+			command: () => onDownloadOptionSelect("csv-all")
 		},
 		{
-			label: 'Excel',
+			label: 'CSV (Current Page)',
+			icon: 'pi pi-file',
+			command: () => onDownloadOptionSelect("csv-page")
+		},
+		{
+			label: 'Excel (All)',
 			icon: 'pi pi-file-excel',
-			command: () => onDownloadOptionSelect("excel")
+			command: () => onDownloadOptionSelect("excel-all")
+		},
+		{
+			label: 'Excel (Current Page)', 
+			icon: 'pi pi-file-excel',
+			command: () => onDownloadOptionSelect("excel-page")
 		}
 	];
 
@@ -227,7 +237,7 @@ const Header = ({
 					model={downloadItems}
 					className="p-button-outlined p-button-secondary p-button-icon-only"
 					size="small"
-					onClick={() => onDownloadOptionSelect("csv")}
+					onClick={() => onDownloadOptionSelect("csv-all")}
 				/>
 				<SplitButton
 					icon="pi pi-filter"
