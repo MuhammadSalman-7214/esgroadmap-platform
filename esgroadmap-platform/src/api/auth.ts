@@ -84,7 +84,6 @@ const changePassword = async (body: z.infer<typeof changePasswordSchema>) => {
   }
 }
 
-
 const editProfile = async (body: z.infer<typeof editProfileSchema>) => {
   try {
     const response = await router.private.post('/auth/profile', {
@@ -119,13 +118,34 @@ const logout = async () => {
   }
 }
 
+// Update forgotPassword function
+const forgotPassword = async (email: string) => {
+  try {
+    const response = await router.public.post('/auth/password/forgot', {
+      email,
+    });
+
+    if (!response.data.success) {
+      throw new Error(response.data.error ?? '');
+    }
+
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.response?.data.error);
+    }
+    throw new Error('Failed to process password reset request');
+  }
+};
+
 const auth = { 
   signup, 
   login, 
   me, 
   changePassword, 
   editProfile,
-  logout 
+  logout,
+  forgotPassword
 }
 
 export default auth

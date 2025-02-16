@@ -11,7 +11,7 @@ const AuthHeader = () => {
 			<div className="w-100 h-[12rem] bg-[#E5ECED] flex items-center justify-center">
 				<h2 className="text-[#219E99] text-[32px] font-semibold">
 					{pathname
-						.split("/")
+						?.split("/")
 						.at(-1)
 						?.split("-")
 						.map((i) => i.charAt(0).toUpperCase() + i.slice(1))

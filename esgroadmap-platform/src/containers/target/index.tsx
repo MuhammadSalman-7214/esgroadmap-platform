@@ -13,8 +13,8 @@ const Target: React.FC<{
 	targetName: TargetTables;
 }> = ({ title, targetName }) => {
 	return (
-		<div className="pt-[5vh] w-[100%] overflow-x-hidden">
-			<h1 className="px-10 text-[32px] text-[#219E99] font-bold">{title}</h1>
+		<div className="flex flex-col h-screen">
+			<h1 className="px-5 text-[32px] text-[#219E99] font-bold pt-3 mt-2 pb-2">{title}</h1>
 			<ErrorBoundary
 				fallback={
 					<div className="w-[100%] min-h-[50vh] h-[100%] grid place-items-center">
@@ -32,9 +32,11 @@ const Target: React.FC<{
 					</div>
 				}
 			>
-				<Suspense fallback={<Loading />}>
-					<Content targetName={targetName} />
-				</Suspense>
+				<div className="flex-1 overflow-hidden">
+					<Suspense fallback={<Loading />}>
+						<Content targetName={targetName} />
+					</Suspense>
+				</div>
 			</ErrorBoundary>
 		</div>
 	);

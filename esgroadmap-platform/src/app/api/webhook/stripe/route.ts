@@ -65,9 +65,9 @@ const onPaymentFailed = async (data: Stripe.Invoice) => {
 
 const buffer = (req: NextApiRequest) => {
   return new Promise<Buffer>((resolve, reject) => {
-    const chunks: Buffer[] = [];
+    const chunks: Uint8Array[] = [];
 
-    req.on("data", (chunk: Buffer) => {
+    req.on("data", (chunk: Uint8Array) => {
       chunks.push(chunk);
     });
 
@@ -86,14 +86,14 @@ export const POST = async (req: NextRequest) => {
 
     if (!sig) throw new Error('Sig not found')
     
-    const body = await req.text();
+    const bufferedBody = await buffer(req as any)
     let event: Stripe.Event
     console.log(`Signature: ${sig}`)
-    console.log(`Text Body: ${body}`)
+    console.log(`Text Body: ${bufferedBody.toString()}`)
     console.log(`End point secret ${endpointSecret}`)
 
     try {
-      event = stripe.webhooks.constructEvent(body, sig, endpointSecret)
+      event = stripe.webhooks.constructEvent(bufferedBody.toString(), sig, endpointSecret)
     } catch (err) {
       // console.log(JSON.stringify({ err }, null, 2))
       throw new HttpBadRequestError(`Webhook Error: ${(err as Error).message}`)

@@ -7,7 +7,7 @@
 **How to update python documents on server
 **
 Remote Desktop connection
-password = mN7=K1q-@NVBhw=FiQc1bE$C&Ie?Oo7M
+password = 
 
 **How to adjust instance settings**
 Go to AWS Lambda

@@ -1,7 +1,7 @@
 import { HttpUnAuthorizedError } from '@/errors'
 import prisma from '@/lib/prisma'
 import token from '@/utils/token'
-import { cookies, headers } from 'next/headers'
+import { headers } from 'next/headers'
 
 export default async function authorizer() {
   const authorization = headers().get('Authorization')
