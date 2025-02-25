@@ -1,7 +1,0 @@
-wheel
-datetime
-pandas
-lxml
-undetected-chromedriver
-pdftitle
-PyPDF2
