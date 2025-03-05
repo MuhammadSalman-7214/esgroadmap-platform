@@ -352,14 +352,14 @@ model wp_actionscheduler_actions {
   action_id            BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
   hook                 String
   status               String   @db.VarChar(20)
-  scheduled_date_gmt   DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
-  scheduled_date_local DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
+  scheduled_date_gmt   DateTime @default(now()) @db.DateTime(0)
+  scheduled_date_local DateTime @default(now()) @db.DateTime(0)
   args                 String?
   schedule             String?  @db.LongText
   group_id             BigInt   @default(0) @db.UnsignedBigInt
   attempts             Int      @default(0)
-  last_attempt_gmt     DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
-  last_attempt_local   DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
+  last_attempt_gmt     DateTime @default(now()) @db.DateTime(0)
+  last_attempt_local   DateTime @default(now()) @db.DateTime(0)
   claim_id             BigInt   @default(0) @db.UnsignedBigInt
   extended_args        String?  @db.VarChar(8000)
 
@@ -374,7 +374,7 @@ model wp_actionscheduler_actions {
 
 model wp_actionscheduler_claims {
   claim_id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  date_created_gmt DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
+  date_created_gmt DateTime @default(now()) @db.DateTime(0)
 
   @@index([date_created_gmt], map: "date_created_gmt")
 }
@@ -390,8 +390,8 @@ model wp_actionscheduler_logs {
   log_id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
   action_id      BigInt   @db.UnsignedBigInt
   message        String   @db.Text
-  log_date_gmt   DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
-  log_date_local DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
+  log_date_gmt   DateTime @default(now()) @db.DateTime(0)
+  log_date_local DateTime @default(now()) @db.DateTime(0)
 
   @@index([action_id], map: "action_id")
   @@index([log_date_gmt], map: "log_date_gmt")
@@ -496,8 +496,8 @@ model wp_comments {
   comment_author_email String   @default("") @db.VarChar(100)
   comment_author_url   String   @default("") @db.VarChar(200)
   comment_author_IP    String   @default("") @db.VarChar(100)
-  comment_date         DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
-  comment_date_gmt     DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
+  comment_date         DateTime @default(now()) @db.DateTime(0)
+  comment_date_gmt     DateTime @default(now()) @db.DateTime(0)
   comment_content      String   @db.Text
   comment_karma        Int      @default(0)
   comment_approved     String   @default("1") @db.VarChar(20)
@@ -523,7 +523,7 @@ model wp_links {
   link_visible     String   @default("Y") @db.VarChar(20)
   link_owner       BigInt   @default(1) @db.UnsignedBigInt
   link_rating      Int      @default(0)
-  link_updated     DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
+  link_updated     DateTime @default(now()) @db.DateTime(0)
   link_rel         String   @default("") @db.VarChar(255)
   link_notes       String   @db.MediumText
   link_rss         String   @default("") @db.VarChar(255)
@@ -630,8 +630,8 @@ model wp_postmeta {
 model wp_posts {
   ID                    BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
   post_author           BigInt   @default(0) @db.UnsignedBigInt
-  post_date             DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
-  post_date_gmt         DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
+  post_date             DateTime @default(now()) @db.DateTime(0)
+  post_date_gmt         DateTime @default(now()) @db.DateTime(0)
   post_content          String   @db.LongText
   post_title            String   @db.Text
   post_excerpt          String   @db.Text
@@ -642,8 +642,8 @@ model wp_posts {
   post_name             String   @default("") @db.VarChar(200)
   to_ping               String   @db.Text
   pinged                String   @db.Text
-  post_modified         DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
-  post_modified_gmt     DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
+  post_modified         DateTime @default(now()) @db.DateTime(0)
+  post_modified_gmt     DateTime @default(now()) @db.DateTime(0)
   post_content_filtered String   @db.LongText
   post_parent           BigInt   @default(0) @db.UnsignedBigInt
   guid                  String   @default("") @db.VarChar(255)
@@ -734,7 +734,7 @@ model wp_users {
   user_nicename       String   @default("") @db.VarChar(50)
   user_email          String   @default("") @db.VarChar(100)
   user_url            String   @default("") @db.VarChar(100)
-  user_registered     DateTime @default(dbgenerated("'0000-00-00 00:00:00'")) @db.DateTime(0)
+  user_registered     DateTime @default(now()) @db.DateTime(0)
   user_activation_key String   @default("") @db.VarChar(255)
   user_status         Int      @default(0)
   display_name        String   @default("") @db.VarChar(250)
@@ -830,676 +830,101 @@ model wp_wpforms_tasks_meta {
   date   DateTime @db.DateTime(0)
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view companydataview {
-  company                                                      String? @db.Text
-  Member_of_the_S_P500                                         String? @map("Member of the S&P500") @db.Text
-  Member_of_the_Russell_1000_Index                             String? @map("Member of the Russell 1000 Index") @db.Text
-  Ticker_s_                                                    String? @map("Ticker(s)") @db.Text
-  PR_Agency                                                    String? @map("PR Agency") @db.Text
-  Example_2020_company_PR_agency_press_release_URL             String? @map("Example 2020 company PR agency press release URL") @db.Text
-  Company_Global___Main_Website_URL                            String? @map("Company Global / Main Website URL") @db.Text
-  Company_global_main_press___news_release_site_URL            String? @map("Company global/main press - news release site URL") @db.Text
-  Company_annual_reports_page_URL                              String? @map("Company annual reports page URL") @db.Text
-  Company_annual___financial_report_2020_URL_of_pdf_document   String? @map("Company annual / financial report 2020 URL of pdf document") @db.Text
-  Company_sustainability___ESG_reports_page_URL                String? @map("Company sustainability / ESG reports page URL") @db.Text
-  Company_Sustainability___ESG_report_2020_URL_of_pdf_document String? @map("Company Sustainability / ESG report 2020 URL of pdf document") @db.Text
-  Country                                                      String? @db.Text
-  sector_code__1__NAICS_                                       BigInt? @map("sector code #1 (NAICS)")
-  sector_name__1__NAICS_                                       String? @map("sector name #1 (NAICS)") @db.Text
-  sector_code__2__NAICS_                                       String? @map("sector code #2 (NAICS)") @db.Text
-  sector_name__2__NAICS_                                       String? @map("sector name #2 (NAICS)") @db.Text
-  sector_code__3__NAICS_                                       String? @map("sector code #3 (NAICS)") @db.Text
-  sector_name__3__NAICS_                                       String? @map("sector name #3 (NAICS)") @db.Text
-  sector_code__4__NAICS_                                       String? @map("sector code #4 (NAICS)") @db.Text
-  sector_name__4__NAICS_                                       String? @map("sector name #4 (NAICS)") @db.Text
-  sector_code__5__NAICS_                                       String? @map("sector code #5 (NAICS)") @db.Text
-  sector_name__5__NAICS_                                       String? @map("sector name #5 (NAICS)") @db.Text
-  sector_codes_all__NAICS_                                     String? @map("sector codes all (NAICS)") @db.Text
-  sector_name_all__NAICS_                                      String? @map("sector name all (NAICS)") @db.Text
+model User {
+  id               Int                @unique(map: "id") @default(autoincrement())
+  username         String             @db.VarChar(255)
+  email            String             @db.VarChar(255)
+  password         String             @db.VarChar(255)
+  isActive         Boolean            @map("is_active")
+  profileImage     String?            @map("profile_image") @db.Text
+  plan             Int                @default(1) @map("plan")
+  role             String             @default("user") @db.VarChar(255)
+  stripeId         String?            @default("stripe_id") @db.VarChar(255)
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime?          @map("updated_at")
+  deletedAt        DateTime?          @map("deleted_at")
+  Portfolio        Portfolio[]
+  ticketComments   TicketComment[]
+  tickets          Ticket[]
+  UserSubscription UserSubscription[]
 
-  @@ignore
+  @@map("users")
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view targetsentenceview {
-  Company                                          String?  @db.Text
-  companylist                                      String?  @db.Text
-  Ticker_s_                                        String?  @map("Ticker(s)") @db.Text
-  PR_Agency                                        String?  @map("PR Agency") @db.Text
-  Example_2020_company_PR_agency_press_release_URL String?  @map("Example 2020 company PR agency press release URL") @db.Text
-  Company_Main_Website_URL                         String?  @map("Company Main Website URL") @db.Text
-  Company_press_release_site_URL                   String?  @map("Company press release site URL") @db.Text
-  Country                                          String?  @db.Text
-  sector_code__1__NAICS_                           BigInt?  @map("sector code #1 (NAICS)")
-  sector_name__1__NAICS_                           String?  @map("sector name #1 (NAICS)") @db.Text
-  sector_code__2__NAICS_                           String?  @map("sector code #2 (NAICS)") @db.Text
-  sector_name__2__NAICS_                           String?  @map("sector name #2 (NAICS)") @db.Text
-  sector_code__3__NAICS_                           String?  @map("sector code #3 (NAICS)") @db.Text
-  sector_name__3__NAICS_                           String?  @map("sector name #3 (NAICS)") @db.Text
-  sector_code__4__NAICS_                           String?  @map("sector code #4 (NAICS)") @db.Text
-  sector_name__4__NAICS_                           String?  @map("sector name #4 (NAICS)") @db.Text
-  sector_code__5__NAICS_                           String?  @map("sector code #5 (NAICS)") @db.Text
-  sector_name__5__NAICS_                           String?  @map("sector name #5 (NAICS)") @db.Text
-  S_P500member                                     String?  @map("S&P500member") @db.Text
-  Russell_1000_member                              String?  @map("Russell 1000 member") @db.Text
-  emails                                           String?  @db.Text
-  full_text                                        String?  @db.Text
-  Source_link                                      String?  @map("Source link") @db.Text
-  pr_site                                          String?  @db.Text
-  release_date                                     String?  @db.Text
-  source                                           String?  @db.Text
-  ticker                                           String?  @db.Text
-  title                                            String?  @db.Text
-  ArticleTargetYear                                String?  @db.Text
-  PressReleaseFullCleanstep1                       String?  @db.Text
-  PressReleaseFullClean                            String?  @db.Text
-  Source_date                                      String?  @map("Source date") @db.Text
-  PressReleaseYear                                 BigInt?
-  PressReleaseMonth                                BigInt?
-  Target_sentence                                  String?  @map("Target sentence") @db.Text
-  SentenceTargetYear                               String?  @db.Text
-  Targetyear_s_                                    String?  @map("Targetyear(s)") @db.Text
-  sentence_carbon                                  Boolean? @map("sentence-carbon")
-  sentence_gender                                  Boolean? @map("sentence-gender")
-  sentence_renewables                              Boolean? @map("sentence-renewables")
-  sentence_suppliers                               Boolean? @map("sentence-suppliers")
-  sentence_water                                   Boolean? @map("sentence-water")
-  Primarysource                                    Boolean?
+model Ticket {
+  id          Int              @unique(map: "id") @default(autoincrement())
+  userId      Int
+  title       String           @db.VarChar(255)
+  description String           @db.Text
+  status      String           @db.VarChar(255)
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime?        @map("updated_at")
+  deletedAt   DateTime?        @map("deleted_at")
+  comments    TicketComment[]
+  documents   TicketDocument[]
+  postedBy    User             @relation(fields: [userId], references: [id])
 
-  @@ignore
+  @@index([userId], map: "tickets_userId_fkey")
+  @@map("tickets")
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view SentenceAllView {
-  Company                                           String? @db.MediumText
-  emails                                            String? @db.MediumText
-  full_text                                         String? @db.MediumText
-  Source_link                                       String? @map("Source link") @db.MediumText
-  pr_site                                           String? @db.MediumText
-  release_date                                      String? @db.MediumText
-  source                                            String? @db.MediumText
-  ticker                                            String? @db.MediumText
-  title                                             String? @db.MediumText
-  ArticleTargetYear                                 String? @db.MediumText
-  PressReleaseFullCleanstep1                        String? @db.MediumText
-  PressReleaseFullClean                             String? @db.MediumText
-  Source_Date                                       String? @map("Source Date") @db.MediumText
-  Annual_Report_Date                                String? @map("Annual Report Date") @db.MediumText
-  PressReleaseYear                                  String? @db.MediumText
-  PressReleaseMonth                                 String? @db.MediumText
-  Target_sentence                                   String? @map("Target sentence") @db.MediumText
-  SentenceTargetYear                                String? @db.MediumText
-  Targetyear_s_                                     String? @map("Targetyear(s)") @db.MediumText
-  sentence_carbon                                   String? @map("sentence-carbon") @db.VarChar(20)
-  sentence_gender                                   String? @map("sentence-gender") @db.VarChar(20)
-  sentence_renewables                               String? @map("sentence-renewables") @db.VarChar(20)
-  sentence_suppliers                                String? @map("sentence-suppliers") @db.VarChar(20)
-  sentence_water                                    String? @map("sentence-water") @db.VarChar(20)
-  sentence_waste                                    String? @map("sentence-waste") @db.VarChar(20)
-  sentence_other                                    String? @map("sentence-other") @db.VarChar(20)
-  upload_date                                       String? @map("upload-date") @db.MediumText
-  id                                                Int     @unique @db.Int
-  PageURL                                           String? @db.VarChar(255)
-  DocURL                                            String? @db.VarChar(255)
-  DocTitle                                          String? @db.VarChar(255)
-  DocName                                           String? @db.VarChar(255)
-  Target_Sentence_Page                              String? @map("Target Sentence Page") @db.VarChar(255)
-  Member_of_the_S_P500                              String? @map("Member of the S&P500") @db.VarChar(255)
-  Member_of_the_Russell_1000_Index                  String? @map("Member of the Russell 1000 Index") @db.VarChar(255)
-  Ticker_s_                                         String? @map("Ticker(s)") @db.VarChar(255)
-  PR_Agency                                         String? @map("PR Agency") @db.VarChar(255)
-  Example_2020_company_PR_agency_press_release_URL  String? @map("Example 2020 company PR agency press release URL") @db.MediumText
-  Company_global_main_press___news_release_site_URL String? @map("Company global/main press - news release site URL") @db.MediumText
-  Company_annual_reports_page_URL                   String? @map("Company annual reports page URL") @db.MediumText
-  Company_sustainability___ESG_reports_page_URL     String? @map("Company sustainability / ESG reports page URL") @db.MediumText
-  Country                                           String? @db.VarChar(255)
-  sector_code__1__NAICS_                            String? @map("sector code #1 (NAICS)") @db.VarChar(10)
-  sector_name__1__NAICS_                            String? @map("sector name #1 (NAICS)") @db.VarChar(255)
-  sector_code__2__NAICS_                            String? @map("sector code #2 (NAICS)") @db.VarChar(10)
-  sector_name__2__NAICS_                            String? @map("sector name #2 (NAICS)") @db.VarChar(255)
-  sector_code__3__NAICS_                            String? @map("sector code #3 (NAICS)") @db.VarChar(10)
-  sector_name__3__NAICS_                            String? @map("sector name #3 (NAICS)") @db.VarChar(255)
-  sector_code__4__NAICS_                            String? @map("sector code #4 (NAICS)") @db.VarChar(10)
-  sector_name__4__NAICS_                            String? @map("sector name #4 (NAICS)") @db.VarChar(255)
-  sector_code__5__NAICS_                            String? @map("sector code #5 (NAICS)") @db.VarChar(10)
-  sector_name__5__NAICS_                            String? @map("sector name #5 (NAICS)") @db.VarChar(255)
+model TicketDocument {
+  id        Int       @unique(map: "id") @default(autoincrement())
+  url       String
+  name      String
+  size      Int
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  ticketId  Int
+  ticket    Ticket    @relation(fields: [ticketId], references: [id])
 
-  @@map("sentenceallview")
+  @@index([ticketId], map: "ticket_documents_ticketId_fkey")
+  @@map("ticket_documents")
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view SentenceCarbonView {
-  id                                                String  @id @default("") @db.VarChar(11)
-  Company                                           String? @db.MediumText
-  emails                                            String? @db.MediumText
-  full_text                                         String? @db.MediumText
-  Source_link                                       String? @map("Source link") @db.MediumText
-  DocURL                                            String? @db.VarChar(255)
-  pr_site                                           String? @db.MediumText
-  release_date                                      String? @db.MediumText
-  source                                            String? @db.MediumText
-  ticker                                            String? @db.MediumText
-  title                                             String? @db.MediumText
-  ArticleTargetYear                                 String? @db.MediumText
-  PressReleaseFullCleanstep1                        String? @db.MediumText
-  PressReleaseFullClean                             String? @db.MediumText
-  Source_Date                                       String? @map("Source Date") @db.MediumText
-  Annual_Report_Date                                String? @map("Annual Report Date") @db.MediumText
-  PressReleaseYear                                  String? @db.MediumText
-  PressReleaseMonth                                 String? @db.MediumText
-  Target_sentence                                   String? @map("Target sentence") @db.MediumText
-  SentenceTargetYear                                String? @db.MediumText
-  Targetyear_s_                                     String? @map("Targetyear(s)") @db.MediumText
-  sentence_carbon                                   String? @map("sentence-carbon") @db.VarChar(20)
-  sentence_gender                                   String? @map("sentence-gender") @db.VarChar(20)
-  sentence_renewables                               String? @map("sentence-renewables") @db.VarChar(20)
-  sentence_suppliers                                String? @map("sentence-suppliers") @db.VarChar(20)
-  sentence_water                                    String? @map("sentence-water") @db.VarChar(20)
-  sentence_waste                                    String? @map("sentence-waste") @db.VarChar(20)
-  sentence_other                                    String? @map("sentence-other") @db.VarChar(20)
-  Member_of_the_S_P500                              String? @map("Member of the S&P500") @db.VarChar(255)
-  Member_of_the_Russell_1000_Index                  String? @map("Member of the Russell 1000 Index") @db.VarChar(255)
-  Ticker_s_                                         String? @map("Ticker(s)") @db.VarChar(255)
-  PR_Agency                                         String? @map("PR Agency") @db.VarChar(255)
-  Company_global_main_press___news_release_site_URL String? @map("Company global/main press - news release site URL") @db.MediumText
-  Company_annual_reports_page_URL                   String? @map("Company annual reports page URL") @db.MediumText
-  Company_sustainability___ESG_reports_page_URL     String? @map("Company sustainability / ESG reports page URL") @db.MediumText
-  Country                                           String? @db.VarChar(255)
-  sector_code__1__NAICS_                            String? @map("sector code #1 (NAICS)") @db.VarChar(10)
-  sector_name__1__NAICS_                            String? @map("sector name #1 (NAICS)") @db.VarChar(255)
-  sector_code__2__NAICS_                            String? @map("sector code #2 (NAICS)") @db.VarChar(10)
-  sector_name__2__NAICS_                            String? @map("sector name #2 (NAICS)") @db.VarChar(255)
-  sector_code__3__NAICS_                            String? @map("sector code #3 (NAICS)") @db.VarChar(10)
-  sector_name__3__NAICS_                            String? @map("sector name #3 (NAICS)") @db.VarChar(255)
-  sector_code__4__NAICS_                            String? @map("sector code #4 (NAICS)") @db.VarChar(10)
-  sector_name__4__NAICS_                            String? @map("sector name #4 (NAICS)") @db.VarChar(255)
-  sector_code__5__NAICS_                            String? @map("sector code #5 (NAICS)") @db.VarChar(10)
-  sector_name__5__NAICS_                            String? @map("sector name #5 (NAICS)") @db.VarChar(255)
-  upload_date                                       String? @map("upload-date") @db.MediumText
+model TicketComment {
+  id        Int       @unique(map: "id") @default(autoincrement())
+  text      String    @db.Text
+  ticketId  Int
+  userId    Int
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  ticket    Ticket    @relation(fields: [ticketId], references: [id])
+  postedBy  User      @relation(fields: [userId], references: [id])
 
-  @@map("sentence_carbon_view")
+  @@index([ticketId], map: "ticket_comments_ticketId_fkey")
+  @@index([userId], map: "ticket_comments_userId_fkey")
+  @@map("ticket_comments")
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view SentenceWaterView {
-  id                                                String  @id @default("") @db.VarChar(11)
-  Company                                           String? @db.MediumText
-  emails                                            String? @db.MediumText
-  full_text                                         String? @db.MediumText
-  Source_link                                       String? @map("Source link") @db.MediumText
-  DocURL                                            String? @db.VarChar(255)
-  pr_site                                           String? @db.MediumText
-  release_date                                      String? @db.MediumText
-  source                                            String? @db.MediumText
-  ticker                                            String? @db.MediumText
-  title                                             String? @db.MediumText
-  ArticleTargetYear                                 String? @db.MediumText
-  PressReleaseFullCleanstep1                        String? @db.MediumText
-  PressReleaseFullClean                             String? @db.MediumText
-  Source_Date                                       String? @map("Source Date") @db.MediumText
-  Annual_Report_Date                                String? @map("Annual Report Date") @db.MediumText
-  PressReleaseYear                                  String? @db.MediumText
-  PressReleaseMonth                                 String? @db.MediumText
-  Target_sentence                                   String? @map("Target sentence") @db.MediumText
-  SentenceTargetYear                                String? @db.MediumText
-  Targetyear_s_                                     String? @map("Targetyear(s)") @db.MediumText
-  sentence_carbon                                   String? @map("sentence-carbon") @db.VarChar(20)
-  sentence_gender                                   String? @map("sentence-gender") @db.VarChar(20)
-  sentence_renewables                               String? @map("sentence-renewables") @db.VarChar(20)
-  sentence_suppliers                                String? @map("sentence-suppliers") @db.VarChar(20)
-  sentence_water                                    String? @map("sentence-water") @db.VarChar(20)
-  sentence_waste                                    String? @map("sentence-waste") @db.VarChar(20)
-  sentence_other                                    String? @map("sentence-other") @db.VarChar(20)
-  Member_of_the_S_P500                              String? @map("Member of the S&P500") @db.VarChar(255)
-  Member_of_the_Russell_1000_Index                  String? @map("Member of the Russell 1000 Index") @db.VarChar(255)
-  Ticker_s_                                         String? @map("Ticker(s)") @db.VarChar(255)
-  PR_Agency                                         String? @map("PR Agency") @db.VarChar(255)
-  Company_global_main_press___news_release_site_URL String? @map("Company global/main press - news release site URL") @db.MediumText
-  Company_annual_reports_page_URL                   String? @map("Company annual reports page URL") @db.MediumText
-  Company_sustainability___ESG_reports_page_URL     String? @map("Company sustainability / ESG reports page URL") @db.MediumText
-  Country                                           String? @db.VarChar(255)
-  sector_code__1__NAICS_                            String? @map("sector code #1 (NAICS)") @db.VarChar(10)
-  sector_name__1__NAICS_                            String? @map("sector name #1 (NAICS)") @db.VarChar(255)
-  sector_code__2__NAICS_                            String? @map("sector code #2 (NAICS)") @db.VarChar(10)
-  sector_name__2__NAICS_                            String? @map("sector name #2 (NAICS)") @db.VarChar(255)
-  sector_code__3__NAICS_                            String? @map("sector code #3 (NAICS)") @db.VarChar(10)
-  sector_name__3__NAICS_                            String? @map("sector name #3 (NAICS)") @db.VarChar(255)
-  sector_code__4__NAICS_                            String? @map("sector code #4 (NAICS)") @db.VarChar(10)
-  sector_name__4__NAICS_                            String? @map("sector name #4 (NAICS)") @db.VarChar(255)
-  sector_code__5__NAICS_                            String? @map("sector code #5 (NAICS)") @db.VarChar(10)
-  sector_name__5__NAICS_                            String? @map("sector name #5 (NAICS)") @db.VarChar(255)
-  upload_date                                       String? @map("upload-date") @db.MediumText
+model UserSubscription {
+  id             Int       @unique(map: "id") @default(autoincrement())
+  userId         Int
+  subscriptionId String    @map("subscription_id")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime? @map("updated_at")
+  deletedAt      DateTime? @map("deleted_at")
+  user           User      @relation(fields: [userId], references: [id])
 
-  @@map("sentence_water_view")
+  @@index([userId], map: "user_subscriptions_userId_fkey")
+  @@map("user_subscriptions")
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view SentenceGenderView {
-  id                                                String  @id @default("") @db.VarChar(11)
-  Company                                           String? @db.MediumText
-  emails                                            String? @db.MediumText
-  full_text                                         String? @db.MediumText
-  Source_link                                       String? @map("Source link") @db.MediumText
-  DocURL                                            String? @db.VarChar(255)
-  pr_site                                           String? @db.MediumText
-  release_date                                      String? @db.MediumText
-  source                                            String? @db.MediumText
-  ticker                                            String? @db.MediumText
-  title                                             String? @db.MediumText
-  ArticleTargetYear                                 String? @db.MediumText
-  PressReleaseFullCleanstep1                        String? @db.MediumText
-  PressReleaseFullClean                             String? @db.MediumText
-  Source_Date                                       String? @map("Source Date") @db.MediumText
-  Annual_Report_Date                                String? @map("Annual Report Date") @db.MediumText
-  PressReleaseYear                                  String? @db.MediumText
-  PressReleaseMonth                                 String? @db.MediumText
-  Target_sentence                                   String? @map("Target sentence") @db.MediumText
-  SentenceTargetYear                                String? @db.MediumText
-  Targetyear_s_                                     String? @map("Targetyear(s)") @db.MediumText
-  sentence_carbon                                   String? @map("sentence-carbon") @db.VarChar(20)
-  sentence_gender                                   String? @map("sentence-gender") @db.VarChar(20)
-  sentence_renewables                               String? @map("sentence-renewables") @db.VarChar(20)
-  sentence_suppliers                                String? @map("sentence-suppliers") @db.VarChar(20)
-  sentence_water                                    String? @map("sentence-water") @db.VarChar(20)
-  sentence_waste                                    String? @map("sentence-waste") @db.VarChar(20)
-  sentence_other                                    String? @map("sentence-other") @db.VarChar(20)
-  Member_of_the_S_P500                              String? @map("Member of the S&P500") @db.VarChar(255)
-  Member_of_the_Russell_1000_Index                  String? @map("Member of the Russell 1000 Index") @db.VarChar(255)
-  Ticker_s_                                         String? @map("Ticker(s)") @db.VarChar(255)
-  PR_Agency                                         String? @map("PR Agency") @db.VarChar(255)
-  Company_global_main_press___news_release_site_URL String? @map("Company global/main press - news release site URL") @db.MediumText
-  Company_annual_reports_page_URL                   String? @map("Company annual reports page URL") @db.MediumText
-  Company_sustainability___ESG_reports_page_URL     String? @map("Company sustainability / ESG reports page URL") @db.MediumText
-  Country                                           String? @db.VarChar(255)
-  sector_code__1__NAICS_                            String? @map("sector code #1 (NAICS)") @db.VarChar(10)
-  sector_name__1__NAICS_                            String? @map("sector name #1 (NAICS)") @db.VarChar(255)
-  sector_code__2__NAICS_                            String? @map("sector code #2 (NAICS)") @db.VarChar(10)
-  sector_name__2__NAICS_                            String? @map("sector name #2 (NAICS)") @db.VarChar(255)
-  sector_code__3__NAICS_                            String? @map("sector code #3 (NAICS)") @db.VarChar(10)
-  sector_name__3__NAICS_                            String? @map("sector name #3 (NAICS)") @db.VarChar(255)
-  sector_code__4__NAICS_                            String? @map("sector code #4 (NAICS)") @db.VarChar(10)
-  sector_name__4__NAICS_                            String? @map("sector name #4 (NAICS)") @db.VarChar(255)
-  sector_code__5__NAICS_                            String? @map("sector code #5 (NAICS)") @db.VarChar(10)
-  sector_name__5__NAICS_                            String? @map("sector name #5 (NAICS)") @db.VarChar(255)
-  upload_date                                       String? @map("upload-date") @db.MediumText
+model Portfolio {
+  id        Int       @unique(map: "id") @default(autoincrement())
+  userId    Int
+  name      String    @db.VarChar(255)
+  filters   Json
+  tableName String    @map("table_name") @db.VarChar(255)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  user      User      @relation(fields: [userId], references: [id])
 
-  @@map("sentence_gender_view")
-}
-
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view sentence_other_view {
-  id                                                String  @default("") @db.VarChar(11)
-  Company                                           String? @db.MediumText
-  emails                                            String? @db.MediumText
-  full_text                                         String? @db.MediumText
-  Source_link                                       String? @map("Source link") @db.MediumText
-  DocURL                                            String? @db.VarChar(255)
-  pr_site                                           String? @db.MediumText
-  release_date                                      String? @db.MediumText
-  source                                            String? @db.MediumText
-  ticker                                            String? @db.MediumText
-  title                                             String? @db.MediumText
-  ArticleTargetYear                                 String? @db.MediumText
-  PressReleaseFullCleanstep1                        String? @db.MediumText
-  PressReleaseFullClean                             String? @db.MediumText
-  Source_Date                                       String? @map("Source Date") @db.MediumText
-  Annual_Report_Date                                String? @map("Annual Report Date") @db.MediumText
-  PressReleaseYear                                  String? @db.MediumText
-  PressReleaseMonth                                 String? @db.MediumText
-  Target_sentence                                   String? @map("Target sentence") @db.MediumText
-  SentenceTargetYear                                String? @db.MediumText
-  Targetyear_s_                                     String? @map("Targetyear(s)") @db.MediumText
-  sentence_carbon                                   String? @map("sentence-carbon") @db.VarChar(20)
-  sentence_gender                                   String? @map("sentence-gender") @db.VarChar(20)
-  sentence_renewables                               String? @map("sentence-renewables") @db.VarChar(20)
-  sentence_suppliers                                String? @map("sentence-suppliers") @db.VarChar(20)
-  sentence_water                                    String? @map("sentence-water") @db.VarChar(20)
-  sentence_waste                                    String? @map("sentence-waste") @db.VarChar(20)
-  sentence_other                                    String? @map("sentence-other") @db.VarChar(20)
-  Member_of_the_S_P500                              String? @map("Member of the S&P500") @db.VarChar(255)
-  Member_of_the_Russell_1000_Index                  String? @map("Member of the Russell 1000 Index") @db.VarChar(255)
-  Ticker_s_                                         String? @map("Ticker(s)") @db.VarChar(255)
-  PR_Agency                                         String? @map("PR Agency") @db.VarChar(255)
-  Company_global_main_press___news_release_site_URL String? @map("Company global/main press - news release site URL") @db.MediumText
-  Company_annual_reports_page_URL                   String? @map("Company annual reports page URL") @db.MediumText
-  Company_sustainability___ESG_reports_page_URL     String? @map("Company sustainability / ESG reports page URL") @db.MediumText
-  Country                                           String? @db.VarChar(255)
-  sector_code__1__NAICS_                            String? @map("sector code #1 (NAICS)") @db.VarChar(10)
-  sector_name__1__NAICS_                            String? @map("sector name #1 (NAICS)") @db.VarChar(255)
-  sector_code__2__NAICS_                            String? @map("sector code #2 (NAICS)") @db.VarChar(10)
-  sector_name__2__NAICS_                            String? @map("sector name #2 (NAICS)") @db.VarChar(255)
-  sector_code__3__NAICS_                            String? @map("sector code #3 (NAICS)") @db.VarChar(10)
-  sector_name__3__NAICS_                            String? @map("sector name #3 (NAICS)") @db.VarChar(255)
-  sector_code__4__NAICS_                            String? @map("sector code #4 (NAICS)") @db.VarChar(10)
-  sector_name__4__NAICS_                            String? @map("sector name #4 (NAICS)") @db.VarChar(255)
-  sector_code__5__NAICS_                            String? @map("sector code #5 (NAICS)") @db.VarChar(10)
-  sector_name__5__NAICS_                            String? @map("sector name #5 (NAICS)") @db.VarChar(255)
-  upload_date                                       String? @map("upload-date") @db.MediumText
-
-  @@ignore
-}
-
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view SentenceWasteView {
-  id                                                String  @id @default("") @db.VarChar(11)
-  Company                                           String? @db.MediumText
-  emails                                            String? @db.MediumText
-  full_text                                         String? @db.MediumText
-  Source_link                                       String? @map("Source link") @db.MediumText
-  DocURL                                            String? @db.VarChar(255)
-  pr_site                                           String? @db.MediumText
-  release_date                                      String? @db.MediumText
-  source                                            String? @db.MediumText
-  ticker                                            String? @db.MediumText
-  title                                             String? @db.MediumText
-  ArticleTargetYear                                 String? @db.MediumText
-  PressReleaseFullCleanstep1                        String? @db.MediumText
-  PressReleaseFullClean                             String? @db.MediumText
-  Source_Date                                       String? @map("Source Date") @db.MediumText
-  Annual_Report_Date                                String? @map("Annual Report Date") @db.MediumText
-  PressReleaseYear                                  String? @db.MediumText
-  PressReleaseMonth                                 String? @db.MediumText
-  Target_sentence                                   String? @map("Target sentence") @db.MediumText
-  SentenceTargetYear                                String? @db.MediumText
-  Targetyear_s_                                     String? @map("Targetyear(s)") @db.MediumText
-  sentence_carbon                                   String? @map("sentence-carbon") @db.VarChar(20)
-  sentence_gender                                   String? @map("sentence-gender") @db.VarChar(20)
-  sentence_renewables                               String? @map("sentence-renewables") @db.VarChar(20)
-  sentence_suppliers                                String? @map("sentence-suppliers") @db.VarChar(20)
-  sentence_water                                    String? @map("sentence-water") @db.VarChar(20)
-  sentence_waste                                    String? @map("sentence-waste") @db.VarChar(20)
-  sentence_other                                    String? @map("sentence-other") @db.VarChar(20)
-  Member_of_the_S_P500                              String? @map("Member of the S&P500") @db.VarChar(255)
-  Member_of_the_Russell_1000_Index                  String? @map("Member of the Russell 1000 Index") @db.VarChar(255)
-  Ticker_s_                                         String? @map("Ticker(s)") @db.VarChar(255)
-  PR_Agency                                         String? @map("PR Agency") @db.VarChar(255)
-  Company_global_main_press___news_release_site_URL String? @map("Company global/main press - news release site URL") @db.MediumText
-  Company_annual_reports_page_URL                   String? @map("Company annual reports page URL") @db.MediumText
-  Company_sustainability___ESG_reports_page_URL     String? @map("Company sustainability / ESG reports page URL") @db.MediumText
-  Country                                           String? @db.VarChar(255)
-  sector_code__1__NAICS_                            String? @map("sector code #1 (NAICS)") @db.VarChar(10)
-  sector_name__1__NAICS_                            String? @map("sector name #1 (NAICS)") @db.VarChar(255)
-  sector_code__2__NAICS_                            String? @map("sector code #2 (NAICS)") @db.VarChar(10)
-  sector_name__2__NAICS_                            String? @map("sector name #2 (NAICS)") @db.VarChar(255)
-  sector_code__3__NAICS_                            String? @map("sector code #3 (NAICS)") @db.VarChar(10)
-  sector_name__3__NAICS_                            String? @map("sector name #3 (NAICS)") @db.VarChar(255)
-  sector_code__4__NAICS_                            String? @map("sector code #4 (NAICS)") @db.VarChar(10)
-  sector_name__4__NAICS_                            String? @map("sector name #4 (NAICS)") @db.VarChar(255)
-  sector_code__5__NAICS_                            String? @map("sector code #5 (NAICS)") @db.VarChar(10)
-  sector_name__5__NAICS_                            String? @map("sector name #5 (NAICS)") @db.VarChar(255)
-  upload_date                                       String? @map("upload-date") @db.MediumText
-
-  @@map("sentence_waste_view")
-}
-
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view SentenceSuppliersView {
-  id                                                String  @id @default("") @db.VarChar(11)
-  Company                                           String? @db.MediumText
-  emails                                            String? @db.MediumText
-  full_text                                         String? @db.MediumText
-  Source_link                                       String? @map("Source link") @db.MediumText
-  DocURL                                            String? @db.VarChar(255)
-  pr_site                                           String? @db.MediumText
-  release_date                                      String? @db.MediumText
-  source                                            String? @db.MediumText
-  ticker                                            String? @db.MediumText
-  title                                             String? @db.MediumText
-  ArticleTargetYear                                 String? @db.MediumText
-  PressReleaseFullCleanstep1                        String? @db.MediumText
-  PressReleaseFullClean                             String? @db.MediumText
-  Source_Date                                       String? @map("Source Date") @db.MediumText
-  Annual_Report_Date                                String? @map("Annual Report Date") @db.MediumText
-  PressReleaseYear                                  String? @db.MediumText
-  PressReleaseMonth                                 String? @db.MediumText
-  Target_sentence                                   String? @map("Target sentence") @db.MediumText
-  SentenceTargetYear                                String? @db.MediumText
-  Targetyear_s_                                     String? @map("Targetyear(s)") @db.MediumText
-  sentence_carbon                                   String? @map("sentence-carbon") @db.VarChar(20)
-  sentence_gender                                   String? @map("sentence-gender") @db.VarChar(20)
-  sentence_renewables                               String? @map("sentence-renewables") @db.VarChar(20)
-  sentence_suppliers                                String? @map("sentence-suppliers") @db.VarChar(20)
-  sentence_water                                    String? @map("sentence-water") @db.VarChar(20)
-  sentence_waste                                    String? @map("sentence-waste") @db.VarChar(20)
-  sentence_other                                    String? @map("sentence-other") @db.VarChar(20)
-  Member_of_the_S_P500                              String? @map("Member of the S&P500") @db.VarChar(255)
-  Member_of_the_Russell_1000_Index                  String? @map("Member of the Russell 1000 Index") @db.VarChar(255)
-  Ticker_s_                                         String? @map("Ticker(s)") @db.VarChar(255)
-  PR_Agency                                         String? @map("PR Agency") @db.VarChar(255)
-  Company_global_main_press___news_release_site_URL String? @map("Company global/main press - news release site URL") @db.MediumText
-  Company_annual_reports_page_URL                   String? @map("Company annual reports page URL") @db.MediumText
-  Company_sustainability___ESG_reports_page_URL     String? @map("Company sustainability / ESG reports page URL") @db.MediumText
-  Country                                           String? @db.VarChar(255)
-  sector_code__1__NAICS_                            String? @map("sector code #1 (NAICS)") @db.VarChar(10)
-  sector_name__1__NAICS_                            String? @map("sector name #1 (NAICS)") @db.VarChar(255)
-  sector_code__2__NAICS_                            String? @map("sector code #2 (NAICS)") @db.VarChar(10)
-  sector_name__2__NAICS_                            String? @map("sector name #2 (NAICS)") @db.VarChar(255)
-  sector_code__3__NAICS_                            String? @map("sector code #3 (NAICS)") @db.VarChar(10)
-  sector_name__3__NAICS_                            String? @map("sector name #3 (NAICS)") @db.VarChar(255)
-  sector_code__4__NAICS_                            String? @map("sector code #4 (NAICS)") @db.VarChar(10)
-  sector_name__4__NAICS_                            String? @map("sector name #4 (NAICS)") @db.VarChar(255)
-  sector_code__5__NAICS_                            String? @map("sector code #5 (NAICS)") @db.VarChar(10)
-  sector_name__5__NAICS_                            String? @map("sector name #5 (NAICS)") @db.VarChar(255)
-  upload_date                                       String? @map("upload-date") @db.MediumText
-
-  @@map("sentence_suppliers_view")
-}
-
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view SentenceRenewablesView {
-  id                                                String  @id @default("") @db.VarChar(11)
-  Company                                           String? @db.MediumText
-  emails                                            String? @db.MediumText
-  full_text                                         String? @db.MediumText
-  Source_link                                       String? @map("Source link") @db.MediumText
-  DocURL                                            String? @db.VarChar(255)
-  pr_site                                           String? @db.MediumText
-  release_date                                      String? @db.MediumText
-  source                                            String? @db.MediumText
-  ticker                                            String? @db.MediumText
-  title                                             String? @db.MediumText
-  ArticleTargetYear                                 String? @db.MediumText
-  PressReleaseFullCleanstep1                        String? @db.MediumText
-  PressReleaseFullClean                             String? @db.MediumText
-  Source_Date                                       String? @map("Source Date") @db.MediumText
-  Annual_Report_Date                                String? @map("Annual Report Date") @db.MediumText
-  PressReleaseYear                                  String? @db.MediumText
-  PressReleaseMonth                                 String? @db.MediumText
-  Target_sentence                                   String? @map("Target sentence") @db.MediumText
-  SentenceTargetYear                                String? @db.MediumText
-  Targetyear_s_                                     String? @map("Targetyear(s)") @db.MediumText
-  sentence_carbon                                   String? @map("sentence-carbon") @db.VarChar(20)
-  sentence_gender                                   String? @map("sentence-gender") @db.VarChar(20)
-  sentence_renewables                               String? @map("sentence-renewables") @db.VarChar(20)
-  sentence_suppliers                                String? @map("sentence-suppliers") @db.VarChar(20)
-  sentence_water                                    String? @map("sentence-water") @db.VarChar(20)
-  sentence_waste                                    String? @map("sentence-waste") @db.VarChar(20)
-  sentence_other                                    String? @map("sentence-other") @db.VarChar(20)
-  Member_of_the_S_P500                              String? @map("Member of the S&P500") @db.VarChar(255)
-  Member_of_the_Russell_1000_Index                  String? @map("Member of the Russell 1000 Index") @db.VarChar(255)
-  Ticker_s_                                         String? @map("Ticker(s)") @db.VarChar(255)
-  PR_Agency                                         String? @map("PR Agency") @db.VarChar(255)
-  Company_global_main_press___news_release_site_URL String? @map("Company global/main press - news release site URL") @db.MediumText
-  Company_annual_reports_page_URL                   String? @map("Company annual reports page URL") @db.MediumText
-  Company_sustainability___ESG_reports_page_URL     String? @map("Company sustainability / ESG reports page URL") @db.MediumText
-  Country                                           String? @db.VarChar(255)
-  sector_code__1__NAICS_                            String? @map("sector code #1 (NAICS)") @db.VarChar(10)
-  sector_name__1__NAICS_                            String? @map("sector name #1 (NAICS)") @db.VarChar(255)
-  sector_code__2__NAICS_                            String? @map("sector code #2 (NAICS)") @db.VarChar(10)
-  sector_name__2__NAICS_                            String? @map("sector name #2 (NAICS)") @db.VarChar(255)
-  sector_code__3__NAICS_                            String? @map("sector code #3 (NAICS)") @db.VarChar(10)
-  sector_name__3__NAICS_                            String? @map("sector name #3 (NAICS)") @db.VarChar(255)
-  sector_code__4__NAICS_                            String? @map("sector code #4 (NAICS)") @db.VarChar(10)
-  sector_name__4__NAICS_                            String? @map("sector name #4 (NAICS)") @db.VarChar(255)
-  sector_code__5__NAICS_                            String? @map("sector code #5 (NAICS)") @db.VarChar(10)
-  sector_name__5__NAICS_                            String? @map("sector name #5 (NAICS)") @db.VarChar(255)
-  upload_date                                       String? @map("upload-date") @db.MediumText
-
-  @@map("sentence_renewables_view")
-}
-
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view latest_entries_view {
-  release_date               String? @db.Text
-  Targetyear_s_              String? @map("Targetyear(s)") @db.Text
-  pr_site                    String? @db.Text
-  ArticleTargetYear          String? @db.Text
-  sentence_carbon            BigInt? @map("sentence-carbon")
-  full_text                  String? @db.Text
-  PressReleaseMonth          String? @db.Text
-  PressReleaseFullClean      String? @db.Text
-  sentence_renewables        BigInt? @map("sentence-renewables")
-  sentence_suppliers         BigInt? @map("sentence-suppliers")
-  sentence_gender            BigInt? @map("sentence-gender")
-  Company                    String? @db.Text
-  Annual_Report_Date         String? @map("Annual Report Date") @db.Text
-  title                      String? @db.Text
-  emails                     String? @db.Text
-  sentence_other             BigInt? @map("sentence-other")
-  Source_link                String? @map("Source link") @db.Text
-  Source_Date                String? @map("Source Date") @db.Text
-  PressReleaseFullCleanstep1 String? @db.Text
-  sentence_waste             BigInt? @map("sentence-waste")
-  source                     String? @db.Text
-  sentence_water             BigInt? @map("sentence-water")
-  PressReleaseYear           String? @db.Text
-  ticker                     String? @db.Text
-  SentenceTargetYear         String? @db.Text
-  Target_sentence            String? @map("Target sentence") @db.Text
-  upload_date                String? @map("upload-date") @db.Text
-  id                         Int     @default(0)
-
-  @@ignore
-}
-
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view uniquecompanies {
-  Company                String? @db.MediumText
-  Country                String? @db.VarChar(255)
-  sector_code__1__NAICS_ String? @map("sector code #1 (NAICS)") @db.VarChar(10)
-  sector_name__1__NAICS_ String? @map("sector name #1 (NAICS)") @db.VarChar(255)
-
-  @@ignore
-}
-
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view sentenceallview_gig {
-  Company                                                      String? @db.MediumText
-  emails                                                       String? @db.MediumText
-  full_text                                                    String? @db.MediumText
-  Source_link                                                  String? @map("Source link") @db.MediumText
-  pr_site                                                      String? @db.MediumText
-  release_date                                                 String? @db.MediumText
-  source                                                       String? @db.MediumText
-  ticker                                                       String? @db.MediumText
-  title                                                        String? @db.MediumText
-  ArticleTargetYear                                            String? @db.MediumText
-  PressReleaseFullCleanstep1                                   String? @db.MediumText
-  PressReleaseFullClean                                        String? @db.MediumText
-  Source_Date                                                  String? @map("Source Date") @db.MediumText
-  Annual_Report_Date                                           String? @map("Annual Report Date") @db.MediumText
-  PressReleaseYear                                             String? @db.MediumText
-  PressReleaseMonth                                            String? @db.MediumText
-  Target_sentence                                              String? @map("Target sentence") @db.MediumText
-  SentenceTargetYear                                           String? @db.MediumText
-  Targetyear_s_                                                String? @map("Targetyear(s)") @db.MediumText
-  sentence_carbon                                              String? @map("sentence-carbon") @db.VarChar(20)
-  sentence_gender                                              String? @map("sentence-gender") @db.VarChar(20)
-  sentence_renewables                                          String? @map("sentence-renewables") @db.VarChar(20)
-  sentence_suppliers                                           String? @map("sentence-suppliers") @db.VarChar(20)
-  sentence_water                                               String? @map("sentence-water") @db.VarChar(20)
-  sentence_waste                                               String? @map("sentence-waste") @db.VarChar(20)
-  sentence_other                                               String? @map("sentence-other") @db.VarChar(20)
-  upload_date                                                  String? @map("upload-date") @db.MediumText
-  Member_of_the_S_P500                                         String? @map("Member of the S&P500") @db.MediumText
-  Member_of_the_Russell_1000_Index                             String? @map("Member of the Russell 1000 Index") @db.MediumText
-  Ticker_s_                                                    String? @map("Ticker(s)") @db.MediumText
-  PR_Agency                                                    String? @map("PR Agency") @db.MediumText
-  Example_2020_company_PR_agency_press_release_URL             String? @map("Example 2020 company PR agency press release URL") @db.MediumText
-  Company_Global___Main_Website_URL                            String? @map("Company Global / Main Website URL") @db.MediumText
-  Company_global_main_press___news_release_site_URL            String? @map("Company global/main press - news release site URL") @db.MediumText
-  Company_annual_reports_page_URL                              String? @map("Company annual reports page URL") @db.MediumText
-  Company_annual___financial_report_2020_URL_of_pdf_document   String? @map("Company annual / financial report 2020 URL of pdf document") @db.MediumText
-  Company_sustainability___ESG_reports_page_URL                String? @map("Company sustainability / ESG reports page URL") @db.MediumText
-  Company_Sustainability___ESG_report_2020_URL_of_pdf_document String? @map("Company Sustainability / ESG report 2020 URL of pdf document") @db.MediumText
-  Country                                                      String? @db.MediumText
-  sector_code__1__NAICS_                                       String? @map("sector code #1 (NAICS)") @db.MediumText
-  sector_name__1__NAICS_                                       String? @map("sector name #1 (NAICS)") @db.MediumText
-  sector_code__2__NAICS_                                       String? @map("sector code #2 (NAICS)") @db.MediumText
-  sector_name__2__NAICS_                                       String? @map("sector name #2 (NAICS)") @db.MediumText
-  sector_code__3__NAICS_                                       String? @map("sector code #3 (NAICS)") @db.MediumText
-  sector_name__3__NAICS_                                       String? @map("sector name #3 (NAICS)") @db.MediumText
-  sector_code__4__NAICS_                                       String? @map("sector code #4 (NAICS)") @db.MediumText
-  sector_name__4__NAICS_                                       String? @map("sector name #4 (NAICS)") @db.MediumText
-  sector_code__5__NAICS_                                       String? @map("sector code #5 (NAICS)") @db.MediumText
-  sector_name__5__NAICS_                                       String? @map("sector name #5 (NAICS)") @db.MediumText
-  sector_codes_all__NAICS_                                     String? @map("sector codes all (NAICS)") @db.MediumText
-  sector_name_all__NAICS_                                      String? @map("sector name all (NAICS)") @db.MediumText
-  NAICS__1_GIG                                                 String? @map("NAICS #1 GIG") @db.MediumText
-  NAICS__1_GIG_name                                            String? @map("NAICS #1 GIG name") @db.MediumText
-
-  @@map("sentenceallview-gig")
-  @@ignore
-}
-
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view sentence_gig_manufacturing_view {
-  Company                                                      String? @db.MediumText
-  emails                                                       String? @db.MediumText
-  full_text                                                    String? @db.MediumText
-  Source_link                                                  String? @map("Source link") @db.MediumText
-  pr_site                                                      String? @db.MediumText
-  release_date                                                 String? @db.MediumText
-  source                                                       String? @db.MediumText
-  ticker                                                       String? @db.MediumText
-  title                                                        String? @db.MediumText
-  ArticleTargetYear                                            String? @db.MediumText
-  PressReleaseFullCleanstep1                                   String? @db.MediumText
-  PressReleaseFullClean                                        String? @db.MediumText
-  Source_Date                                                  String? @map("Source Date") @db.MediumText
-  Annual_Report_Date                                           String? @map("Annual Report Date") @db.MediumText
-  PressReleaseYear                                             String? @db.MediumText
-  PressReleaseMonth                                            String? @db.MediumText
-  Target_sentence                                              String? @map("Target sentence") @db.MediumText
-  SentenceTargetYear                                           String? @db.MediumText
-  Targetyear_s_                                                String? @map("Targetyear(s)") @db.MediumText
-  sentence_carbon                                              String? @map("sentence-carbon") @db.VarChar(20)
-  sentence_gender                                              String? @map("sentence-gender") @db.VarChar(20)
-  sentence_renewables                                          String? @map("sentence-renewables") @db.VarChar(20)
-  sentence_suppliers                                           String? @map("sentence-suppliers") @db.VarChar(20)
-  sentence_water                                               String? @map("sentence-water") @db.VarChar(20)
-  sentence_waste                                               String? @map("sentence-waste") @db.VarChar(20)
-  sentence_other                                               String? @map("sentence-other") @db.VarChar(20)
-  Member_of_the_S_P500                                         String? @map("Member of the S&P500") @db.MediumText
-  Member_of_the_Russell_1000_Index                             String? @map("Member of the Russell 1000 Index") @db.MediumText
-  Ticker_s_                                                    String? @map("Ticker(s)") @db.MediumText
-  PR_Agency                                                    String? @map("PR Agency") @db.MediumText
-  Example_2020_company_PR_agency_press_release_URL             String? @map("Example 2020 company PR agency press release URL") @db.MediumText
-  Company_Global___Main_Website_URL                            String? @map("Company Global / Main Website URL") @db.MediumText
-  Company_global_main_press___news_release_site_URL            String? @map("Company global/main press - news release site URL") @db.MediumText
-  Company_annual_reports_page_URL                              String? @map("Company annual reports page URL") @db.MediumText
-  Company_annual___financial_report_2020_URL_of_pdf_document   String? @map("Company annual / financial report 2020 URL of pdf document") @db.MediumText
-  Company_sustainability___ESG_reports_page_URL                String? @map("Company sustainability / ESG reports page URL") @db.MediumText
-  Company_Sustainability___ESG_report_2020_URL_of_pdf_document String? @map("Company Sustainability / ESG report 2020 URL of pdf document") @db.MediumText
-  Country                                                      String? @db.MediumText
-  sector_code__1__NAICS_                                       String? @map("sector code #1 (NAICS)") @db.MediumText
-  sector_name__1__NAICS_                                       String? @map("sector name #1 (NAICS)") @db.MediumText
-  sector_code__2__NAICS_                                       String? @map("sector code #2 (NAICS)") @db.MediumText
-  sector_name__2__NAICS_                                       String? @map("sector name #2 (NAICS)") @db.MediumText
-  sector_code__3__NAICS_                                       String? @map("sector code #3 (NAICS)") @db.MediumText
-  sector_name__3__NAICS_                                       String? @map("sector name #3 (NAICS)") @db.MediumText
-  sector_code__4__NAICS_                                       String? @map("sector code #4 (NAICS)") @db.MediumText
-  sector_name__4__NAICS_                                       String? @map("sector name #4 (NAICS)") @db.MediumText
-  sector_code__5__NAICS_                                       String? @map("sector code #5 (NAICS)") @db.MediumText
-  sector_name__5__NAICS_                                       String? @map("sector name #5 (NAICS)") @db.MediumText
-  sector_codes_all__NAICS_                                     String? @map("sector codes all (NAICS)") @db.MediumText
-  sector_name_all__NAICS_                                      String? @map("sector name all (NAICS)") @db.MediumText
-  NAICS__1_GIG_name                                            String? @map("NAICS #1 GIG name") @db.MediumText
-  NAICS__1_GIG                                                 String? @map("NAICS #1 GIG") @db.MediumText
-  upload_date                                                  String? @map("upload-date") @db.MediumText
-
-  @@ignore
+  @@index([userId], map: "portfolios_userId_fkey")
+  @@map("portfolios")
 }
 
 enum wp_wpdatacharts_engine {
@@ -1550,110 +975,4 @@ enum wp_wpdatatables_columns_input_type {
   selectbox
   multi_selectbox @map("multi-selectbox")
   attachment
-}
-
-model User {
-  id Int @unique(map: "id") @default(autoincrement())
-
-  username     String  @db.VarChar(255)
-  email        String  @db.VarChar(255)
-  password     String  @db.VarChar(255)
-  isActive     Boolean @map("is_active") @db.TinyInt
-  profileImage String  @default("") @map("profile_image") @db.Text
-  plan         Int     @default(1) @map("plan") @db.Int
-  role         String  @default("user") @db.VarChar(255)
-  stripeId     String? @default("stripe_id") @db.VarChar(255)
-
-  createdAt        DateTime           @default(now()) @map("created_at")
-  updatedAt        DateTime?          @map("updated_at")
-  deletedAt        DateTime?          @map("deleted_at")
-  tickets          Ticket[]
-  ticketComments   TicketComment[]
-  UserSubscription UserSubscription[]
-  Portfolio        Portfolio[]
-
-  @@map("users")
-}
-
-model Ticket {
-  id Int @unique(map: "id") @default(autoincrement())
-
-  userId   Int  @db.Int
-  postedBy User @relation(fields: [userId], references: [id])
-
-  title       String @db.VarChar(255)
-  description String @db.Text
-  status      String @db.VarChar(255)
-
-  createdAt DateTime         @default(now()) @map("created_at")
-  updatedAt DateTime?        @map("updated_at")
-  deletedAt DateTime?        @map("deleted_at")
-  documents TicketDocument[]
-  comments  TicketComment[]
-
-  @@map("tickets")
-}
-
-model TicketDocument {
-  id Int @unique(map: "id") @default(autoincrement())
-
-  url  String
-  name String
-  size Int
-
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
-  ticketId  Int
-  ticket    Ticket    @relation(fields: [ticketId], references: [id])
-
-  @@map("ticket_documents")
-}
-
-model TicketComment {
-  id Int @unique(map: "id") @default(autoincrement())
-
-  text     String @db.Text
-  ticketId Int
-  ticket   Ticket @relation(fields: [ticketId], references: [id])
-
-  userId   Int  @db.Int
-  postedBy User @relation(fields: [userId], references: [id])
-
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
-
-  @@map("ticket_comments")
-}
-
-model UserSubscription {
-  id Int @unique(map: "id") @default(autoincrement())
-
-  userId Int  @db.Int
-  user   User @relation(fields: [userId], references: [id])
-
-  subscriptionId String @map("subscription_id")
-
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
-
-  @@map("user_subscriptions")
-}
-
-model Portfolio {
-  id Int @unique(map: "id") @default(autoincrement())
-
-  userId    Int    @db.Int
-  user      User   @relation(fields: [userId], references: [id])
-  name      String @db.VarChar(255)
-  filters   Json   @db.Json
-  tableName String @map("table_name") @db.VarChar(255)
-
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime? @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
-
-  @@map("portfolios")
 }
