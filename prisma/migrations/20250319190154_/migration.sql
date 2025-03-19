@@ -928,7 +928,8 @@ CREATE TABLE `tickets` (
     `updated_at` DATETIME(3) NULL,
     `deleted_at` DATETIME(3) NULL,
 
-    UNIQUE INDEX `id`(`id`)
+    UNIQUE INDEX `id`(`id`),
+    INDEX `tickets_userId_fkey`(`userId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -942,7 +943,8 @@ CREATE TABLE `ticket_documents` (
     `deleted_at` DATETIME(3) NULL,
     `ticketId` INTEGER NOT NULL,
 
-    UNIQUE INDEX `id`(`id`)
+    UNIQUE INDEX `id`(`id`),
+    INDEX `ticket_documents_ticketId_fkey`(`ticketId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -955,7 +957,9 @@ CREATE TABLE `ticket_comments` (
     `updated_at` DATETIME(3) NULL,
     `deleted_at` DATETIME(3) NULL,
 
-    UNIQUE INDEX `id`(`id`)
+    UNIQUE INDEX `id`(`id`),
+    INDEX `ticket_comments_ticketId_fkey`(`ticketId`),
+    INDEX `ticket_comments_userId_fkey`(`userId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -967,7 +971,8 @@ CREATE TABLE `user_subscriptions` (
     `updated_at` DATETIME(3) NULL,
     `deleted_at` DATETIME(3) NULL,
 
-    UNIQUE INDEX `id`(`id`)
+    UNIQUE INDEX `id`(`id`),
+    INDEX `user_subscriptions_userId_fkey`(`userId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -981,7 +986,8 @@ CREATE TABLE `portfolios` (
     `updated_at` DATETIME(3) NULL,
     `deleted_at` DATETIME(3) NULL,
 
-    UNIQUE INDEX `id`(`id`)
+    UNIQUE INDEX `id`(`id`),
+    INDEX `portfolios_userId_fkey`(`userId`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
